@@ -94,7 +94,7 @@ st.markdown("""
 @st.cache_data
 def load_data():
     """Carrega os dados do arquivo Excel"""
-    file_path = 'CAPES_6_ACORDOS_DINAMICO.xlsx'
+    file_path = 'file_path = 'https://drive.google.com/uc?export=download&id=1iOxbUE2vwWrtzIIgeydGdpYueoHnMVHY'
     
     # Carregar todas as abas
     xl_file = pd.ExcelFile(file_path)
