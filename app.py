@@ -9,7 +9,6 @@ st.set_page_config(
     page_icon="💰",
     layout="wide",
     initial_sidebar_state="expanded"
-    st.sidebar.image("logo.png", use_column_width=True)
 )
 
 # CSS customizado
@@ -94,7 +93,8 @@ st.markdown("""
 # Carregar dados
 @st.cache_data
 def load_data():
-    """Carrega os dados do arquivo Excel"""
+    """Carrega os dados do arquivo Excel hospedado no Google Drive"""
+    # URL do Google Drive com ID do arquivo
     file_path = 'https://drive.google.com/uc?export=download&id=1iOxbUE2vwWrtzIIgeydGdpYueoHnMVHY'
     
     # Carregar todas as abas
@@ -110,6 +110,7 @@ def load_data():
         '💎 ACS': 'ACS'
     }
     
+    # Carregar dados das editoras
     for sheet_name, publisher in publishers.items():
         try:
             df = pd.read_excel(file_path, sheet_name=sheet_name)
@@ -121,18 +122,57 @@ def load_data():
         except Exception as e:
             st.warning(f"Não foi possível carregar dados de {publisher}: {str(e)}")
     
+    # Carregar aba ÍNDICE
+    try:
+        data['INDICE'] = pd.read_excel(file_path, sheet_name='📊 ÍNDICE').dropna(how='all')
+    except:
+        data['INDICE'] = None
+    
+    # Carregar aba REQUISITOS
+    try:
+        data['REQUISITOS'] = pd.read_excel(file_path, sheet_name='✅ REQUISITOS').dropna(how='all')
+    except:
+        data['REQUISITOS'] = None
+    
     return data
 
 # Carregar dados
 try:
     publisher_data = load_data()
     
+    # Filtrar apenas editoras (remover INDICE e REQUISITOS da lista)
+    publishers_list = [k for k in publisher_data.keys() if k not in ['INDICE', 'REQUISITOS']]
+    
+    # Exibir informações da aba ÍNDICE se disponível
+    if publisher_data.get('INDICE') is not None:
+        with st.expander("📊 Resumo Geral - Índice de Periódicos", expanded=False):
+            st.markdown("### Visão Geral dos Acordos CAPES")
+            st.dataframe(
+                publisher_data['INDICE'],
+                use_container_width=True,
+                hide_index=True
+            )
+            st.caption("💡 Este é um resumo consolidado de todos os acordos transformativos CAPES")
+    
+    # Exibir informações de REQUISITOS se disponível
+    if publisher_data.get('REQUISITOS') is not None:
+        with st.expander("✅ Requisitos para Publicação Gratuita", expanded=False):
+            st.markdown("### O que você precisa para publicar gratuitamente")
+            st.dataframe(
+                publisher_data['REQUISITOS'],
+                use_container_width=True,
+                hide_index=True
+            )
+            st.caption("⚠️ Verifique estes requisitos antes de submeter seu artigo")
+    
+    st.markdown("---")
+    
     # Sidebar - Seleção de editora
     st.sidebar.header("🔍 Filtros de Busca")
     
     selected_publisher = st.sidebar.selectbox(
         "Selecione a Editora:",
-        options=list(publisher_data.keys()),
+        options=publishers_list,
         index=0
     )
     
@@ -144,7 +184,8 @@ try:
     st.sidebar.markdown("### 📈 Estatísticas Gerais")
     
     total_journals = 0
-    for publisher, data in publisher_data.items():
+    for publisher in publishers_list:
+        data = publisher_data[publisher]
         count = len(data)
         total_journals += count
         st.sidebar.metric(publisher, f"{count:,}")
