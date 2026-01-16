@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "Se você usar este sistema em pesquisa acadêmica, por favor cite-o como indicado abaixo."
+type: software
+title: "Publique Gratuitamente – Acordos Transformativos CAPES"
+authors:
+  - name: "Grupo GOBIOTA"
+    affiliation: "Faculdade de Medicina Veterinária e Zootecnia, Universidade Federal de Uberlândia"
+  - family-names: "Polveiro"
+    given-names: "Richard Costa"
+    orcid: "https://orcid.org/0000-0002-1714-9720"
+    affiliation: "Faculdade de Medicina Veterinária e Zootecnia, Universidade Federal de Uberlândia"
+version: "1.0.0"
+date-released: "2026-01-16"
+url: "https://github.com/ricmedveterinario/periodicos-capes-gratuito"
+repository-code: "https://github.com/ricmedveterinario/periodicos-capes-gratuito"
+license: MIT
+keywords:
+  - open-access
+  - CAPES
+  - scientific-publishing
+  - transformative-agreements
+  - Brazil
+  - academic-research
+abstract: "Sistema web interativo para consulta de periódicos científicos com publicação gratuita através dos acordos transformativos CAPES. Ajuda pesquisadores brasileiros a economizar milhares de dólares em APCs (Article Processing Charges)."
