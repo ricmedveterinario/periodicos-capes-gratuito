@@ -98,7 +98,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Carregar dados
-@st.cache_data
+@st.cache_data(ttl=3600)  # Cache expira a cada 1 hora (3600 segundos)
 def load_data():
     """Carrega os dados do arquivo Excel hospedado no Google Drive"""
     # URL do Google Drive com ID do arquivo
@@ -190,6 +190,15 @@ try:
         </p>
     </div>
     """, unsafe_allow_html=True)
+    
+    st.sidebar.markdown("---")
+    
+    # Botão para forçar atualização dos dados
+    if st.sidebar.button("🔄 Atualizar Dados", help="Recarrega os dados da planilha CAPES"):
+        st.cache_data.clear()
+        st.rerun()
+    
+    st.sidebar.caption("ℹ️ Dados atualizados automaticamente a cada 1 hora")
     
     st.sidebar.markdown("---")
     
