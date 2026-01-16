@@ -9,6 +9,7 @@ st.set_page_config(
     page_icon="💰",
     layout="wide",
     initial_sidebar_state="expanded"
+    st.sidebar.image("logo.png", use_column_width=True)
 )
 
 # CSS customizado
