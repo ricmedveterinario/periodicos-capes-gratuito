@@ -79,10 +79,17 @@ st.markdown("""
     <hr style="margin: 1rem 0;">
     <h3 style="margin-top: 1rem; color: #1e40af;">📚 Desenvolvido por:</h3>
     <p style="margin-bottom: 0.5rem;">
-        <strong>Grupo GOBIOTA</strong> - Genômica, Bioinformática e Tecnologias Aplicadas<br>
-        <strong>Programa de Pós-Graduação</strong><br>
-        Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
+        <strong>Grupo GOBIOTA</strong><br>
+        <em>Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica</em>
+    </p>
+    <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+        <strong>Instituição:</strong> Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
         Universidade Federal de Uberlândia (UFU)
+    </p>
+    <p style="margin-bottom: 0.5rem; font-size: 0.85rem; color: #4b5563;">
+        <strong>Coordenação:</strong> Prof. Dr. Richard Costa Polveiro<br>
+        <strong>CNPq:</strong> <a href="http://dgp.cnpq.br/dgp/espelhogrupo/5786031102053722" target="_blank" style="color: #3b82f6;">Espelho do Grupo</a><br>
+        <strong>Instagram:</strong> <a href="https://instagram.com/gobiota2025" target="_blank" style="color: #3b82f6;">@gobiota2025</a>
     </p>
     <p style="margin-bottom: 0; font-size: 0.9rem; color: #6b7280;">
         ℹ️ Dados extraídos dos acordos transformativos CAPES vigentes • Atualizado periodicamente
@@ -166,6 +173,25 @@ try:
             st.caption("⚠️ Verifique estes requisitos antes de submeter seu artigo")
     
     st.markdown("---")
+    
+    # Sidebar - Logo e informações GOBIOTA
+    st.sidebar.image("logo.png", use_column_width=True)
+    
+    st.sidebar.markdown("""
+    <div style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
+        <h3 style="margin: 5px 0; color: #1e40af; font-size: 1.1rem;">GOBIOTA</h3>
+        <p style="margin: 0; font-size: 0.75rem; color: #6b7280; line-height: 1.3;">
+            <strong>G</strong>rupo de Pesquisa e Inovação em<br>
+            <strong>O</strong>rganismos, <strong>Bio</strong>informática e<br>
+            <strong>T</strong>ecnologias <strong>A</strong>plicadas
+        </p>
+        <p style="margin: 10px 0 0 0; font-size: 0.7rem; color: #9ca3af;">
+            FMVZ • UFU
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.sidebar.markdown("---")
     
     # Sidebar - Seleção de editora
     st.sidebar.header("🔍 Filtros de Busca")
@@ -470,7 +496,12 @@ try:
             💰 Ajudando pesquisadores brasileiros a publicarem gratuitamente em acesso aberto
         </p>
         <p style="margin-top: 0.5rem; font-size: 0.85rem;">
-            📧 Dúvidas ou sugestões? Entre em contato através da sua biblioteca institucional
+            📧 <a href="mailto:richard.polveiro@ufu.br" style="color: #3b82f6; text-decoration: none;">richard.polveiro@ufu.br</a> | 
+            📱 <a href="https://instagram.com/gobiota2025" target="_blank" style="color: #3b82f6; text-decoration: none;">@gobiota2025</a> | 
+            🔗 <a href="http://dgp.cnpq.br/dgp/espelhogrupo/5786031102053722" target="_blank" style="color: #3b82f6; text-decoration: none;">CNPq</a>
+        </p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #9ca3af;">
+            Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica
         </p>
     </div>
     """, unsafe_allow_html=True)
