@@ -366,6 +366,150 @@ publisher:
 
 ---
 
+# 📄 SEÇÃO PARA ADICIONAR AO README.md
+
+Cole esta seção completa no README.md, antes do rodapé final.
+
+---
+
+## ⚖️ Licença e Direitos
+
+### Licença do Código
+
+Este projeto é licenciado sob os termos da **Licença MIT**. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+**Em resumo:**
+- ✅ Uso comercial permitido
+- ✅ Modificação permitida
+- ✅ Distribuição permitida
+- ✅ Uso privado permitido
+- ⚠️ Sem garantia
+- ⚠️ Limitação de responsabilidade
+
+### Direitos Autorais
+
+**© 2026 Richard Costa Polveiro - Grupo GOBIOTA**
+
+Todos os direitos sobre o código, interface e lógica desta aplicação são reservados ao autor e ao Grupo GOBIOTA - FMVZ/UFU.
+
+### Fonte dos Dados
+
+As informações sobre periódicos, instituições elegíveis e acordos transformativos são baseadas em:
+- **Portal de Periódicos da CAPES** - Documentos e páginas oficiais
+- **Editoras participantes** - Listas oficiais de periódicos e instituições
+- **Acordos transformativos vigentes** - Informações públicas divulgadas pela CAPES
+
+**Links oficiais:**
+- CAPES: https://www.periodicos.capes.gov.br
+- Elsevier: https://www.elsevier.com/open-access/agreements
+- Springer Nature: https://www.springernature.com/gp/open-research/transformative-journals
+- Wiley: https://www.wiley.com/en-br/publish/article/open-access/oa-agreement
+- ACM: https://www.acm.org/publications/openaccess
+- IEEE: https://open.ieee.org/partners/capes-transformative-agreement
+- ACS: https://acsopenscience.org/customers/capes
+
+---
+
+## ⚠️ Aviso Legal e Disclaimer
+
+### Natureza da Aplicação
+
+Esta aplicação é uma **ferramenta independente** desenvolvida para fins **exclusivamente informativos e acadêmicos**. Organiza e apresenta informações públicas sobre acordos transformativos CAPES–editoras para facilitar a consulta por pesquisadores brasileiros.
+
+### Ausência de Vínculo Oficial
+
+**IMPORTANTE:** Esta ferramenta **NÃO possui vínculo oficial** com:
+- Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES)
+- Editoras participantes dos acordos (Elsevier, Springer Nature, Wiley, ACM, IEEE, ACS, Royal Society)
+- Periódicos científicos listados
+
+### Limitações e Responsabilidades
+
+- ⚠️ **Verificação obrigatória:** Sempre consulte os documentos oficiais da CAPES e das editoras antes de tomar decisões de submissão de artigos.
+- ⚠️ **Dados atualizados:** Embora nos esforcemos para manter os dados atualizados, os acordos podem mudar sem aviso prévio. A data da última atualização está indicada no sistema.
+- ⚠️ **Sem garantias:** Esta ferramenta é fornecida "como está", sem garantias de qualquer tipo. Não nos responsabilizamos por decisões tomadas com base nas informações aqui apresentadas.
+- ⚠️ **Verifique elegibilidade:** A elegibilidade final para publicação gratuita depende de verificação junto à sua instituição e à editora do periódico.
+
+### Direitos de Terceiros
+
+Os direitos sobre:
+- **Dados dos acordos:** Pertencem à CAPES e às editoras
+- **Nomes e logotipos:** Pertencem aos respectivos titulares (CAPES, editoras, periódicos)
+- **Marcas registradas:** Pertencem aos seus proprietários
+
+Este projeto **não reivindica propriedade** sobre esses elementos, utilizando-os apenas de forma descritiva e informativa, conforme permitido para fins acadêmicos e de referência.
+
+### Uso Acadêmico
+
+Esta ferramenta foi desenvolvida como parte das atividades do **Grupo GOBIOTA** da **FMVZ/UFU** para apoiar a comunidade científica brasileira no acesso à publicação em acesso aberto.
+
+**Citação recomendada:**
+Se você utilizar esta ferramenta em seu trabalho acadêmico, considere citá-la conforme as orientações na seção [Como Citar](#-como-citar).
+
+### Contato para Questões Legais
+
+Para questões relacionadas a direitos autorais, licenciamento ou uso da aplicação:
+
+📧 **E-mail:** richard.polveiro@ufu.br  
+🏛️ **Instituição:** FMVZ - Universidade Federal de Uberlândia  
+🔗 **GitHub:** https://github.com/ricmedveterinario/periodicos-capes-gratuito
+
+---
+
+## 📝 Política de Privacidade
+
+### Coleta de Dados
+
+Esta aplicação **NÃO coleta, armazena ou compartilha** dados pessoais dos usuários:
+- ✅ Não requer login ou cadastro
+- ✅ Não utiliza cookies de rastreamento
+- ✅ Não armazena histórico de buscas
+- ✅ Não coleta informações identificáveis
+
+### Dados de Uso
+
+O **Streamlit Community Cloud** (plataforma de hospedagem) pode coletar estatísticas agregadas e anônimas de uso para fins de infraestrutura, conforme seus próprios [Termos de Serviço](https://streamlit.io/terms-of-use).
+
+### Cache Local
+
+A aplicação utiliza cache temporário (1 hora) para melhorar a performance, mas **nenhum dado pessoal** é armazenado.
+
+---
+
+## 🤝 Termos de Uso
+
+Ao utilizar esta aplicação, você concorda que:
+
+1. **Uso responsável:** Utilizará a ferramenta apenas para fins legítimos de consulta acadêmica e informativa
+2. **Verificação oficial:** Consultará sempre as fontes oficiais (CAPES/editoras) antes de tomar decisões
+3. **Sem redistribuição de dados:** Não copiará ou redistribuirá em massa os dados sem autorização
+4. **Citação apropriada:** Citará adequadamente o sistema caso o utilize em trabalhos acadêmicos
+5. **Respeito aos direitos:** Respeitará os direitos autorais e marcas de terceiros mencionados
+
+### Modificações nos Termos
+
+Reservamo-nos o direito de modificar estes termos a qualquer momento. As alterações entrarão em vigor imediatamente após publicação no repositório.
+
+---
+
+## 📚 Referências Legais e Normativas
+
+### Legislação Aplicável
+
+Este projeto está sujeito a:
+- **Lei 9.610/98** (Lei de Direitos Autorais - Brasil)
+- **Lei 9.279/96** (Lei de Propriedade Industrial - Brasil)
+- **Marco Civil da Internet** (Lei 12.965/2014)
+- **LGPD** (Lei 13.709/2018) - não aplicável, pois não há coleta de dados pessoais
+
+### Acordos Transformativos CAPES
+
+Para informações oficiais sobre os acordos:
+- [Portal de Periódicos CAPES](https://www.periodicos.capes.gov.br)
+- [Guias de Publicação em Acesso Aberto](https://www.periodicos.capes.gov.br/index.php/publicacoes-acesso-aberto.html)
+
+---
+
 **Desenvolvido com ❤️ pelo [Grupo GOBIOTA](http://dgp.cnpq.br/dgp/espelhogrupo/5786031102053722)**  
 FMVZ - Universidade Federal de Uberlândia
 
