@@ -174,17 +174,16 @@ def load_data():
 # Carregar dados de instituições
 @st.cache_data(ttl=3600)
 def load_institutions_data():
-    """Carrega dados de instituições elegíveis do Google Sheets"""
+    """Carrega dados de instituições elegíveis do Google Drive"""
     
-    # IDs do Google Sheets
-    spreadsheet_id = "1j8nZcOlIV2ag6pax2mAaWuWonNfMkqA4"
-    sheet_id = "940808991"  # gid da aba específica
+    # ID do arquivo no Google Drive
+    file_id = "1j8nZcOlIV2ag6pax2mAaWuWonNfMkqA4"
     
-    # URL de exportação CSV
-    url = f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}/export?format=csv&gid={sheet_id}"
+    # URL de download direto do Google Drive
+    url = f"https://drive.google.com/uc?export=download&id={file_id}"
     
     try:
-        df = pd.read_csv(url)
+        df = pd.read_csv(url, encoding='utf-8-sig')
         return df
     except Exception as e:
         st.error(f"Erro ao carregar dados de instituições: {str(e)}")
