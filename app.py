@@ -732,24 +732,94 @@ try:
     
     # Rodapé
     st.markdown("---")
-    st.markdown("""
-    <div style="text-align: center; color: #6b7280; padding: 1rem;">
-        <p style="margin-bottom: 0.5rem;">
-            <strong>Grupo GOBIOTA</strong> | FMVZ - Universidade Federal de Uberlândia
-        </p>
-        <p style="margin: 0; font-size: 0.9rem;">
-            💰 Ajudando pesquisadores brasileiros a publicarem gratuitamente em acesso aberto
-        </p>
-        <p style="margin-top: 0.5rem; font-size: 0.85rem;">
-            📧 <a href="mailto:richard.polveiro@ufu.br" style="color: #3b82f6; text-decoration: none;">richard.polveiro@ufu.br</a> | 
-            📱 <a href="https://instagram.com/gobiota2025" target="_blank" style="color: #3b82f6; text-decoration: none;">@gobiota2025</a> | 
-            🔗 <a href="http://dgp.cnpq.br/dgp/espelhogrupo/5786031102053722" target="_blank" style="color: #3b82f6; text-decoration: none;">CNPq</a>
-        </p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #9ca3af;">
-            Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica
+   
+# Aviso Legal e Direitos
+st.markdown("""
+<div style="background-color: #f8f9fa; 
+            padding: 2rem; 
+            border-radius: 10px; 
+            border-left: 4px solid #6c757d;
+            margin-top: 2rem;">
+    
+    <h3 style="margin-top: 0; color: #495057;">⚖️ Aviso Legal e Direitos</h3>
+    
+    <div style="margin-bottom: 1.5rem;">
+        <h4 style="color: #6c757d; font-size: 1rem; margin-bottom: 0.5rem;">© Direitos Autorais</h4>
+        <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">
+            <strong>© 2026 Richard Costa Polveiro - Grupo GOBIOTA</strong><br>
+            Todos os direitos sobre o código, interface e lógica desta aplicação são reservados.<br>
+            Licenciado sob <a href="https://github.com/ricmedveterinario/periodicos-capes-gratuito/blob/main/LICENSE" 
+            target="_blank" style="color: #0066cc;">Licença MIT</a>.
         </p>
     </div>
-    """, unsafe_allow_html=True)
+    
+    <div style="margin-bottom: 1.5rem;">
+        <h4 style="color: #6c757d; font-size: 1rem; margin-bottom: 0.5rem;">📊 Fonte dos Dados</h4>
+        <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">
+            As informações sobre periódicos, instituições elegíveis e acordos transformativos são baseadas em 
+            documentos e páginas oficiais do 
+            <a href="https://www.periodicos.capes.gov.br" target="_blank" style="color: #0066cc;">Portal de Periódicos da CAPES</a> 
+            e das editoras participantes dos acordos.
+        </p>
+    </div>
+    
+    <div style="margin-bottom: 1.5rem;">
+        <h4 style="color: #6c757d; font-size: 1rem; margin-bottom: 0.5rem;">⚠️ Disclaimer</h4>
+        <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">
+            <strong>Esta ferramenta é independente e não possui vínculo oficial com a CAPES ou com as editoras.</strong><br>
+            Desenvolvida para fins exclusivamente informativos e acadêmicos. 
+            Verifique sempre os documentos oficiais antes de tomar decisões de submissão de artigos.<br>
+            Os direitos sobre dados, marcas e logotipos de CAPES e editoras pertencem aos respectivos titulares.
+        </p>
+    </div>
+    
+    <div style="margin-bottom: 1.5rem;">
+        <h4 style="color: #6c757d; font-size: 1rem; margin-bottom: 0.5rem;">🔒 Privacidade</h4>
+        <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">
+            Esta aplicação <strong>não coleta, armazena ou compartilha dados pessoais</strong> dos usuários.<br>
+            Não requer login, não utiliza cookies de rastreamento e não armazena histórico de buscas.
+        </p>
+    </div>
+    
+    <div>
+        <h4 style="color: #6c757d; font-size: 1rem; margin-bottom: 0.5rem;">📅 Atualização dos Dados</h4>
+        <p style="margin: 0; font-size: 0.9rem; color: #6c757d;">
+            Última atualização dos dados CAPES: <strong>16/01/2026</strong><br>
+            Os acordos podem mudar sem aviso prévio. Sempre consulte as fontes oficiais.
+        </p>
+    </div>
+    
+</div>
+""", unsafe_allow_html=True)
+
+# Rodapé compacto com créditos
+st.markdown("""
+<div style="text-align: center; 
+            color: #6b7280; 
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-top: 1px solid #e5e7eb;">
+    <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+        <strong>Grupo GOBIOTA</strong> | FMVZ - Universidade Federal de Uberlândia
+    </p>
+    <p style="margin: 0.5rem 0; font-size: 0.85rem;">
+        💰 Ajudando pesquisadores brasileiros a publicarem gratuitamente em acesso aberto
+    </p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;">
+        📧 <a href="mailto:richard.polveiro@ufu.br" style="color: #3b82f6; text-decoration: none;">richard.polveiro@ufu.br</a> | 
+        📱 <a href="https://instagram.com/gobiota2025" target="_blank" style="color: #3b82f6; text-decoration: none;">@gobiota2025</a> | 
+        🔗 <a href="http://dgp.cnpq.br/dgp/espelhogrupo/5786031102053722" target="_blank" style="color: #3b82f6; text-decoration: none;">CNPq</a> | 
+        💻 <a href="https://github.com/ricmedveterinario/periodicos-capes-gratuito" target="_blank" style="color: #3b82f6; text-decoration: none;">GitHub</a>
+    </p>
+    <p style="margin-top: 0.8rem; font-size: 0.75rem; color: #9ca3af;">
+        Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica<br>
+        Licenciado sob MIT License | Versão 2.0 | Janeiro 2026
+    </p>
+</div>
+""", unsafe_allow_html=True)
+```
+
+---
 
 except Exception as e:
     st.error(f"""
