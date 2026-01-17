@@ -790,38 +790,28 @@ try:
 </div>
 """, unsafe_allow_html=True)
 
-try:
-    # Rodapé compacto com créditos
-    st.markdown("""
-    <div style="text-align: center; 
-                color: #6b7280; 
-                padding: 1.5rem;
-                margin-top: 1rem;
-                border-top: 1px solid #e5e7eb;">
-        <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">
-            <strong>Grupo GOBIOTA</strong> | FMVZ - Universidade Federal de Uberlândia
-        </p>
-        <p style="margin: 0.5rem 0; font-size: 0.85rem;">
-            💰 Ajudando pesquisadores brasileiros a publicarem gratuitamente em acesso aberto
-        </p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem;">
-            📧 <a href="mailto:richard.polveiro@ufu.br" style="color: #3b82f6; text-decoration: none;">richard.polveiro@ufu.br</a> | 
-            📱 <a href="https://instagram.com/gobiota2025" target="_blank" style="color: #3b82f6; text-decoration: none;">@gobiota2025</a> | 
-            🔗 <a href="http://dgp.cnpq.br/dgp/espelhogrupo/5786031102053722" target="_blank" style="color: #3b82f6; text-decoration: none;">CNPq</a> | 
-            💻 <a href="https://github.com/ricmedveterinario/periodicos-capes-gratuito" target="_blank" style="color: #3b82f6; text-decoration: none;">GitHub</a>
-        </p>
-        <p style="margin-top: 0.8rem; font-size: 0.75rem; color: #9ca3af;">
-            Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica<br>
-            Licenciado sob MIT License | Versão 2.0 | Janeiro 2026
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-except Exception as e:
-    st.error(f"""
-    ❌ **Erro ao carregar os dados**
-    
-    Detalhes técnicos: {str(e)}
-    """)
-
----
+# Rodapé compacto com créditos
+st.markdown("""
+<div style="text-align: center; 
+            color: #6b7280; 
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-top: 1px solid #e5e7eb;">
+    <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+        <strong>Grupo GOBIOTA</strong> | FMVZ - Universidade Federal de Uberlândia
+    </p>
+    <p style="margin: 0.5rem 0; font-size: 0.85rem;">
+        💰 Ajudando pesquisadores brasileiros a publicarem gratuitamente em acesso aberto
+    </p>
+    <p style="margin-top: 0.5rem; font-size: 0.8rem;">
+        📧 <a href="mailto:richard.polveiro@ufu.br" style="color: #3b82f6; text-decoration: none;">richard.polveiro@ufu.br</a> | 
+        📱 <a href="https://instagram.com/gobiota2025" target="_blank" style="color: #3b82f6; text-decoration: none;">@gobiota2025</a> | 
+        🔗 <a href="http://dgp.cnpq.br/dgp/espelhogrupo/5786031102053722" target="_blank" style="color: #3b82f6; text-decoration: none;">CNPq</a> | 
+        💻 <a href="https://github.com/ricmedveterinario/periodicos-capes-gratuito" target="_blank" style="color: #3b82f6; text-decoration: none;">GitHub</a>
+    </p>
+    <p style="margin-top: 0.8rem; font-size: 0.75rem; color: #9ca3af;">
+        Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica<br>
+        Licenciado sob MIT License | Versão 2.0 | Janeiro 2026
+    </p>
+</div>
+""", unsafe_allow_html=True)
