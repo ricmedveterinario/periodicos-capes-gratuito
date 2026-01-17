@@ -730,11 +730,9 @@ try:
         *Última atualização: {datetime.now().strftime('%d/%m/%Y')}*
         """)
     
-    # Rodapé
+    # Aviso Legal e Direitos
     st.markdown("---")
-   
-# Aviso Legal e Direitos
-st.markdown("""
+    st.markdown("""
 <div style="background-color: #f8f9fa; 
             padding: 2rem; 
             border-radius: 10px; 
@@ -817,9 +815,6 @@ st.markdown("""
     </p>
 </div>
 """, unsafe_allow_html=True)
-```
-
----
 
 except Exception as e:
     st.error(f"""
