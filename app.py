@@ -152,7 +152,8 @@ def load_data():
     
     for sheet_name, publisher in publishers.items():
         try:
-            df = pd.read_excel(file_path, sheet_name=sheet_name)
+            # CORREÇÃO: skiprows=1 para pular a primeira linha
+            df = pd.read_excel(file_path, sheet_name=sheet_name, skiprows=1)
             df = df.dropna(how='all')
             df = df.reset_index(drop=True)
             data[publisher] = df
@@ -160,17 +161,18 @@ def load_data():
             st.warning(f"Não foi possível carregar dados de {publisher}: {str(e)}")
     
     try:
-        data['INDICE'] = pd.read_excel(file_path, sheet_name='📊 ÍNDICE').dropna(how='all')
+        # Para ÍNDICE e REQUISITOS também
+        data['INDICE'] = pd.read_excel(file_path, sheet_name='📊 ÍNDICE', skiprows=1).dropna(how='all')
     except:
         data['INDICE'] = None
     
     try:
-        data['REQUISITOS'] = pd.read_excel(file_path, sheet_name='✅ REQUISITOS').dropna(how='all')
+        data['REQUISITOS'] = pd.read_excel(file_path, sheet_name='✅ REQUISITOS', skiprows=1).dropna(how='all')
     except:
         data['REQUISITOS'] = None
     
     return data
-
+    
 # Carregar dados de instituições
 @st.cache_data(ttl=3600)
 def load_institutions_data():
