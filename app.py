@@ -1263,8 +1263,9 @@ Desenvolvida para fins informativos e acadêmicos. Verifique sempre documentos o
 Direitos sobre dados e marcas pertencem aos respectivos titulares.
 
 **🔒 Privacidade**  
-Esta aplicação **não coleta, armazena ou compartilha dados pessoais**.  
-Não requer login, não usa cookies e não armazena histórico.
+Esta aplicação **não requer login**. 
+O que você digita é usado apenas durante o uso e não é armazenado pelo aplicativo.
+Usamos Google Analytics. A hospedagem pode registrar logs técnicos para segurança e diagnóstico.
 """)
     
 # Rodapé com créditos
