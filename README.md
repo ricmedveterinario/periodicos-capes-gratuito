@@ -341,12 +341,6 @@ publisher:
 
 ---
 
-# 📄 SEÇÃO PARA ADICIONAR AO README.md
-
-Cole esta seção completa no README.md, antes do rodapé final.
-
----
-
 ## ⚖️ Licença e Direitos
 
 ### Licença do Código
@@ -487,4 +481,5 @@ FMVZ - Universidade Federal de Uberlândia
 
 **Última atualização:** Janeiro 2026  
 **Versão:** 2.7 (Com verificação de instituições)
+
 
