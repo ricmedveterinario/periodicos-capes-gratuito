@@ -288,7 +288,7 @@ publisher:
 ## 📞 Suporte
 
 **Tem dúvidas?**
-- 📧 E-mail: richard.polveiro@ufu.br
+- 📧 E-mail: gobiota2025@gmail.com
 - 📱 Instagram: [@gobiota2025](https://instagram.com/gobiota2025)
 - 🐛 Issues: [GitHub Issues](https://github.com/ricmedveterinario/periodicos-capes-gratuito/issues)
 
@@ -487,3 +487,4 @@ FMVZ - Universidade Federal de Uberlândia
 
 **Última atualização:** Janeiro 2026  
 **Versão:** 2.7 (Com verificação de instituições)
+
