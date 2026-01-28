@@ -3,7 +3,6 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40.2-FF4B4B.svg)](https://streamlit.io)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Status](https://img.shields.io/badge/Status-Production-success.svg)](https://publica-gratis-capes.streamlit.app)
 
 > **Sistema web para consulta de periódicos e instituições elegíveis nos acordos transformativos CAPES**
 
