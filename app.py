@@ -1264,7 +1264,7 @@ Direitos sobre dados e marcas pertencem aos respectivos titulares.
 
 **🔒 Privacidade**  
 Esta aplicação **não requer login**. 
-O que você digita é usado apenas durante o uso e não é armazenado pelo aplicativo.
+O que você digita é usado apenas durante o uso e não é armazenado pelo aplicativo. 
 Usamos Google Analytics. A hospedagem pode registrar logs técnicos para segurança e diagnóstico.
 """)
     
