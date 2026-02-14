@@ -284,7 +284,7 @@ st.markdown("""
     <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">
         <strong>Instituição:</strong> Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
         <strong>Programa de Pós-graduação:</strong> Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
-        Universidade Federal de Uberlândia (UFU)
+        <strong>Universidade:</strong> Universidade Federal de Uberlândia (UFU)
     </p>
     <p style="margin-bottom: 0.5rem; font-size: 0.85rem; color: #4b5563;">
         <strong>Coordenação:</strong> Prof. Dr. Richard Costa Polveiro
@@ -1249,6 +1249,7 @@ st.markdown("""
         Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica
     </p>
     <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #6b7280;">
+        Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
         Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
         Universidade Federal de Uberlândia (UFU)
     </p>
