@@ -1258,7 +1258,7 @@ st.markdown("""
         💰 Ajudando pesquisadores brasileiros a publicarem em acesso aberto
     </p>
     <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #9ca3af;">
-        Licenciado sob MIT License | Versão 2.3.0 | Fevereiro 2026
+        Licenciado sob MIT License | Versão 0.8 | Fevereiro 2026
     </p>
 </div>
 """, unsafe_allow_html=True)
