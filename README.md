@@ -111,7 +111,7 @@ Universidade Federal de Uberlândia (UFU)
 Este software está sendo submetido para **registro no INPI** (Instituto Nacional da Propriedade Industrial) como programa de computador, conforme Lei nº 9.609/1998 (Lei do Software).
 
 **Titular:** Richard Costa Polveiro  
-**Entidade:** Grupo GOBIOTA - FMVZ/UFU  
+**Entidade:** Grupo GOBIOTA - PPGCVET/FMVZ/UFU  
 **Categoria:** Software de código aberto com proteção de propriedade intelectual
 
 **Direitos protegidos:**
@@ -207,7 +207,7 @@ https://publicaberto.gobiota.com.br
   author = {Polveiro, Richard Costa},
   title = {Publica Aberto: Sistema de Busca de Acordos CAPES},
   year = {2026},
-  version = {0.7},
+  version = {0.8},
   organization = {Grupo GOBIOTA, FMVZ/UFU},
   url = {https://publicaberto.gobiota.com.br},
   note = {Software livre sob licença MIT}
@@ -308,8 +308,8 @@ Encontrou um bug ou tem uma sugestão?
 ![GitHub watchers](https://img.shields.io/github/watchers/ricmedveterinario/periodicos-capes-gratuito?style=social)
 
 **Status:** 🟢 Produção  
-**Versão:** 0.7  
-**Última atualização:** Janeiro 2026  
+**Versão:** 0.8  
+**Última atualização:** Fevereiro 2026  
 **Licença:** MIT License  
 **Linguagem:** Python  
 **Framework:** Streamlit
@@ -349,7 +349,7 @@ Agradecimentos especiais aos membros do **Grupo GOBIOTA** e a todos que contribu
 
 ## 📄 Versão e Changelog
 
-**Versão Atual:** 0.7 (Janeiro 2026)
+**Versão Atual:** 0.8 (Fevereiro 2026)
 
 **Principais mudanças:**
 - ✅ Footer customizado no domínio próprio
@@ -365,7 +365,8 @@ Agradecimentos especiais aos membros do **Grupo GOBIOTA** e a todos que contribu
 
 ## 📧 Contato
 
-**Grupo GOBIOTA**  
+**Grupo GOBIOTA**
+Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)
 Faculdade de Medicina Veterinária e Zootecnia (FMVZ)  
 Universidade Federal de Uberlândia (UFU)
 
