@@ -112,7 +112,7 @@ Universidade Federal de Uberlândia (UFU)
 
 ### 🔒 Software Registrado
 
-Este software está sendo submetido para **registro no INPI** (Instituto Nacional da Propriedade Industrial) como programa de computador, conforme Lei nº 9.609/1998 (Lei do Software).
+Este software foi submetido para **registro no INPI** (Instituto Nacional da Propriedade Industrial) como programa de computador, conforme Lei nº 9.609/1998 (Lei do Software).
 
 **Titular:** Richard Costa Polveiro  
 **Entidade:** Grupo GOBIOTA - PPGCVET/FMVZ/UFU  
