@@ -304,6 +304,7 @@ Este projeto é fortalecido pelo apoio de:
 - **FAPEMIG** - Fundação de Amparo à Pesquisa do Estado de Minas Gerais
 - **UFU** - Universidade Federal de Uberlândia
 - **FMVZ** - Faculdade de Medicina Veterinária e Zootecnia
+- **PPGCVET** - Programa de Pós Graduação em Ciências Veterinárias
 
 ### Colaboradores
 
