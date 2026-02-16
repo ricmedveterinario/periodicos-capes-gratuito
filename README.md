@@ -219,22 +219,7 @@ Use o botão **"Cite this repository"** no GitHub para:
 
 ### Como Contribuir
 
-Contribuições são bem-vindas! Siga estas etapas:
-
-1. **Fork** o repositório
-2. **Clone** seu fork: `git clone seu-fork-url`
-3. **Crie uma branch**: `git checkout -b feature/nova-funcionalidade`
-4. **Commit** suas mudanças: `git commit -m 'Adicionar nova funcionalidade'`
-5. **Push** para a branch: `git push origin feature/nova-funcionalidade`
-6. Abra um **Pull Request**
-
-### Diretrizes
-
-- ✅ Código limpo e documentado
-- ✅ Commits descritivos em português
-- ✅ Teste suas alterações localmente
-- ✅ Mantenha compatibilidade com Python 3.10+
-- ✅ Respeite a licença MIT
+## Para Contribuições entre em contato com o suporte abaixo
 
 ### Tipos de Contribuição
 
@@ -249,7 +234,7 @@ Contribuições são bem-vindas! Siga estas etapas:
 
 ## 🆘 Suporte e Contato
 
-### Reportar Problemas
+### Reportar Problemas e contribuições
 
 Encontrou um bug ou tem uma sugestão?
 
