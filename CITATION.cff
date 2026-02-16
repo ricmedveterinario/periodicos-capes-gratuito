@@ -10,18 +10,26 @@ repository-code: "https://github.com/ricmedveterinario/periodicos-capes-gratuito
 
 abstract: >
   Interactive web tool for searching scientific journals eligible for APC coverage or discounts through CAPES transformative
-  agreements. It supports strategic journal selection by enabling fast journal search across the current dataset and
-  verification of eligible institutions.
+  agreements. It helps Brazilian researchers identify no-APC publishing options and reduced-APC routes, supporting strategic 
+  journal selection. The system enables fast search across 5,895 journals, verification of 2,483 eligible institutions, and 
+  automatic alerts about publishing conditions and potential costs. Version 0.8.0 separates Wiley OnlineOpen (APC fully covered) 
+  from Wiley Gold (discounted APC) to prevent confusion and reduce submission errors.
 
 keywords:
   - CAPES
-  - transformative agreements
-  - open access
+  - transformative-agreements
+  - open-access
   - APC
-  - scholarly communication
+  - article-processing-charges
+  - scholarly-communication
   - Brazil
-  - journal search
+  - journal-search
+  - scientific-publishing
+  - web-application
+  - Python
   - Streamlit
+  - Pandas
+  - research-infrastructure
 
 authors:
   - family-names: "Polveiro"
@@ -31,20 +39,31 @@ authors:
 
   - family-names: "de Araújo Brum"
     given-names: "Bárbara"
+    orcid: "https://orcid.org/0000-0001-8004-8247"
     affiliation: "Universidade Federal de Uberlândia (UFU), Brazil"
 
   - family-names: "Sassaki"
     given-names: "Flavio"
+    orcid: "https://orcid.org/0000-0001-7130-9943"
     affiliation: "Universidade Federal de Uberlândia (UFU), Brazil"
 
   - family-names: "Melo"
     given-names: "Roberta"
+    orcid: "https://orcid.org/0000-0001-8265-5163"
     affiliation: "Universidade Federal de Uberlândia (UFU), Brazil"
 
   - family-names: "Nero"
     given-names: "Luis Augusto"
+    orcid: "https://orcid.org/0000-0002-4954-5824"
     affiliation: "Universidade Federal de Viçosa (UFV), Brazil"
 
 identifiers:
   - type: doi
     value: "10.5281/zenodo.18663828"
+    description: "Zenodo DOI for version 0.8.0"
+
+references:
+  - type: website
+    title: "Publica Aberto - Sistema Web"
+    url: "https://publicaberto.gobiota.com.br"
+
