@@ -123,17 +123,9 @@ Este software está sendo submetido para **registro no INPI** (Instituto Naciona
 - ✅ Algoritmos de busca e filtros
 - ✅ Estrutura de dados e organização
 
-### ™ Marca GOBIOTA
+### Marca GOBIOTA
 
-A marca **GOBIOTA** está em processo de registro no INPI (Instituto Nacional da Propriedade Industrial) sob a classe NCL(11) 42 - Serviços científicos e tecnológicos.
-
-**Solicitante:** Richard Costa Polveiro  
-**Natureza:** Marca de serviço  
-**Status:** ™ Pendente de registro (aguardando concessão ®)
-
-**Enquanto aguarda registro definitivo:**
-- Símbolo: **GOBIOTA™** (Trademark)
-- Após concessão: **GOBIOTA®** (Registered Trademark)
+ **GOBIOTA®** (Registered Trademark)
 
 ### ⚖️ Uso da Marca
 
