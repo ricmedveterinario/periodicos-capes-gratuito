@@ -1,24 +1,50 @@
 cff-version: 1.2.0
-message: "Se você usar este sistema em pesquisa acadêmica, por favor cite-o como indicado abaixo."
+message: "If you use this software in academic work, please cite it using the DOI below."
 type: software
-title: "Publique Gratuitamente – Acordos Transformativos CAPES"
+title: "Publish for Free: Web Tool for Searching Journals Covered by CAPES Transformative Agreements"
+version: "0.8.0"
+date-released: "2026-02-16"
+license: "MIT"
+url: "https://publicaberto.gobiota.com.br"
+repository-code: "https://github.com/ricmedveterinario/periodicos-capes-gratuito"
+
+abstract: >
+  Interactive web tool for searching scientific journals eligible for APC coverage or discounts through CAPES transformative
+  agreements. It supports strategic journal selection by enabling fast journal search across the current dataset and
+  verification of eligible institutions.
+
+keywords:
+  - CAPES
+  - transformative agreements
+  - open access
+  - APC
+  - scholarly communication
+  - Brazil
+  - journal search
+  - Streamlit
+
 authors:
-  - name: "Grupo GOBIOTA"
-    affiliation: "Faculdade de Medicina Veterinária e Zootecnia, Universidade Federal de Uberlândia"
   - family-names: "Polveiro"
     given-names: "Richard Costa"
     orcid: "https://orcid.org/0000-0002-1714-9720"
-    affiliation: "Faculdade de Medicina Veterinária e Zootecnia, Universidade Federal de Uberlândia"
-version: "1.0.0"
-date-released: "2026-01-16"
-url: "https://github.com/ricmedveterinario/periodicos-capes-gratuito"
-repository-code: "https://github.com/ricmedveterinario/periodicos-capes-gratuito"
-license: MIT
-keywords:
-  - open-access
-  - CAPES
-  - scientific-publishing
-  - transformative-agreements
-  - Brazil
-  - academic-research
-abstract: "Sistema web interativo para consulta de periódicos científicos com publicação gratuita através dos acordos transformativos CAPES. Ajuda pesquisadores brasileiros a economizar milhares de dólares em APCs (Article Processing Charges)."
+    affiliation: "Faculdade de Medicina Veterinária e Zootecnia, Universidade Federal de Uberlândia (UFU), Brazil"
+
+  - family-names: "de Araújo Brum"
+    given-names: "Bárbara"
+    affiliation: "Universidade Federal de Uberlândia (UFU), Brazil"
+
+  - family-names: "Sassaki"
+    given-names: "Flavio"
+    affiliation: "Universidade Federal de Uberlândia (UFU), Brazil"
+
+  - family-names: "Melo"
+    given-names: "Roberta"
+    affiliation: "Universidade Federal de Uberlândia (UFU), Brazil"
+
+  - family-names: "Nero"
+    given-names: "Luis Augusto"
+    affiliation: "Universidade Federal de Viçosa (UFV), Brazil"
+
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.18663828"
