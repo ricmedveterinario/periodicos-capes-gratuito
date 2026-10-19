@@ -3,7 +3,8 @@ import pandas as pd
 from datetime import datetime
 import io
 import unicodedata
-from workbook_loader import open_workbook
+import os
+from capes_catalog import load_catalog, search_catalog, acceptance_status, REVISION
 
 # Configuração da página
 st.set_page_config(
@@ -256,7 +257,7 @@ st.info("""
 1. **🏛️ Verificar se SUA INSTITUIÇÃO é elegível** (primeiro passo - faça isso abaixo!)
 2. **📚 Buscar o PERIÓDICO** onde você quer publicar (segundo passo)
 
-Se AMBOS estiverem listados → **Você pode publicar GRATUITAMENTE!** 🎉
+Se ambos estiverem listados, confira também o modelo do periódico, a data de aceite e os requisitos do autor. O custeio depende de validação pela CAPES.
 """)
 
 
@@ -270,7 +271,7 @@ st.markdown("""
         processamento de artigos que podem custar milhares de dólares).
     </p>
     <p style="margin-bottom: 1rem;">
-        <strong>✅ Você está elegível se:</strong><br>
+        <strong>Verificação preliminar:</strong><br>
         • É afiliado a uma instituição brasileira elegível nos acordos<br>
         • Sua instituição tem acesso ao Portal de Periódicos CAPES<br>
         • O periódico está listado nos acordos da editora<br>
@@ -307,102 +308,30 @@ def normalizar_busca(texto):
     texto = ''.join([c for c in texto if not unicodedata.combining(c)])
     return texto.upper()
 
-# Carregar dados de periódicos
+# Excel privado: uma leitura de cada arquivo por período de cache.
 @st.cache_data(ttl=3600)
+def load_sources():
+    local_dir = os.environ.get('PUBLICA_ABERTO_LOCAL_DATA_DIR')
+    if local_dir:
+        return load_catalog(data_dir=local_dir)
+    try:
+        account = dict(st.secrets['gcp_service_account'])
+    except (KeyError, FileNotFoundError):
+        from drive_workbooks import PrivateDriveConfigurationError
+        raise PrivateDriveConfigurationError('O acesso privado às bases precisa ser configurado no servidor.') from None
+    return load_catalog(service_account_info=account)
+
 def load_data():
-    """Carrega os dados do arquivo Excel (Google Sheets)"""
+    return load_sources()[0]
 
-    # ATUALIZADO: Novo link do Google Sheets
-    # Link fornecido: https://docs.google.com/spreadsheets/d/1r-XXVn0wORZ1rsv4i_JJSSxsZyPytY8A/edit
-    file_path = "https://docs.google.com/spreadsheets/d/1r-XXVn0wORZ1rsv4i_JJSSxsZyPytY8A/export?format=xlsx"
-
-    data = {}
-
-    # Planilha atualizada: MANTENDO WILEY SEPARADO
-    publishers = {
-        '🟡 Elsevier': 'Elsevier',
-        '🟢 Springer Nature': 'Springer Nature',
-        '🟢 Wiley OnlineOpen': 'Wiley OnlineOpen',
-        '🟡 Wiley Gold': 'Wiley Gold',
-        '🟢 ACM': 'ACM',
-        '🔵 IEEE': 'IEEE',
-        '💎 ACS': 'ACS',
-        '🔴 RSP': 'Royal Society Publishing (RSP)'
-    }
-
-    # Download e abertura únicos para todas as abas; falhas não são armazenadas como dados vazios.
-    with open_workbook(file_path) as workbook:
-        return parse_publishers_workbook(workbook, publishers)
-
-def parse_publishers_workbook(workbook, publishers):
-    data = {}
-    for sheet_name, publisher in publishers.items():
-        try:
-            df = pd.read_excel(workbook, sheet_name=sheet_name)
-            df = df.dropna(how='all').reset_index(drop=True)
-
-            # A base já traz uma coluna "Editora" em várias abas.
-            # O app já insere "Editora" na visualização, então removemos para evitar duplicidade.
-            if 'Editora' in df.columns:
-                df = df.drop(columns=['Editora'])
-
-            # Armazenar cada editora separadamente (incluindo Wiley OnlineOpen e Wiley Gold)
-            data[publisher] = df
-
-        except Exception as e:
-            st.warning(f"Não foi possível carregar dados de {publisher}: {str(e)}")
-
-    # Índice
-    try:
-        data['INDICE'] = pd.read_excel(workbook, sheet_name='📊 ÍNDICE').dropna(how='all')
-    except Exception:
-        data['INDICE'] = None
-
-    # Requisitos
-    try:
-        df_req = pd.read_excel(workbook, sheet_name='✅ REQUISITOS').dropna(how='all')
-        if df_req.shape[1] == 1:
-            df_req.columns = ['Requisitos e Informações']
-        data['REQUISITOS'] = df_req
-    except Exception:
-        data['REQUISITOS'] = None
-
-    # NOVO: Avisos
-    try:
-        df_avisos = pd.read_excel(workbook, sheet_name='⚠️ AVISOS').dropna(how='all')
-        if df_avisos.shape[1] == 1:
-            df_avisos.columns = ['⚠️ AVISOS IMPORTANTES']
-        data['AVISOS'] = df_avisos
-    except Exception:
-        data['AVISOS'] = None
-
-    return data
-
-# Carregar dados de instituições
-@st.cache_data(ttl=3600)
 def load_institutions_data():
-    """Carrega dados de instituições elegíveis do Google Sheets"""
-    
-    # ATUALIZADO: Novo link do Google Sheets
-    # Link fornecido: https://docs.google.com/spreadsheets/d/1R1zxXygZqUxsVtW3pwJeZVltPRcTczKJ/edit
-    spreadsheet_id = "1R1zxXygZqUxsVtW3pwJeZVltPRcTczKJ"
-    
-    # URL de exportação XLSX (primeira aba)
-    url = f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}/export?format=xlsx"
-    
-    try:
-        # Carregar primeira aba
-        with open_workbook(url) as workbook:
-            df = pd.read_excel(workbook, sheet_name=0)
-        return df
-    except Exception as e:
-        st.error(f"Erro ao carregar dados de instituições: {str(e)}")
-        return None
+    return load_sources()[1]
 
 # URLs oficiais das editoras
 URLS_INSTITUICOES = {
     'Elsevier': 'https://view.highspot.com/viewer/c53fae46a21769209f110f21afcc6504#1',
-    'Springer Nature': 'https://resource-preview-cms.springernature.com/springer-cms/rest/v1/content/27829128/data/v7',
+    'Springer Nature': 'https://cms-resources.apps.public.k8s.springernature.io/springer-cms/rest/v1/content/27829128/data/v6',
+    'Nature Portfolio': 'https://cms-resources.apps.public.k8s.springernature.io/springer-cms/rest/v1/content/52896924/data/v3',
     'ACM': 'https://www.periodicos.capes.gov.br/images/documents/Lista%20de%20IES_ACM.pdf',
     'Royal Society Publishing (RSP)': 'https://www.periodicos.capes.gov.br/images/documents/Acordo%20CAPES–Royal%20Society_%20Publicação%20em%20Acesso%20Aberto%20Sem%20Custos%20_%20Royal%20Society.pdf',
     'Wiley': 'https://www.wiley.com/en-br/publish/article/open-access/oa-agreement/',
@@ -442,8 +371,8 @@ try:
                 break
         publishers_list.insert(insert_pos, 'Wiley (Todas)')
 
-except Exception as e:
-    st.error(f"❌ **Erro ao carregar os dados**\n\nDetalhes técnicos: {str(e)}")
+except Exception:
+    st.error("Não foi possível carregar as bases privadas. A equipe responsável precisa conferir o acesso do aplicativo no Google Drive.")
     st.stop()
 
 # ==================== SIDEBAR ====================
@@ -471,11 +400,12 @@ st.sidebar.markdown("""
 st.sidebar.markdown("---")
 
 # Botão para forçar atualização
-if st.sidebar.button("🔄 Atualizar Dados", help="Recarrega os dados da planilha CAPES"):
+if st.sidebar.button("🔄 Atualizar Dados", help="Recarrega a versão de dados publicada no aplicativo"):
     st.cache_data.clear()
     st.rerun()
 
-st.sidebar.caption("ℹ️ Dados atualizados automaticamente a cada 1 hora")
+st.sidebar.caption("Bases v2 • Revisão de 19/10/2026 • Nature: lista de setembro/2026")
+st.sidebar.caption("Dados privados do Drive em cache por até 1 hora. Atualizar Dados relê os arquivos compartilhados com o aplicativo.")
 
 st.sidebar.markdown("---")
 
@@ -814,10 +744,10 @@ with st.expander("📋 Clique aqui para buscar sua instituição", expanded=True
                     mask = pd.Series([False] * len(df_inst))
                     
                     if col_busca:
-                        mask = mask | df_inst[col_busca].astype(str).str.contains(termo_norm, case=False, na=False)
+                        mask = mask | df_inst[col_busca].astype(str).str.contains(termo_norm, case=False, na=False, regex=False)
                     if col_sigla:
-                        mask = mask | df_inst[col_sigla].astype(str).str.upper().str.contains(termo_norm, na=False)
-                    mask = mask | df_inst[col_nome].astype(str).str.upper().str.contains(termo_norm, na=False)
+                        mask = mask | df_inst[col_sigla].astype(str).str.upper().str.contains(termo_norm, na=False, regex=False)
+                    mask = mask | df_inst[col_nome].astype(str).str.upper().str.contains(termo_norm, na=False, regex=False)
                     
                     resultados = df_inst[mask & df_inst[col_editora].isin(editoras_selecionadas)]
                 else:
@@ -831,7 +761,7 @@ with st.expander("📋 Clique aqui para buscar sua instituição", expanded=True
                     editoras_encontradas = sorted(resultados[col_editora].unique())
                     
                     if busca_ativa:
-                        st.success(f"✅ **Sua instituição é elegível em {len(editoras_encontradas)} editora(s)!**")
+                        st.success(f"**Encontramos instituições correspondentes à busca em {len(editoras_encontradas)} acordo(s). Confira os nomes abaixo.**")
                         
                         st.markdown("""
                         <div class="info-box">
@@ -839,7 +769,7 @@ with st.expander("📋 Clique aqui para buscar sua instituição", expanded=True
                             1. ✅ Anote em quais editoras você pode publicar (veja abaixo)<br>
                             2. 📚 Role a página para baixo até "Lista de Periódicos Elegíveis"<br>
                             3. 🔍 Busque o periódico específico onde quer publicar<br>
-                            4. ✅ Se o periódico estiver em uma editora onde sua instituição é elegível → <strong>Você pode publicar GRÁTIS!</strong>
+                            4. ✅ Se o periódico estiver em uma editora onde sua instituição é elegível → <strong>Confira a cobertura, a vigência e os requisitos do autor.</strong>
                         </div>
                         """, unsafe_allow_html=True)
                         
@@ -849,7 +779,7 @@ with st.expander("📋 Clique aqui para buscar sua instituição", expanded=True
                             with cols_resumo[i % 4]:
                                 st.metric(
                                     label=ed,
-                                    value="Elegível",
+                                    value="Na lista",
                                     delta="✓"
                                 )
                         
@@ -932,7 +862,7 @@ st.markdown("""
 <div class="info-box">
     <p style="margin-bottom: 0;">
         <strong>💡 Como funciona:</strong> Se o periódico estiver listado em uma editora onde sua instituição é elegível → 
-        <strong>Você pode publicar GRATUITAMENTE!</strong>
+        <strong>Confira a cobertura, a data de aceite e os requisitos do autor.</strong>
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -956,6 +886,7 @@ with st.expander("📋 Clique aqui para buscar seu periódico", expanded=True):
         selected_publisher = st.selectbox(
             "📚 Editora",
             options=["Todas"] + publishers_list,
+            key="journal_publisher",
             help="Filtre por editora específica ou veja todas"
         )
     
@@ -1008,16 +939,26 @@ else:
     df_filtered = publisher_data[selected_publisher].copy()
     df_filtered['Editora'] = selected_publisher
 
-# Aplicar busca
-if search_term:
-    search_norm = normalizar_busca(search_term)
-    mask = pd.Series([False] * len(df_filtered))
-    
-    for col in df_filtered.columns:
-        if df_filtered[col].dtype == 'object':
-            mask = mask | df_filtered[col].astype(str).apply(normalizar_busca).str.contains(search_norm, na=False)
-    
-    df_filtered = df_filtered[mask]
+# Busca literal com índice normalizado preparado uma vez no carregamento.
+df_filtered = search_catalog(df_filtered, search_term).copy()
+df_filtered = df_filtered.drop(columns=['_busca'], errors='ignore')
+accepted_date = st.date_input("Data de aceite (opcional)", value=None,
+                              key="acceptance_date",
+                              help="Confere somente a vigência de Springer, Nature e Elsevier. Os demais requisitos continuam necessários.")
+df_filtered['Conferência da data'] = df_filtered['Editora'].map(lambda publisher: acceptance_status(publisher, accepted_date))
+with st.expander("Requisitos CAPES e atualização Nature de setembro/2026", expanded=False):
+    st.markdown("""
+    Nature e Springer têm listas próprias de instituições. Confirme o portfólio do periódico na busca.
+
+    Para solicitar custeio, confira o perfil ou vínculo elegível do autor, autoria correspondente,
+    ORCID vinculado ao Meus Dados CAPES, licença CC BY, instituição e periódico no acordo.
+    Docentes ativos, pós-doutorandos, mestrandos/doutorandos e egressos de mestrado/doutorado
+    há até cinco anos têm condições previstas na norma. Há previsão também para agentes públicos
+    e empregados com vínculo formal elegível, observados os demais requisitos.
+
+    A aprovação é da CAPES. Taxas adicionais podem existir e não há reembolso de APC paga diretamente.
+    [Orientação oficial da CAPES](https://www.gov.br/capes/pt-br/acesso-a-informacao/acoes-e-programas/carta-de-servicos-ao-usuario/obter-acesso-ao-portal-de-periodicos-da-capes).
+    """)
 
 # Estatísticas
 st.markdown("---")
@@ -1030,43 +971,17 @@ with col2:
     if selected_publisher != "Todas":
         st.metric("Editora", selected_publisher)
     else:
-        st.metric("Editoras", f"{df_filtered['Editora'].nunique()}")
+        st.metric("Grupos / portfólios", f"{df_filtered['Editora'].nunique()}")
 with col3:
     if search_term:
         st.metric("Busca Ativa", "✓")
     else:
         st.metric("Exibindo", "Todos")
 
-# Avisos importantes sobre Wiley Gold
-if len(df_filtered) > 0 and 'Editora' in df_filtered.columns:
-    # Verificar se há resultados de Wiley Gold
-    wiley_gold_count = len(df_filtered[df_filtered['Editora'] == 'Wiley Gold'])
-    wiley_online_count = len(df_filtered[df_filtered['Editora'] == 'Wiley OnlineOpen'])
-    
-    if wiley_gold_count > 0 or selected_publisher == 'Wiley Gold' or selected_publisher == 'Wiley (Todas)':
-        st.markdown("""
-        <div style="background-color: #fef3c7; 
-                    padding: 1rem; 
-                    border-radius: 8px; 
-                    border-left: 4px solid #f59e0b;
-                    margin: 1rem 0;">
-            <strong>⚠️ ATENÇÃO - WILEY GOLD:</strong><br>
-            <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
-                <li><strong>Wiley Gold oferece apenas 55% de desconto</strong></li>
-                <li><strong>Você PAGA 45% do APC!</strong></li>
-                <li><strong>Wiley OnlineOpen é 100% GRÁTIS</strong> - sempre prefira OnlineOpen quando possível</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        if wiley_gold_count > 0 and wiley_online_count > 0:
-            st.info(f"""
-            💡 **Dica:** Você encontrou {wiley_online_count} periódico(s) Wiley OnlineOpen (100% grátis) 
-            e {wiley_gold_count} periódico(s) Wiley Gold (55% desconto). 
-            
-            **Priorize os periódicos Wiley OnlineOpen** para economizar 100%!
-            """)
-
+if (df_filtered['Editora'] == 'Wiley Gold').any():
+    st.warning("Wiley Gold não é cobertura integral pelo acordo CAPES. O desconto registrado na base anterior precisa ser confirmado nas condições atuais da editora.")
+if (df_filtered['Editora'] == 'Nature Portfolio').any():
+    st.info("Nature Portfolio: 41 títulos da lista oficial, com lista institucional própria. Confira a coluna de data e os requisitos CAPES.")
 
 # Exibir resultados
 if len(df_filtered) == 0:
@@ -1079,12 +994,19 @@ elif view_option == "Paginada (Recomendado)":
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
+        filter_signature = (selected_publisher, search_term, rows_per_page)
+        if st.session_state.get('journal_filter_signature') != filter_signature:
+            st.session_state['journal_filter_signature'] = filter_signature
+            st.session_state['results_page'] = 1
+        if st.session_state.get('results_page', 1) > total_pages:
+            st.session_state['results_page'] = 1
         page = st.number_input(
             "Página",
             min_value=1,
             max_value=max(1, total_pages),
             value=1,
             step=1,
+            key="results_page",
             help=f"Total de {total_pages} página(s)"
         )
     
@@ -1183,13 +1105,13 @@ with st.expander("❓ Perguntas Frequentes - Como publicar gratuitamente"):
         
     ### 2. Como sei se posso publicar gratuitamente?
         
-    **Você pode publicar sem custos se:**
+    **Condições preliminares para solicitar custeio:**
     - ✅ O periódico está listado neste sistema
     - ✅ Você é afiliado a uma instituição brasileira elegível
     - ✅ Sua instituição está nos acordos da editora específica
     - ✅ Você é o autor correspondente (corresponding author)
         
-    **💡 Use a seção "PASSO 1: Verificar Instituição" no topo para confirmar!**
+    **A busca não confirma o perfil do autor, a cobertura por título ou a autorização da CAPES.**
         
     ### 3. Por que preciso verificar minha instituição?
         
@@ -1203,7 +1125,7 @@ with st.expander("❓ Perguntas Frequentes - Como publicar gratuitamente"):
     1. Use a seção "PASSO 1" para verificar se sua instituição é elegível
     2. Anote em quais editoras sua instituição está
     3. Use a seção "PASSO 2" para buscar periódicos nessas editoras
-    4. Se encontrar o periódico em uma editora onde sua instituição é elegível → Você pode publicar grátis! 🎉
+    4. Se encontrar o periódico em uma editora onde sua instituição é elegível → Confira a cobertura e os requisitos antes de submeter.
         
     ### 5. Quanto eu economizo?
         
@@ -1211,7 +1133,7 @@ with st.expander("❓ Perguntas Frequentes - Como publicar gratuitamente"):
     - **US$ 1.500 a US$ 3.000** em periódicos convencionais
     - **US$ 3.000 a US$ 11.000** em periódicos de alto impacto
         
-    Com os acordos CAPES, você publica **totalmente grátis** em acesso aberto!
+    O custeio de APC depende do acordo e da validação. Serviços editoriais adicionais podem gerar cobrança.
         
     ### 6. Onde encontro mais informações?
         
@@ -1237,7 +1159,7 @@ with st.expander("ℹ️ Sobre este Sistema"):
     PPGCVET/FMVZ/UFU
         
     ---
-    *Última atualização: {datetime.now().strftime('%d/%m/%Y')}*
+    *Revisão das bases: 19/10/2026. Outras listas editoriais permanecem em revisão.*
     """)
     
 # ==================== AGÊNCIAS DE FOMENTO ====================
@@ -1336,7 +1258,7 @@ st.markdown("""
         💰 Ajudando pesquisadores brasileiros a publicarem em acesso aberto
     </p>
     <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #9ca3af;">
-        Licenciado sob MIT License | Versão 0.8 | Fevereiro 2026
+        Licenciado sob MIT License | Versão 0.9 | Revisão de 19/10/2026
     </p>
 </div>
 """, unsafe_allow_html=True)

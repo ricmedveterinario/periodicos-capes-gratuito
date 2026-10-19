@@ -1,3 +1,5 @@
+Proposta de revisão de 19/10/2026: acesso autenticado às bases v2 privadas do Drive, sem publicar os arquivos Excel. Inclui Nature Portfolio separado. A ativação depende de [configurar o acesso privado](PRIVATE_DRIVE_SETUP.md). Consulte [fontes e limitações](DATA_SOURCES.md).
+
 # 💰 Publica Aberto - Sistema de Busca de Acordos CAPES
 
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40.2-FF4B4B.svg)](https://streamlit.io)
