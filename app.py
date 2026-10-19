@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime
 import io
 import unicodedata
+from workbook_loader import open_workbook
 
 # Configuração da página
 st.set_page_config(
@@ -329,9 +330,15 @@ def load_data():
         '🔴 RSP': 'Royal Society Publishing (RSP)'
     }
 
+    # Download e abertura únicos para todas as abas; falhas não são armazenadas como dados vazios.
+    with open_workbook(file_path) as workbook:
+        return parse_publishers_workbook(workbook, publishers)
+
+def parse_publishers_workbook(workbook, publishers):
+    data = {}
     for sheet_name, publisher in publishers.items():
         try:
-            df = pd.read_excel(file_path, sheet_name=sheet_name)
+            df = pd.read_excel(workbook, sheet_name=sheet_name)
             df = df.dropna(how='all').reset_index(drop=True)
 
             # A base já traz uma coluna "Editora" em várias abas.
@@ -347,13 +354,13 @@ def load_data():
 
     # Índice
     try:
-        data['INDICE'] = pd.read_excel(file_path, sheet_name='📊 ÍNDICE').dropna(how='all')
+        data['INDICE'] = pd.read_excel(workbook, sheet_name='📊 ÍNDICE').dropna(how='all')
     except Exception:
         data['INDICE'] = None
 
     # Requisitos
     try:
-        df_req = pd.read_excel(file_path, sheet_name='✅ REQUISITOS').dropna(how='all')
+        df_req = pd.read_excel(workbook, sheet_name='✅ REQUISITOS').dropna(how='all')
         if df_req.shape[1] == 1:
             df_req.columns = ['Requisitos e Informações']
         data['REQUISITOS'] = df_req
@@ -362,7 +369,7 @@ def load_data():
 
     # NOVO: Avisos
     try:
-        df_avisos = pd.read_excel(file_path, sheet_name='⚠️ AVISOS').dropna(how='all')
+        df_avisos = pd.read_excel(workbook, sheet_name='⚠️ AVISOS').dropna(how='all')
         if df_avisos.shape[1] == 1:
             df_avisos.columns = ['⚠️ AVISOS IMPORTANTES']
         data['AVISOS'] = df_avisos
@@ -385,7 +392,8 @@ def load_institutions_data():
     
     try:
         # Carregar primeira aba
-        df = pd.read_excel(url, sheet_name=0)
+        with open_workbook(url) as workbook:
+            df = pd.read_excel(workbook, sheet_name=0)
         return df
     except Exception as e:
         st.error(f"Erro ao carregar dados de instituições: {str(e)}")
