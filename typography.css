@@ -1,0 +1,63 @@
+/* Reading scale informed by USWDS and WCAG text-resizing/spacing guidance. */
+:root {
+  --pa-font: Arial, Helvetica, sans-serif;
+  --pa-body: 1rem;
+  --pa-small: .875rem;
+  --pa-label: 1rem;
+  --pa-heading: 1.5rem;
+  --pa-ink: #1f2937;
+  --pa-muted: #475569;
+}
+html { font-size: 100%; }
+.stApp, input, textarea, select, button { font-family: var(--pa-font); }
+[data-testid="stMarkdownContainer"] { font-family: var(--pa-font); }
+.stApp { font-size: var(--pa-body); color: var(--pa-ink); line-height: 1.55; }
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li {
+  font-size: var(--pa-body); line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+[data-testid="stMarkdownContainer"] h1 { font-size: clamp(2rem, 3.5vw, 2.5rem); line-height: 1.2; }
+[data-testid="stMarkdownContainer"] h2 { font-size: 1.75rem; line-height: 1.3; }
+[data-testid="stMarkdownContainer"] h3 { font-size: 1.5rem; line-height: 1.3; }
+[data-testid="stMarkdownContainer"] h4 { font-size: 1.25rem; line-height: 1.35; }
+.main-header { background: linear-gradient(90deg, #1e3a8a, #1d4ed8) !important; }
+.main-header h1 { color: #fff; }
+.main-header p { font-size: 1.125rem !important; line-height: 1.55 !important; color: #fff; }
+[data-testid="stCaptionContainer"] p,
+[data-testid="stCaptionContainer"] {
+  font-size: var(--pa-small) !important;
+  line-height: 1.55 !important; color: var(--pa-muted) !important;
+}
+[data-testid="stWidgetLabel"] p,
+[data-testid="stExpander"] summary p,
+[data-testid="stTabs"] button p {
+  font-size: var(--pa-label) !important; line-height: 1.4 !important;
+}
+input, textarea, [data-baseweb="select"] { font-size: 1rem !important; line-height: 1.5; }
+button { min-height: 2.75rem; }
+[data-testid="stTabs"] button { height: auto; min-height: 2.75rem; white-space: normal; }
+[data-testid="stButton"] p, [data-testid="stLinkButton"] p {
+  font-size: 1rem !important; line-height: 1.4 !important; white-space: normal;
+}
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: .1875rem solid #1d4ed8; outline-offset: .125rem;
+}
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+  font-size: .9375rem !important; line-height: 1.55 !important;
+}
+.sidebar-link { font-size: 1rem !important; line-height: 1.5; }
+.sidebar-section-title { font-size: .875rem !important; line-height: 1.5; }
+.pa-metric-label, .pa-chip { font-size: .875rem; line-height: 1.5; }
+.pa-metric-value { font-size: 1.875rem; font-weight: 700; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.pa-metric-source { font-size: .875rem; line-height: 1.5; color: var(--pa-muted); }
+[data-testid="stMetricValue"] { font-size: 1.875rem; line-height: 1.3; }
+[data-testid="stMetricLabel"] p { font-size: .875rem !important; white-space: normal; }
+.pa-metric-label, .pa-metric-value, .pa-metric-source, .pa-chip {
+  font-family: var(--pa-font); overflow-wrap: anywhere;
+}
+@media (max-width: 42rem) {
+  .main-header { padding: 1.25rem; }
+  [data-testid="stMarkdownContainer"] h1 { font-size: 2rem; }
+  [data-testid="stMarkdownContainer"] h2 { font-size: 1.5rem; }
+}
