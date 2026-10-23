@@ -104,6 +104,7 @@ def enrich_catalog(catalog, snapshot):
             'Consulta OpenAlex': snapshot.get('retrieved_at', '')[:10],
             'Correspondência': 'ISSN ambíguo; sem métrica' if key in ambiguous else ('ISSN exato' if record else 'Sem correspondência'),
             '_citation_history': record.get('history') or [],
+            'Temas OpenAlex': '; '.join(record.get('topics') or [record.get('topic') or '']),
         })
     frame = pd.concat([frame, pd.DataFrame(metadata)], axis=1)
     for metric in (METRIC, H_INDEX):
