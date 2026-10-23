@@ -89,6 +89,12 @@ def render_explorer(catalog, institutions):
     version = SNAPSHOT_PATH.stat().st_mtime_ns if SNAPSHOT_PATH.exists() else 0
     frame, retrieved = prepare_explorer(catalog, version)
     st.markdown('<div id="explorar-revistas"></div>', unsafe_allow_html=True)
+    summary = st.columns(4)
+    summary[0].metric('Registros no catálogo', f'{len(frame):,}'.replace(',', '.'))
+    summary[1].metric('Com métrica OpenAlex', f'{int(frame[METRIC].notna().sum()):,}'.replace(',', '.'))
+    summary[2].metric('Títulos Nature', int((frame['Editora'] == 'Nature Portfolio').sum()))
+    summary[3].metric('Modos de busca', 2)
+    st.caption('Oportunidades pelo tema do manuscrito, com conferência institucional, cobertura e fontes. A presença no catálogo não autoriza custeio por si só.')
     st.caption('¹ Métricas abertas OpenAlex, consultadas em ' + (retrieved or 'data não disponível') + '. Não são JIF/JCR, CiteScore ou quartil. Não determinam elegibilidade CAPES ou qualidade individual do artigo.')
     simple, advanced = st.tabs(['🔎 Busca simples', '🎯 Busca avançada'])
     publishers = sorted(frame['Editora'].unique())
