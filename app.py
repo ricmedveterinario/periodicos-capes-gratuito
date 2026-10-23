@@ -4,6 +4,8 @@ from datetime import datetime
 import io
 import unicodedata
 import os
+import base64
+from pathlib import Path
 from capes_catalog import load_catalog, search_catalog, acceptance_status, REVISION
 from explorer_ui import render_explorer
 
@@ -14,6 +16,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+st.markdown('<style>' + (Path(__file__).parent / 'typography.css').read_text(encoding='utf-8') + '</style>', unsafe_allow_html=True)
 
 # CSS customizado
 st.markdown("""
@@ -333,19 +337,20 @@ except Exception:
 
 # Sidebar - Logo e informações GOBIOTA
 try:
-    st.sidebar.image("logo.png", use_column_width=True)
+    logo_data = base64.b64encode((Path(__file__).resolve().parent / "logo.png").read_bytes()).decode('ascii')
+    st.sidebar.markdown('<div style="text-align:center"><img src="data:image/png;base64,' + logo_data + '" alt="Logotipo GOBIOTA — Universidade Federal de Uberlândia" style="width:15rem;max-width:100%;height:auto"></div>', unsafe_allow_html=True)
 except:
     pass
 
 st.sidebar.markdown("""
 <div style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
     <h3 style="margin: 5px 0; color: #1e40af; font-size: 1.1rem;">GOBIOTA</h3>
-    <p style="margin: 0; font-size: 0.75rem; color: #6b7280; line-height: 1.3;">
+    <p style="margin: 0; font-size: 0.875rem; color: #475569; line-height: 1.3;">
         <strong>G</strong>rupo de Pesquisa e Inovação em<br>
         <strong>O</strong>rganismos, <strong>Bio</strong>informática e<br>
         <strong>T</strong>ecnologias <strong>A</strong>plicadas
     </p>
-    <p style="margin: 10px 0 0 0; font-size: 0.7rem; color: #9ca3af;">
+    <p style="margin: 10px 0 0 0; font-size: 0.875rem; color: #475569;">
         PPGCVET • FMVZ • UFU
     </p>
 </div>
@@ -390,12 +395,12 @@ st.sidebar.markdown("""
     .sidebar-link-disabled {
         opacity: 0.5;
         cursor: not-allowed;
-        border-left: 3px solid #9ca3af;
+        border-left: 3px solid #475569;
     }
     .sidebar-section-title {
-        font-size: 0.75rem;
+        font-size: 0.875rem;
         font-weight: bold;
-        color: #6b7280;
+        color: #475569;
         text-transform: uppercase;
         margin: 1rem 0 0.5rem 0;
         letter-spacing: 0.05em;
@@ -440,23 +445,6 @@ st.sidebar.markdown("""
     📚 Lista de Editoras
 </a>
 
-<div class="sidebar-section-title">🚀 Em Desenvolvimento</div>
-
-<span class="sidebar-link sidebar-link-disabled">
-    🔬 Sistemas de Análise
-</span>
-
-<span class="sidebar-link sidebar-link-disabled">
-    📊 Banco de Dados
-</span>
-
-<span class="sidebar-link sidebar-link-disabled">
-    📚 Publicações
-</span>
-
-<span class="sidebar-link sidebar-link-disabled">
-    👥 Equipe
-</span>
 """, unsafe_allow_html=True)
 
 # Descoberta de revistas com dois níveis de complexidade.
@@ -500,10 +488,10 @@ with st.expander("Como usar o Publica Aberto e equipe GOBIOTA", expanded=False):
             <strong>Programa de Pós-graduação:</strong> Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
             <strong>Universidade:</strong> Universidade Federal de Uberlândia (UFU)
         </p>
-        <p style="margin-bottom: 0.5rem; font-size: 0.85rem; color: #4b5563;">
+        <p style="margin-bottom: 0.5rem; font-size: 0.875rem; color: #4b5563;">
             <strong>Coordenação:</strong> Prof. Dr. Richard Costa Polveiro
         </p>
-        <p style="margin-bottom: 0; font-size: 0.9rem; color: #6b7280;">
+        <p style="margin-bottom: 0; font-size: 0.9rem; color: #475569;">
             ℹ️ Dados extraídos dos acordos transformativos CAPES vigentes • Atualizado periodicamente<br>
             💡 Acesse a barra lateral para links de contato e recursos do GOBIOTA
         </p>
@@ -522,7 +510,7 @@ if publisher_data.get('INDICE') is not None:
         st.markdown("### Visão Geral dos Acordos CAPES")
         st.dataframe(
             publisher_data['INDICE'],
-            use_container_width=True,
+            width="stretch",
             hide_index=True
         )
         st.caption("💡 Este é um resumo consolidado de todos os acordos transformativos CAPES")
@@ -534,7 +522,7 @@ if publisher_data.get('REQUISITOS') is not None:
         st.markdown("### O que você precisa para publicar gratuitamente")
         st.dataframe(
             publisher_data['REQUISITOS'],
-            use_container_width=True,
+            width="stretch",
             hide_index=True
         )
         st.caption("⚠️ Verifique estes requisitos antes de submeter seu artigo")
@@ -545,7 +533,7 @@ if publisher_data.get('AVISOS') is not None:
         st.markdown("### Avisos e Observações sobre os Acordos")
         st.dataframe(
             publisher_data['AVISOS'],
-            use_container_width=True,
+            width="stretch",
             hide_index=True
         )
         st.caption("⚠️ Atenção especial para Elsevier e Wiley Gold!")
@@ -644,7 +632,7 @@ st.markdown("""
             border-radius: 8px; 
             border-left: 4px solid #f59e0b;
             margin-bottom: 2rem;">
-    <p style="margin: 0; color: #92400e; font-size: 0.85rem; text-align: center;">
+    <p style="margin: 0; color: #92400e; font-size: 0.875rem; text-align: center;">
         ⚠️ <strong>Disclaimer:</strong> As opiniões, hipóteses e conclusões ou recomendações 
         expressas neste site são de responsabilidade dos autores e não necessariamente 
         refletem a visão das agências de fomento.
@@ -707,16 +695,16 @@ st.markdown("""
     <p style="margin: 0.25rem 0; font-size: 0.9rem; color: #4b5563;">
         Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica
     </p>
-    <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #6b7280;">
+    <p style="margin: 0.25rem 0; font-size: 0.875rem; color: #475569;">
         Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
         Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
         Universidade Federal de Uberlândia (UFU)
     </p>
     <hr style="margin: 1rem auto; width: 50%; border: none; border-top: 1px solid #e5e7eb;">
-    <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: #9ca3af;">
+    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #475569;">
         💰 Ajudando pesquisadores brasileiros a publicarem em acesso aberto
     </p>
-    <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #9ca3af;">
+    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #475569;">
         Licenciado sob MIT License | Versão 1.0 | Interface de 23/10/2026
     </p>
 </div>
