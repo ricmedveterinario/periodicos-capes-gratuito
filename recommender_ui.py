@@ -5,30 +5,31 @@ from capes_catalog import acceptance_status
 from journal_recommender import JournalRecommender, institution_publishers
 
 
-@st.cache_resource(show_spinner=False)
+@st.cache_resource(show_spinner=False, max_entries=2)
 def build_recommender(catalog):
     return JournalRecommender(catalog)
 
 
 def render_recommender(catalog, institutions):
     st.markdown('<div id="recomendar-revista"></div>', unsafe_allow_html=True)
-    st.subheader('🎯 Encontrar revistas para meu manuscrito')
-    st.write('Descreva seu trabalho para receber sugestões temáticas dentro do catálogo Publica Aberto.')
-    st.caption('O texto é processado no servidor do Publica Aberto, sem envio a serviços de IA ou busca externa. Não é gravado pelo recomendador; permanece na sessão enquanto ela estiver aberta.')
-    with st.expander('Como as sugestões são calculadas'):
-        st.write('Comparamos palavras do título, resumo e palavras-chave com títulos e áreas disponíveis no catálogo. Um vocabulário português–inglês ajuda a reconhecer temas. Título e palavras-chave têm maior peso. A pontuação ordena a relação temática; não é porcentagem de compatibilidade ou chance de aceite.')
-        st.write('Esta primeira versão não analisa artigos publicados nem o escopo completo de cada revista. Periódicos multidisciplinares podem não aparecer. Confira o escopo e as instruções aos autores antes de escolher.')
+    st.write('**Qual é o tema do seu manuscrito?**')
     with st.form('manuscript_recommender'):
         title = st.text_input('Título do manuscrito', max_chars=500)
-        abstract = st.text_area('Resumo (opcional)', max_chars=12000, height=150)
         keywords = st.text_input('Palavras-chave', placeholder='Ex.: resistência antimicrobiana; microbiologia veterinária', max_chars=1000)
+        with st.expander('Adicionar resumo (opcional)'):
+            abstract = st.text_area('Resumo', max_chars=12000, height=150)
         names = sorted(institutions['Nome da Instituição'].dropna().unique())
         institution = st.selectbox('Instituição do autor correspondente', ['Sem filtro institucional'] + names)
         integral = st.checkbox('Somente cobertura integral indicada na base', value=True,
                                help='Exclui descontos e registros de cobertura pendente. A indicação da base exige confirmação no acordo.')
-        accepted = st.date_input('Data de aceite para conferir vigência (opcional)', value=None, key='recommender_acceptance')
-        limit = st.select_slider('Quantidade de sugestões', options=[5, 10, 20], value=10)
-        submitted = st.form_submit_button('Encontrar revistas', type='primary')
+        with st.expander('Mais opções'):
+            accepted = st.date_input('Data de aceite para conferir vigência (opcional)', value=None, key='recommender_acceptance')
+            limit = st.select_slider('Quantidade de sugestões', options=[5, 10, 20], value=10)
+        submitted = st.form_submit_button('Encontrar revistas', type='primary', use_container_width=True)
+    st.caption('Seu texto é processado no servidor do Publica Aberto, sem envio a serviços externos e sem gravação pelo recomendador. Permanece na sessão enquanto ela estiver aberta.')
+    with st.expander('Como interpretar as sugestões'):
+        st.write('Comparamos palavras do título, resumo e palavras-chave com títulos e áreas disponíveis no catálogo. Um vocabulário português–inglês ajuda a reconhecer temas. Título e palavras-chave têm maior peso. A pontuação ordena a relação temática; não é porcentagem de compatibilidade ou chance de aceite.')
+        st.write('Esta primeira versão não analisa artigos publicados nem o escopo completo de cada revista. Periódicos multidisciplinares podem não aparecer. Confira o escopo e as instruções aos autores antes de escolher.')
     if not submitted:
         return
     if not any(text.strip() for text in (title, abstract, keywords)):
