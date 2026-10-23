@@ -5,6 +5,7 @@ import io
 import unicodedata
 import os
 from capes_catalog import load_catalog, search_catalog, acceptance_status, REVISION
+from recommender_ui import render_recommender
 
 # Configuração da página
 st.set_page_config(
@@ -457,6 +458,10 @@ st.sidebar.markdown("""
     📚 Buscar Periódico
 </a>
 
+<a href="#recomendar-revista" class="nav-button nav-button-blue">
+    🎯 Recomendar Revistas
+</a>
+
 <script>
 function scrollToElement(elementId) {
     // Tentar encontrar o elemento pelo ID
@@ -839,6 +844,9 @@ st.markdown("---")
 
 # Âncora para navegação
 st.markdown('<div id="passo-2-periodico"></div>', unsafe_allow_html=True)
+
+render_recommender(publisher_data, load_institutions_data())
+st.markdown("---")
 
 # ==================== CÓDIGO ORIGINAL DE PERIÓDICOS ====================
 
