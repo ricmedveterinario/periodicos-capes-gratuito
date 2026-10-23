@@ -5,6 +5,7 @@ from capes_catalog import acceptance_status
 from journal_recommender import JournalRecommender, institution_publishers
 from open_metrics import enrich_catalog, read_snapshot, SNAPSHOT_PATH, AREA, safe_url
 from metric_visuals import metric_panel, journal_chips
+from discovery_links import scholar_journal_url
 
 
 @st.cache_resource(show_spinner=False, max_entries=2)
@@ -66,7 +67,8 @@ def render_recommender(catalog, institutions):
             st.markdown(metric_panel(row), unsafe_allow_html=True)
             url = safe_url(row.get('Página da revista', ''))
             if url:
-                st.link_button('Abrir revista e conferir escopo ↗', url)
+                st.link_button('Abrir revista e conferir escopo ↗', url, width='stretch')
+            st.link_button('Pesquisar artigos no Google Acadêmico ↗', scholar_journal_url(row['Título da Revista']), width='stretch')
         with st.expander('Ver condições: ' + str(row['Título da Revista'])):
             st.write('**Termos relacionados:** ' + row['Termos relacionados'])
             st.write('**Cobertura registrada:** ' + str(row.get('Cobertura APC', 'Conferir')))
