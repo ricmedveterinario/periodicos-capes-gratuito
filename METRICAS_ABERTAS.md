@@ -5,6 +5,11 @@ média de citações em dois anos ou índice h. A busca avançada combina instit
 cobertura registrada, presença e mínimo de métrica e data de aceite, ou abre o
 recomendador por manuscrito. O cabeçalho e a identidade GOBIOTA são preservados.
 
+Os cartões iniciais mostram nome, área, editora, indicação resumida da cobertura,
+métricas disponíveis e link. Preços APC em moedas, colunas técnicas e campos
+vazios não aparecem na busca. A conferência de vigência só aparece quando o
+pesquisador informa uma data de aceite. ISSN, modelo e fontes ficam nos detalhes.
+
 ## Dados e correspondência
 
 `data/openalex_metrics.json.gz.b64` contém apenas metadados públicos obtidos diretamente
@@ -19,6 +24,11 @@ semelhança de título. Um ISSN associado a mais de uma fonte não recebe métri
 Revistas sem métrica permanecem na lista com travessão; zero continua sendo zero.
 Links usam a URL existente da revista ou a homepage do mesmo registro OpenAlex.
 O gráfico deduplica ISSNs e apresenta somente valores disponíveis.
+
+Os cartões incluem selos coloridos, painéis de métricas sem cortes e pequenas
+linhas de citações anuais OpenAlex entre 2021 e 2025. As linhas usam escala própria
+por revista, não fator de impacto anual. Anos ausentes produzem lacunas, sem zeros
+inventados. O intervalo exclui 2026, que ainda não é um ano completo.
 
 ## Interpretação
 
