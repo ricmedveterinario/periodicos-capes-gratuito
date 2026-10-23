@@ -45,7 +45,8 @@ def render_recommender(catalog, institutions):
     st.caption('A presença da instituição no acordo é preliminar. A cobertura depende também do título, modelo, vigência e requisitos do autor; a aprovação do custeio é da CAPES.')
     display_columns = ['Título da Revista', 'Editora', 'Pontuação temática', 'Termos relacionados', 'ISSN', 'Modelo', 'Cobertura APC']
     display = results[[column for column in display_columns if column in results]].copy()
-    display['Conferência da data'] = results['Editora'].map(lambda publisher: acceptance_status(publisher, accepted))
+    if accepted is not None:
+        display['Conferência da data'] = results['Editora'].map(lambda publisher: acceptance_status(publisher, accepted))
     st.dataframe(display, hide_index=True, use_container_width=True)
     for position, (_, row) in enumerate(results.iterrows(), 1):
         with st.expander(f"{position}. {row['Título da Revista']} — {row['Editora']}"):
@@ -55,7 +56,8 @@ def render_recommender(catalog, institutions):
             for column in ('Situação da lista', 'Observações', 'Observação'):
                 if column in row and str(row[column]).strip():
                     st.write(str(row[column]))
-            st.write(acceptance_status(row['Editora'], accepted))
+            if accepted is not None:
+                st.write(acceptance_status(row['Editora'], accepted))
             url = str(row.get('URL', ''))
             parsed = urlparse(url)
             if parsed.scheme == 'https' and parsed.netloc and not parsed.username:
