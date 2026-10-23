@@ -1,5 +1,6 @@
 """Small, accessible metric panels and factual citation sparklines."""
 from html import escape
+from scholar_metrics import scholar_panel
 from open_metrics import nonnegative, METRIC, H_INDEX
 
 
@@ -51,7 +52,7 @@ def metric_panel(row):
         blocks.append('<div style="border:1px solid #dbe8e5;background:#fbfefd;border-radius:12px;padding:10px 14px;flex:1 1 16rem;min-width:0">'
                       '<div style="font-size:.875rem;font-weight:650;color:#0f766e">Citações por ano · OpenAlex</div>'
                       + sparkline_svg(history) + '</div>')
-    return '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">' + ''.join(blocks) + '</div>'
+    return '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">' + ''.join(blocks) + '</div>' + scholar_panel(row.get('Título da Revista', ''))
 
 
 def journal_chips(area, publisher, full):
