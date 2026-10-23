@@ -1,13 +1,15 @@
 """Simple and advanced journal discovery with separately labeled open metrics."""
 import streamlit as st
+import pandas as pd
 from open_metrics import (METRIC, H_INDEX, AREA, enrich_catalog, read_snapshot,
-                          filter_catalog, chart_records, safe_url)
+                          filter_catalog, chart_records, safe_url, SNAPSHOT_PATH)
 from capes_catalog import acceptance_status
 from recommender_ui import render_recommender
+from metric_visuals import metric_panel, journal_chips
 
 
 @st.cache_data(show_spinner=False, max_entries=2)
-def prepare_explorer(catalog):
+def prepare_explorer(catalog, snapshot_version=0):
     snapshot = read_snapshot()
     return enrich_catalog(catalog, snapshot), snapshot.get('retrieved_at', '')[:10]
 
@@ -56,32 +58,33 @@ def render_cards(frame, key, accepted=None):
     page = st.number_input('Página de resultados', min_value=1, max_value=pages, step=1, key=page_key)
     for _, row in frame.iloc[(page-1)*10:page*10].iterrows():
         with st.container(border=True):
-            title_col, metric_col, h_col = st.columns([6, 2, 1])
-            with title_col:
-                st.markdown('**' + str(row['Título da Revista']) + '**')
-                st.caption(str(row[AREA]) + ' · ' + str(row['Editora']))
-                st.caption('ISSN ' + str(row['ISSN']) + ' · ' + str(row.get('Modelo', '')) + ' · APC: ' + str(row.get('Cobertura APC', 'Conferir')))
-            with metric_col:
-                value = row[METRIC]
-                st.metric('Citações / 2 anos¹', '—' if value != value else f'{value:.2f}')
-            with h_col:
-                value = row[H_INDEX]
-                st.metric('Índice h¹', '—' if value != value else str(int(value)))
+            st.markdown('**' + str(row['Título da Revista']) + '**')
+            st.markdown(journal_chips(row[AREA], row['Editora'], row['_full_coverage']), unsafe_allow_html=True)
+            st.markdown(metric_panel(row), unsafe_allow_html=True)
+            if pd.isna(row[METRIC]) and pd.isna(row[H_INDEX]):
+                st.caption('Métricas não disponíveis nesta consulta.')
             url = safe_url(row['Página da revista'])
             if url:
                 st.link_button('Abrir revista ↗', url)
             with st.expander('Cobertura, fonte e vigência'):
-                st.write(acceptance_status(row['Editora'], accepted))
-                st.write(str(row.get('Situação da lista', 'Confira as condições oficiais do acordo.')))
+                st.write('**ISSN:** ' + str(row['ISSN']))
+                for column in ('Modelo', 'Cobertura APC'):
+                    value = str(row.get(column, '')).strip()
+                    if value and value not in {'None', 'nan'}:
+                        st.write(f'**{column}:** {value}')
+                if accepted is not None:
+                    st.write(acceptance_status(row['Editora'], accepted))
                 if row['Fonte OpenAlex']:
                     st.link_button('Conferir registro no OpenAlex', row['Fonte OpenAlex'])
-                st.caption('Correspondência: ' + row['Correspondência'] + ' · consulta: ' + row['Consulta OpenAlex'])
+                if row['Fonte OpenAlex']:
+                    st.caption('Métricas associadas pelo ISSN · consulta: ' + row['Consulta OpenAlex'])
                 if not url:
                     st.caption('Link direto da revista não localizado.')
 
 
 def render_explorer(catalog, institutions):
-    frame, retrieved = prepare_explorer(catalog)
+    version = SNAPSHOT_PATH.stat().st_mtime_ns if SNAPSHOT_PATH.exists() else 0
+    frame, retrieved = prepare_explorer(catalog, version)
     st.markdown('<div id="explorar-revistas"></div>', unsafe_allow_html=True)
     st.caption('¹ Métricas abertas OpenAlex, consultadas em ' + (retrieved or 'data não disponível') + '. Não são JIF/JCR, CiteScore ou quartil. Não determinam elegibilidade CAPES ou qualidade individual do artigo.')
     simple, advanced = st.tabs(['🔎 Busca simples', '🎯 Busca avançada'])
@@ -126,4 +129,5 @@ def render_explorer(catalog, institutions):
     with st.expander('Sobre as métricas e a classificação por área'):
         st.write('A média de citações em dois anos e o índice h são fornecidos pelo OpenAlex. A correspondência usa ISSN exato; casos ambíguos e métricas ausentes não recebem valores estimados. A data de consulta é uma fotografia da base, não um ano JCR.')
         st.write('A área vem do campo do tópico mais frequente associado à revista no OpenAlex, traduzido quando disponível. Revistas multidisciplinares podem aparecer sob uma área predominante; não é uma classificação oficial de escopo editorial.')
+        st.write('As pequenas linhas mostram citações por ano no OpenAlex de 2021 a 2025, em escala própria para cada revista. Não são histórico de fator de impacto JCR. Anos sem registro ficam com lacunas; não são preenchidos com zero.')
         st.markdown('[Fonte e definições OpenAlex](https://help.openalex.org/data/sources/attributes/) · Dados CC0. Quartis JCR não são calculados a partir dessas métricas.')
