@@ -6,6 +6,10 @@ disponíveis, expansão por vocabulário português–inglês e BM25 (k1=1.5, b=
 Cada termo pesa 3 no título, 4 nas palavras-chave e 1 no resumo. Repetição no
 manuscrito não aumenta esses pesos. A lista mostra os termos que contribuíram.
 
+A interface separa recomendação, busca de periódico, instituições e informações
+em quatro abas. A página inicial começa pelo formulário; contatos e materiais
+de apoio ficam recolhidos. O resumo estatístico mostra a distribuição por editora.
+
 A seleção exata da instituição limita os grupos aos presentes em sua lista.
 Springer e Nature são separados. O rótulo institucional Wiley inclui seus dois
 grupos; o filtro padrão de cobertura integral exclui Wiley Gold, descontos,
