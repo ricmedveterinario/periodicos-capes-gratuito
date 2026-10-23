@@ -38,8 +38,11 @@ def render_chart(frame, chart_metric):
         y=alt.Y('Área:N'),
         tooltip=[alt.Tooltip('Área:N'), alt.Tooltip('Mediana:Q', format='.2f')],
     )
-    chart = (chart + median).properties(height=max(260, areas * 31)).configure_view(stroke=None)
-    st.altair_chart(chart, use_container_width=True)
+    chart = (chart + median).properties(height=max(260, areas * 35)).configure_view(stroke=None).configure_axis(
+        labelFont='Arial', labelFontSize=14, titleFont='Arial', titleFontSize=16,
+        labelColor='#475569', titleColor='#1f2937',
+    )
+    st.altair_chart(chart, width="stretch")
     st.caption(f'{len(records):,} revistas com valor disponível. Passe o mouse para ver detalhes; clique no ponto para abrir a revista quando houver link. Losangos mostram a mediana dos resultados de cada área. Áreas representam o campo do tópico predominante no OpenAlex. Eixo em escala simétrica logarítmica.')
 
 
@@ -102,7 +105,7 @@ def render_explorer(catalog, institutions):
             render_chart(filtered, METRIC if order != 'Índice h' else H_INDEX)
         render_cards(filtered, 'simple')
     with advanced:
-        mode = st.radio('Como deseja buscar?', ['Combinar filtros', 'Recomendar pelo manuscrito'], horizontal=True)
+        mode = st.radio('Como deseja buscar?', ['Recomendar pelo manuscrito', 'Combinar filtros'], horizontal=True)
         if mode == 'Recomendar pelo manuscrito':
             render_recommender(catalog, institutions)
         else:
