@@ -6,9 +6,15 @@ disponíveis, expansão por vocabulário português–inglês e BM25 (k1=1.5, b=
 Cada termo pesa 3 no título, 4 nas palavras-chave e 1 no resumo. Repetição no
 manuscrito não aumenta esses pesos. A lista mostra os termos que contribuíram.
 
-A interface separa recomendação, busca de periódico, instituições e informações
-em quatro abas. A página inicial começa pelo formulário; contatos e materiais
-de apoio ficam recolhidos. O resumo estatístico mostra a distribuição por editora.
+O índice inclui também os cinco temas predominantes por revista fornecidos pelo
+OpenAlex e o campo de área, associados por ISSN exato. Isso permite encontrar
+revistas de nome genérico cujo perfil temático corresponde ao manuscrito. Não há
+envio do texto à API: os temas públicos ficam no índice local. Os cartões mostram
+os termos que motivaram a sugestão, temas da fonte, métricas e link da revista.
+
+A interface separa Busca simples e Busca avançada. Na busca avançada o formulário
+de manuscrito permite título ou resumo, e os filtros combinados permitem conferir
+a instituição. Detalhes e materiais de apoio ficam recolhidos.
 
 A seleção exata da instituição limita os grupos aos presentes em sua lista.
 Springer e Nature são separados. O rótulo institucional Wiley inclui seus dois
