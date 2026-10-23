@@ -12,7 +12,7 @@ st.set_page_config(
     page_title="Publique Gratuitamente - Acordos CAPES",
     page_icon="💰",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 # CSS customizado
@@ -242,62 +242,19 @@ st.markdown("""
 </script>
 """, unsafe_allow_html=True)
 
-# Cabeçalho
+# Entrada compacta: as tarefas principais aparecem antes das explicações.
 st.markdown("""
-<div class="main-header">
-    <h1>📊 Publique Gratuitamente - Acordos CAPES</h1>
-    <p style="font-size: 1.1rem; margin-bottom: 0;">
-        Descubra se você pode publicar sem custos através dos acordos transformativos
-    </p>
-</div>
+<style>
+.block-container {max-width: 1240px; padding-top: 2.2rem;}
+h1 {letter-spacing: -.04em; font-weight: 750;}
+div[data-testid="stTabs"] button {font-size: 1rem;}
+div[data-testid="stForm"] {border-radius: 14px;}
+</style>
+<p style="color:#13786b;font-size:.78rem;font-weight:700;letter-spacing:.12em;margin-bottom:.4rem">GOBIOTA / UFU · ACORDOS CAPES</p>
 """, unsafe_allow_html=True)
-
-# Alerta informativo
-st.info("""
-🎯 **Como funciona:** Este sistema tem DUAS funções essenciais:
-1. **🏛️ Verificar se SUA INSTITUIÇÃO é elegível** (primeiro passo - faça isso abaixo!)
-2. **📚 Buscar o PERIÓDICO** onde você quer publicar (segundo passo)
-
-Se ambos estiverem listados, confira também o modelo do periódico, a data de aceite e os requisitos do autor. O custeio depende de validação pela CAPES.
-""")
-
-
-# Créditos
-st.markdown("""
-<div class="credits">
-    <h3 style="margin-top: 0; color: #1e40af;">💰 O que são Acordos Transformativos?</h3>
-    <p style="margin-bottom: 1rem;">
-        São acordos entre a CAPES e grandes editoras científicas que permitem a <strong>pesquisadores brasileiros 
-        publicarem gratuitamente em acesso aberto</strong>, sem pagar APCs (Article Processing Charges - taxas de 
-        processamento de artigos que podem custar milhares de dólares).
-    </p>
-    <p style="margin-bottom: 1rem;">
-        <strong>Verificação preliminar:</strong><br>
-        • É afiliado a uma instituição brasileira elegível nos acordos<br>
-        • Sua instituição tem acesso ao Portal de Periódicos CAPES<br>
-        • O periódico está listado nos acordos da editora<br>
-        • Você é o autor correspondente (corresponding author)
-    </p>
-    <hr style="margin: 1rem 0;">
-    <h3 style="margin-top: 1rem; color: #1e40af;">📚 Desenvolvido por:</h3>
-    <p style="margin-bottom: 0.5rem;">
-        <strong>Grupo GOBIOTA</strong><br>
-        <em>Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica</em>
-    </p>
-    <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">
-        <strong>Instituição:</strong> Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
-        <strong>Programa de Pós-graduação:</strong> Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
-        <strong>Universidade:</strong> Universidade Federal de Uberlândia (UFU)
-    </p>
-    <p style="margin-bottom: 0.5rem; font-size: 0.85rem; color: #4b5563;">
-        <strong>Coordenação:</strong> Prof. Dr. Richard Costa Polveiro
-    </p>
-    <p style="margin-bottom: 0; font-size: 0.9rem; color: #6b7280;">
-        ℹ️ Dados extraídos dos acordos transformativos CAPES vigentes • Atualizado periodicamente<br>
-        💡 Acesse a barra lateral para links de contato e recursos do GOBIOTA
-    </p>
-</div>
-""", unsafe_allow_html=True)
+st.title("Publica Aberto")
+st.write("Encontre revistas para sua pesquisa e confira as condições de publicação sem APC.")
+st.caption("Consulta independente. A cobertura depende do periódico, da instituição e dos requisitos do autor.")
 
 # ==================== FUNÇÕES AUXILIARES ====================
 
@@ -376,228 +333,24 @@ except Exception:
     st.error("Não foi possível carregar as bases privadas. A equipe responsável precisa conferir o acesso do aplicativo no Google Drive.")
     st.stop()
 
-# ==================== SIDEBAR ====================
-
-# Sidebar - Logo e informações GOBIOTA
-try:
-    st.sidebar.image("logo.png", use_column_width=True)
-except:
-    pass
-
-st.sidebar.markdown("""
-<div style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
-    <h3 style="margin: 5px 0; color: #1e40af; font-size: 1.1rem;">GOBIOTA</h3>
-    <p style="margin: 0; font-size: 0.75rem; color: #6b7280; line-height: 1.3;">
-        <strong>G</strong>rupo de Pesquisa e Inovação em<br>
-        <strong>O</strong>rganismos, <strong>Bio</strong>informática e<br>
-        <strong>T</strong>ecnologias <strong>A</strong>plicadas
-    </p>
-    <p style="margin: 10px 0 0 0; font-size: 0.7rem; color: #9ca3af;">
-        PPGCVET • FMVZ • UFU
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-st.sidebar.markdown("---")
-
-# Botão para forçar atualização
-if st.sidebar.button("🔄 Atualizar Dados", help="Recarrega a versão de dados publicada no aplicativo"):
-    st.cache_data.clear()
-    st.rerun()
-
-st.sidebar.caption("Bases v2 • Revisão de 19/10/2026 • Nature: lista de setembro/2026")
-st.sidebar.caption("Dados privados do Drive em cache por até 1 hora. Atualizar Dados relê os arquivos compartilhados com o aplicativo.")
-
-st.sidebar.markdown("---")
-
-# ==================== NAVEGAÇÃO RÁPIDA ====================
-st.sidebar.header("🧭 Navegação Rápida")
-
-st.sidebar.markdown("""
-<div style="background-color: #f0f9ff; 
-            padding: 0.8rem; 
-            border-radius: 8px; 
-            border-left: 4px solid #3b82f6;
-            margin-bottom: 1rem;">
-    <p style="margin: 0; color: #1e40af; font-size: 0.85rem; line-height: 1.5;">
-        Use os links abaixo para navegar rapidamente entre as seções:
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-# Links de navegação usando markdown
-st.sidebar.markdown("""
-<style>
-    .nav-button {
-        display: block;
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white !important;
-        padding: 0.75rem;
-        text-align: center;
-        text-decoration: none;
-        border-radius: 8px;
-        margin-bottom: 0.5rem;
-        font-weight: bold;
-        transition: transform 0.2s;
-        cursor: pointer;
-    }
-    .nav-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    .nav-button-blue {
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    }
-</style>
-
-<a href="#passo-1-instituicao" class="nav-button" onclick="scrollToElement('passo-1-instituicao'); return false;">
-    🏛️ Verificar Instituição
-</a>
-
-<a href="#passo-2-periodico" class="nav-button nav-button-blue" onclick="scrollToElement('passo-2-periodico'); return false;">
-    📚 Buscar Periódico
-</a>
-
-<a href="#recomendar-revista" class="nav-button nav-button-blue">
-    🎯 Recomendar Revistas
-</a>
-
-<script>
-function scrollToElement(elementId) {
-    // Tentar encontrar o elemento pelo ID
-    const element = document.getElementById(elementId);
-    if (element) {
-        // Rolar suavemente até o elemento
-        element.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
-        
-        // Atualizar URL sem recarregar página
-        if (history.pushState) {
-            history.pushState(null, null, '#' + elementId);
-        }
-    } else {
-        // Se não encontrar, tentar novamente após delay (Streamlit pode estar renderizando)
-        setTimeout(function() {
-            const el = document.getElementById(elementId);
-            if (el) {
-                el.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
-            }
-        }, 500);
-    }
-}
-
-// Verificar se há hash na URL ao carregar
-window.addEventListener('load', function() {
-    if (window.location.hash) {
-        const targetId = window.location.hash.substring(1);
-        setTimeout(function() {
-            scrollToElement(targetId);
-        }, 1000);
-    }
-});
-</script>
-""", unsafe_allow_html=True)
-
-st.sidebar.markdown("---")
-
-# Espaço para futuros links do GOBIOTA
-st.sidebar.header("🔗 Links GOBIOTA")
-
-st.sidebar.markdown("""
-<style>
-    .sidebar-link {
-        display: block;
-        padding: 0.5rem 0.75rem;
-        margin-bottom: 0.25rem;
-        border-radius: 6px;
-        text-decoration: none;
-        color: #374151;
-        background-color: #f9fafb;
-        border-left: 3px solid #3b82f6;
-        transition: all 0.2s;
-        font-size: 0.9rem;
-    }
-    .sidebar-link:hover {
-        background-color: #eff6ff;
-        transform: translateX(4px);
-        color: #1e40af;
-    }
-    .sidebar-link-disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        border-left: 3px solid #9ca3af;
-    }
-    .sidebar-section-title {
-        font-size: 0.75rem;
-        font-weight: bold;
-        color: #6b7280;
-        text-transform: uppercase;
-        margin: 1rem 0 0.5rem 0;
-        letter-spacing: 0.05em;
-    }
-</style>
-
-<div class="sidebar-section-title">📞 Contato GOBIOTA</div>
-
-<a href="mailto:gobiota2025@gmail.com" class="sidebar-link" target="_blank">
-    📧 gobiota2025@gmail.com
-</a>
-
-<a href="mailto:richard.polveiro@ufu.br" class="sidebar-link" target="_blank">
-    📧 richard.polveiro@ufu.br
-</a>
-
-<a href="https://instagram.com/gobiota2025" class="sidebar-link" target="_blank">
-    📱 @gobiota2025
-</a>
-
-<div class="sidebar-section-title">🏛️ Links Institucionais</div>
-
-<a href="https://fmvz.ufu.br" class="sidebar-link" target="_blank">
-    🎓 FMVZ/UFU
-</a>
-
-<a href="https://ppgcv.fmvz.ufu.br/" class="sidebar-link" target="_blank">
-    📚 PPGCVET/UFU
-</a>
-
-<a href="http://dgp.cnpq.br/dgp/espelhogrupo/815660" class="sidebar-link" target="_blank">
-    🔬 Grupo CNPq (DGP)
-</a>
-
-<div class="sidebar-section-title">📊 Recursos CAPES</div>
-
-<a href="https://www.periodicos.capes.gov.br" class="sidebar-link" target="_blank">
-    📖 Portal CAPES
-</a>
-
-<a href="https://www.periodicos.capes.gov.br/index.php/acessoaberto/acordos-transformativos.html" class="sidebar-link" target="_blank">
-    📚 Lista de Editoras
-</a>
-
-<div class="sidebar-section-title">🚀 Em Desenvolvimento</div>
-
-<span class="sidebar-link sidebar-link-disabled">
-    🔬 Sistemas de Análise
-</span>
-
-<span class="sidebar-link sidebar-link-disabled">
-    📊 Banco de Dados
-</span>
-
-<span class="sidebar-link sidebar-link-disabled">
-    📚 Publicações
-</span>
-
-<span class="sidebar-link sidebar-link-disabled">
-    👥 Equipe
-</span>
-""", unsafe_allow_html=True)
+# Navegação e contatos secundários ficam recolhidos.
+with st.sidebar:
+    try:
+        st.image("logo.png", width=110)
+    except Exception:
+        pass
+    st.markdown("**GOBIOTA · UFU**")
+    st.caption("Publica Aberto · bases v2")
+    if st.button("Atualizar dados", help="Relê as duas planilhas privadas do Drive"):
+        st.cache_data.clear()
+        st.cache_resource.clear()
+        st.rerun()
+    st.caption("Revisão das bases: 19/10/2026. Cache por até 1 hora.")
+    with st.expander("Contato e fontes"):
+        st.markdown("[GOBIOTA](mailto:gobiota2025@gmail.com) · [Richard Polveiro](mailto:richard.polveiro@ufu.br)")
+        st.markdown("[Instagram](https://instagram.com/gobiota2025) · [FMVZ/UFU](https://fmvz.ufu.br) · [PPGCVET](https://ppgcv.fmvz.ufu.br/)")
+        st.markdown("[Acordos CAPES](https://www.periodicos.capes.gov.br/index.php/acessoaberto/acordos-transformativos.html)")
+        st.caption("As planilhas são lidas pelo servidor com acesso restrito.")
 
 # ==================== VALORES PADRÃO (anteriormente da sidebar) ====================
 # Estes valores serão sobrescritos pelos campos do centro da página
@@ -608,665 +361,573 @@ search_term = ""
 view_option = "Paginada (Recomendado)"
 rows_per_page = 25
 
-# ==================== NOVA SEÇÃO: VERIFICAR INSTITUIÇÃO ====================
-
-st.markdown("---")
-
-# Âncora para navegação
-st.markdown('<div id="passo-1-instituicao"></div>', unsafe_allow_html=True)
-
-# CABEÇALHO GRANDE DO PASSO 1
-st.markdown("""
-<div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
-            padding: 1.5rem; 
-            border-radius: 10px; 
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-    <h2 style="color: white; margin: 0; font-size: 1.8rem;">
-        🏛️ PASSO 1: Verifique se sua Instituição é Elegível
-    </h2>
-    <p style="color: white; margin: 0.5rem 0 0 0; font-size: 1rem; opacity: 0.95;">
-        Primeiro passo essencial: descubra em quais editoras você pode publicar gratuitamente
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-with st.expander("📋 Clique aqui para buscar sua instituição", expanded=True):
-    st.markdown("""
-    <div class="institution-card">
-        <h3 style="margin-top: 0; color: #065f46;">✅ Por que verificar sua instituição?</h3>
-        <p style="margin-bottom: 0.5rem;">
-            <strong>Nem todas as instituições brasileiras estão nos acordos!</strong> Mesmo que o periódico esteja 
-            listado, você só pode publicar gratuitamente se sua instituição estiver nos acordos específicos de cada editora.
-        </p>
-        <p style="margin-bottom: 0.5rem;">
-            <strong>💡 O que isso significa?</strong><br>
-            • Cada editora tem sua própria lista de instituições elegíveis<br>
-            • Sua instituição pode estar em ALGUMAS editoras, mas não em todas<br>
-            • Por exemplo: UFU está nas 7 editoras, mas algumas instituições estão em apenas 2 ou 3<br>
-            • Você precisa verificar se está na editora do periódico que escolher
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+tab_recommend, tab_search, tab_institution, tab_about = st.tabs([
+    "Recomendar revistas", "Buscar periódico", "Verificar instituição", "Sobre e requisitos"
+])
+with tab_recommend:
+    render_recommender(publisher_data, load_institutions_data())
+with tab_search:
+    with st.expander("📋 Clique aqui para buscar seu periódico", expanded=True):
     
-    st.markdown("""
-    <div class="warning-box">
-        <strong>⚠️ IMPORTANTE - Como funciona a busca:</strong><br>
-        • Você pode buscar pelo <strong>NOME COMPLETO</strong> (ex: "Universidade Federal de Uberlândia")<br>
-        • Ou pela <strong>SIGLA</strong> (ex: "UFU", "UNESP", "USP")<br>
-        • Ou por <strong>PARTE DO NOME</strong> (ex: "Federal Uberlândia" encontra UFU)<br>
-        • A busca funciona com ou sem acentos<br><br>
-        <strong>💡 Dica:</strong> Se não encontrar pela sigla, tente pelo nome completo ou parte dele!
-    </div>
-    """, unsafe_allow_html=True)
+        # Inputs de busca
+        col1, col2 = st.columns([3, 1])
     
-    # Carregar dados
-    df_inst = load_institutions_data()
-    
-    if df_inst is not None:
-        # Detectar nomes de colunas
-        colunas = df_inst.columns.tolist()
-        
-        # Verificar se tem as colunas necessárias
-        col_editora = None
-        col_nome = None
-        col_sigla = None
-        col_busca = None
-        
-        # Mapear colunas possíveis
-        for col in colunas:
-            col_lower = col.lower()
-            if 'editora' in col_lower or 'publisher' in col_lower:
-                col_editora = col
-            elif 'nome' in col_lower and 'instituição' in col_lower:
-                col_nome = col
-            elif 'sigla' in col_lower or 'acronym' in col_lower:
-                col_sigla = col
-            elif 'busca' in col_lower or 'normalized' in col_lower:
-                col_busca = col
-        
-        if not col_editora or not col_nome:
-            st.error("❌ Estrutura da planilha não reconhecida. Verifique as colunas.")
-            st.write("**Colunas encontradas:**", colunas)
-        else:
-            # Campo de busca - combinar com sidebar
-            st.markdown("### 🔍 Buscar minha instituição:")
-            
-            col1, col2 = st.columns([3, 1])
-            
-            with col1:
-                instituicao_busca = st.text_input(
-                    "Digite o nome da sua instituição ou sigla:",
-                    placeholder="Ex: UFU, Universidade Federal de Uberlândia, Federal Uberlândia...",
-                    key="busca_instituicao",
-                    help="Busque pelo nome completo, sigla ou parte do nome - funciona sem acentos."
-                )
-            
-            with col2:
-                st.markdown("<br>", unsafe_allow_html=True)
-                if st.button("🔍 Buscar", type="primary", use_container_width=True):
-                    pass  # Trigger de atualização
-            
-            # Filtro de editoras
-            st.markdown("### 📚 Filtrar por editoras:")
-            
-            st.markdown("""
-            <div class="info-box">
-                <strong>💡 Por que filtrar por editoras?</strong><br>
-                Cada editora tem acordos diferentes com instituições específicas. Filtre pelas editoras 
-                onde você pretende publicar para ver se sua instituição está elegível especificamente nelas.
-            </div>
-            """, unsafe_allow_html=True)
-            
-            editoras_disponiveis = sorted(df_inst[col_editora].unique())
-            
-            # Checkboxes
-            cols = st.columns(4)
-            editoras_selecionadas = []
-            
-            for i, editora in enumerate(editoras_disponiveis):
-                with cols[i % 4]:
-                    checked = st.checkbox(
-                        editora,
-                        value=True,  # Todas marcadas por padrão
-                        key=f"check_inst_ed_{i}"
-                    )
-                    if checked:
-                        editoras_selecionadas.append(editora)
-            
-            # Realizar busca
-            if not editoras_selecionadas:
-                st.warning("⚠️ Selecione pelo menos uma editora")
-            else:
-                # Usar campo local apenas
-                busca_ativa = instituicao_busca
-                
-                # Filtrar resultados
-                if busca_ativa:
-                    termo_norm = normalizar_busca(busca_ativa)
-                    
-                    # Buscar em todas as colunas relevantes
-                    mask = pd.Series([False] * len(df_inst))
-                    
-                    if col_busca:
-                        mask = mask | df_inst[col_busca].astype(str).str.contains(termo_norm, case=False, na=False, regex=False)
-                    if col_sigla:
-                        mask = mask | df_inst[col_sigla].astype(str).str.upper().str.contains(termo_norm, na=False, regex=False)
-                    mask = mask | df_inst[col_nome].astype(str).str.upper().str.contains(termo_norm, na=False, regex=False)
-                    
-                    resultados = df_inst[mask & df_inst[col_editora].isin(editoras_selecionadas)]
-                else:
-                    resultados = df_inst[df_inst[col_editora].isin(editoras_selecionadas)]
-                
-                # Mostrar resultados
-                if busca_ativa:
-                    st.markdown("---")
-                
-                if len(resultados) > 0:
-                    editoras_encontradas = sorted(resultados[col_editora].unique())
-                    
-                    if busca_ativa:
-                        st.success(f"**Encontramos instituições correspondentes à busca em {len(editoras_encontradas)} acordo(s). Confira os nomes abaixo.**")
-                        
-                        st.markdown("""
-                        <div class="info-box">
-                            <strong>🎉 Ótima notícia!</strong> Sua instituição está nos acordos. Agora:<br>
-                            1. ✅ Anote em quais editoras você pode publicar (veja abaixo)<br>
-                            2. 📚 Role a página para baixo até "Lista de Periódicos Elegíveis"<br>
-                            3. 🔍 Busque o periódico específico onde quer publicar<br>
-                            4. ✅ Se o periódico estiver em uma editora onde sua instituição é elegível → <strong>Confira a cobertura, a vigência e os requisitos do autor.</strong>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        # Cards de resumo
-                        cols_resumo = st.columns(min(len(editoras_encontradas), 4))
-                        for i, ed in enumerate(editoras_encontradas):
-                            with cols_resumo[i % 4]:
-                                st.metric(
-                                    label=ed,
-                                    value="Na lista",
-                                    delta="✓"
-                                )
-                        
-                        st.markdown("---")
-                    
-                    # Detalhes por editora
-                    for editora in editoras_encontradas:
-                        df_editora = resultados[resultados[col_editora] == editora]
-                        
-                        expandido = (len(editoras_encontradas) <= 2 and busca_ativa != "")
-                        
-                        with st.expander(
-                            f"**{editora}** ({len(df_editora)} instituições)",
-                            expanded=expandido
-                        ):
-                            # Link oficial
-                            if editora in URLS_INSTITUICOES:
-                                st.markdown(f"🔗 [Consultar lista oficial da {editora}]({URLS_INSTITUICOES[editora]})")
-                            
-                            # Preparar display
-                            cols_display = []
-                            if col_sigla:
-                                cols_display.append(col_sigla)
-                            cols_display.append(col_nome)
-                            
-                            df_display = df_editora[cols_display].copy()
-                            df_display = df_display.sort_values(col_nome)
-                            df_display = df_display.reset_index(drop=True)
-                            
-                            st.dataframe(
-                                df_display,
-                                use_container_width=True,
-                                hide_index=True,
-                                height=min(400, len(df_display) * 35 + 38)
-                            )
-                            
-                            st.caption(f"📊 {len(df_editora)} instituições encontradas")
-                else:
-                    if busca_ativa:
-                        st.warning("🔍 Nenhuma instituição encontrada com os critérios selecionados")
-                        st.markdown("""
-                        <div class="warning-box">
-                            <strong>💡 Não encontrou sua instituição? Tente:</strong><br>
-                            • <strong>Buscar pela sigla</strong> (ex: "UFU" em vez de nome completo)<br>
-                            • <strong>Buscar por parte do nome</strong> (ex: "Federal Uberlândia" em vez de nome completo)<br>
-                            • <strong>Verificar se digitou corretamente</strong> (a busca funciona sem acentos)<br>
-                            • <strong>Verificar todas as editoras</strong> (marque todas os checkboxes)<br>
-                            • <strong>Consultar as listas oficiais</strong> das editoras (links acima)<br><br>
-                            <strong>⚠️ Sua instituição pode não estar nos acordos.</strong> Neste caso, você precisará 
-                            pagar APCs ou buscar periódicos com outros modelos de acesso aberto.
-                        </div>
-                        """, unsafe_allow_html=True)
-    else:
-        st.error("❌ Não foi possível carregar os dados de instituições. Tente novamente mais tarde.")
-
-st.markdown("---")
-
-# Âncora para navegação
-st.markdown('<div id="passo-2-periodico"></div>', unsafe_allow_html=True)
-
-render_recommender(publisher_data, load_institutions_data())
-st.markdown("---")
-
-# ==================== CÓDIGO ORIGINAL DE PERIÓDICOS ====================
-
-# CABEÇALHO GRANDE DO PASSO 2
-st.markdown("""
-<div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
-            padding: 1.5rem; 
-            border-radius: 10px; 
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-    <h2 style="color: white; margin: 0; font-size: 1.8rem;">
-        📚 PASSO 2: Buscar o Periódico
-    </h2>
-    <p style="color: white; margin: 0.5rem 0 0 0; font-size: 1rem; opacity: 0.95;">
-        Agora busque o periódico específico onde deseja publicar
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<div class="info-box">
-    <p style="margin-bottom: 0;">
-        <strong>💡 Como funciona:</strong> Se o periódico estiver listado em uma editora onde sua instituição é elegível → 
-        <strong>Confira a cobertura, a data de aceite e os requisitos do autor.</strong>
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-# ==================== BUSCA INTERATIVA DE PERIÓDICOS ====================
-
-with st.expander("📋 Clique aqui para buscar seu periódico", expanded=True):
-    
-    # Inputs de busca
-    col1, col2 = st.columns([3, 1])
-    
-    with col1:
-        search_term = st.text_input(
-            "🔍 Buscar periódicos",
-            placeholder="Digite o nome do periódico, ISSN, área de pesquisa...",
-            help="Busque por título, ISSN ou área de conhecimento. A busca funciona em todos os campos disponíveis."
-        )
-    
-    with col2:
-        # Selectbox de editora
-        selected_publisher = st.selectbox(
-            "📚 Editora",
-            options=["Todas"] + publishers_list,
-            key="journal_publisher",
-            help="Filtre por editora específica ou veja todas"
-        )
-    
-    # Opções de visualização
-    col3, col4 = st.columns(2)
-    
-    with col3:
-        view_option = st.radio(
-            "Modo de visualização:",
-            options=["Paginada (Recomendado)", "Completa", "Resumo Estatístico"],
-            horizontal=True,
-            help="Paginada: melhor para navegação. Completa: todos os resultados de uma vez."
-        )
-    
-    with col4:
-        if view_option == "Paginada (Recomendado)":
-            rows_per_page = st.select_slider(
-                "Resultados por página:",
-                options=[10, 25, 50, 100],
-                value=25
+        with col1:
+            search_term = st.text_input(
+                "🔍 Buscar periódicos",
+                placeholder="Digite o nome do periódico, ISSN, área de pesquisa...",
+                help="Busque por título, ISSN ou área de conhecimento. A busca funciona em todos os campos disponíveis."
             )
+    
+        with col2:
+            # Selectbox de editora
+            selected_publisher = st.selectbox(
+                "📚 Editora",
+                options=["Todas"] + publishers_list,
+                key="journal_publisher",
+                help="Filtre por editora específica ou veja todas"
+            )
+    
+        # Opções de visualização
+        col3, col4 = st.columns(2)
+    
+        with col3:
+            view_option = st.radio(
+                "Modo de visualização:",
+                options=["Paginada (Recomendado)", "Completa", "Resumo Estatístico"],
+                horizontal=True,
+                help="Paginada: melhor para navegação. Completa: todos os resultados de uma vez."
+            )
+    
+        with col4:
+            if view_option == "Paginada (Recomendado)":
+                rows_per_page = st.select_slider(
+                    "Resultados por página:",
+                    options=[10, 25, 50, 100],
+                    value=25
+                )
 
-# ==================== PROCESSAMENTO E EXIBIÇÃO ====================
+    # ==================== PROCESSAMENTO E EXIBIÇÃO ====================
 
-# Aplicar filtros
-if selected_publisher == "Todas":
-    all_data = []
-    for pub in publishers_list:
-        # Pular a opção virtual "Wiley (Todas)"
-        if pub == 'Wiley (Todas)':
-            continue
-        if pub in publisher_data:
-            df_temp = publisher_data[pub].copy()
-            df_temp['Editora'] = pub
-            all_data.append(df_temp)
-    df_filtered = pd.concat(all_data, ignore_index=True)
-elif selected_publisher == "Wiley (Todas)":
-    # Consolidar Wiley OnlineOpen + Wiley Gold
-    all_wiley = []
-    if 'Wiley OnlineOpen' in publisher_data:
-        df_temp = publisher_data['Wiley OnlineOpen'].copy()
-        df_temp['Editora'] = 'Wiley OnlineOpen'
-        all_wiley.append(df_temp)
-    if 'Wiley Gold' in publisher_data:
-        df_temp = publisher_data['Wiley Gold'].copy()
-        df_temp['Editora'] = 'Wiley Gold'
-        all_wiley.append(df_temp)
-    df_filtered = pd.concat(all_wiley, ignore_index=True) if all_wiley else pd.DataFrame()
-else:
-    df_filtered = publisher_data[selected_publisher].copy()
-    df_filtered['Editora'] = selected_publisher
-
-# Busca literal com índice normalizado preparado uma vez no carregamento.
-df_filtered = search_catalog(df_filtered, search_term).copy()
-df_filtered = df_filtered.drop(columns=['_busca'], errors='ignore')
-accepted_date = st.date_input("Data de aceite (opcional)", value=None,
-                              key="acceptance_date",
-                              help="Confere somente a vigência de Springer, Nature e Elsevier. Os demais requisitos continuam necessários.")
-df_filtered['Conferência da data'] = df_filtered['Editora'].map(lambda publisher: acceptance_status(publisher, accepted_date))
-with st.expander("Requisitos CAPES e atualização Nature de setembro/2026", expanded=False):
-    st.markdown("""
-    Nature e Springer têm listas próprias de instituições. Confirme o portfólio do periódico na busca.
-
-    Para solicitar custeio, confira o perfil ou vínculo elegível do autor, autoria correspondente,
-    ORCID vinculado ao Meus Dados CAPES, licença CC BY, instituição e periódico no acordo.
-    Docentes ativos, pós-doutorandos, mestrandos/doutorandos e egressos de mestrado/doutorado
-    há até cinco anos têm condições previstas na norma. Há previsão também para agentes públicos
-    e empregados com vínculo formal elegível, observados os demais requisitos.
-
-    A aprovação é da CAPES. Taxas adicionais podem existir e não há reembolso de APC paga diretamente.
-    [Orientação oficial da CAPES](https://www.gov.br/capes/pt-br/acesso-a-informacao/acoes-e-programas/carta-de-servicos-ao-usuario/obter-acesso-ao-portal-de-periodicos-da-capes).
-    """)
-
-# Estatísticas
-st.markdown("---")
-st.markdown("### 📊 Resultados da Busca")
-
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.metric("Total de Periódicos", f"{len(df_filtered):,}")
-with col2:
-    if selected_publisher != "Todas":
-        st.metric("Editora", selected_publisher)
+    # Aplicar filtros
+    if selected_publisher == "Todas":
+        all_data = []
+        for pub in publishers_list:
+            # Pular a opção virtual "Wiley (Todas)"
+            if pub == 'Wiley (Todas)':
+                continue
+            if pub in publisher_data:
+                df_temp = publisher_data[pub].copy()
+                df_temp['Editora'] = pub
+                all_data.append(df_temp)
+        df_filtered = pd.concat(all_data, ignore_index=True)
+    elif selected_publisher == "Wiley (Todas)":
+        # Consolidar Wiley OnlineOpen + Wiley Gold
+        all_wiley = []
+        if 'Wiley OnlineOpen' in publisher_data:
+            df_temp = publisher_data['Wiley OnlineOpen'].copy()
+            df_temp['Editora'] = 'Wiley OnlineOpen'
+            all_wiley.append(df_temp)
+        if 'Wiley Gold' in publisher_data:
+            df_temp = publisher_data['Wiley Gold'].copy()
+            df_temp['Editora'] = 'Wiley Gold'
+            all_wiley.append(df_temp)
+        df_filtered = pd.concat(all_wiley, ignore_index=True) if all_wiley else pd.DataFrame()
     else:
-        st.metric("Grupos / portfólios", f"{df_filtered['Editora'].nunique()}")
-with col3:
-    if search_term:
-        st.metric("Busca Ativa", "✓")
-    else:
-        st.metric("Exibindo", "Todos")
+        df_filtered = publisher_data[selected_publisher].copy()
+        df_filtered['Editora'] = selected_publisher
 
-if (df_filtered['Editora'] == 'Wiley Gold').any():
-    st.warning("Wiley Gold não é cobertura integral pelo acordo CAPES. O desconto registrado na base anterior precisa ser confirmado nas condições atuais da editora.")
-if (df_filtered['Editora'] == 'Nature Portfolio').any():
-    st.info("Nature Portfolio: 41 títulos da lista oficial, com lista institucional própria. Confira a coluna de data e os requisitos CAPES.")
+    # Busca literal com índice normalizado preparado uma vez no carregamento.
+    df_filtered = search_catalog(df_filtered, search_term).copy()
+    df_filtered = df_filtered.drop(columns=['_busca'], errors='ignore')
+    accepted_date = st.date_input("Data de aceite (opcional)", value=None,
+                                  key="acceptance_date",
+                                  help="Confere somente a vigência de Springer, Nature e Elsevier. Os demais requisitos continuam necessários.")
+    df_filtered['Conferência da data'] = df_filtered['Editora'].map(lambda publisher: acceptance_status(publisher, accepted_date))
+    with st.expander("Requisitos CAPES e atualização Nature de setembro/2026", expanded=False):
+        st.markdown("""
+        Nature e Springer têm listas próprias de instituições. Confirme o portfólio do periódico na busca.
 
-# Exibir resultados
-if len(df_filtered) == 0:
-    st.warning("🔍 Nenhum resultado encontrado. Tente outros termos de busca ou selecione outra editora.")
-elif view_option == "Paginada (Recomendado)":
-    # Cálculo de paginação
-    total_pages = -(-len(df_filtered) // rows_per_page)  # ceiling division
-    
-    # Controle de página (agora ACIMA dos resultados)
-    col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col2:
-        filter_signature = (selected_publisher, search_term, rows_per_page)
-        if st.session_state.get('journal_filter_signature') != filter_signature:
-            st.session_state['journal_filter_signature'] = filter_signature
-            st.session_state['results_page'] = 1
-        if st.session_state.get('results_page', 1) > total_pages:
-            st.session_state['results_page'] = 1
-        page = st.number_input(
-            "Página",
-            min_value=1,
-            max_value=max(1, total_pages),
-            value=1,
-            step=1,
-            key="results_page",
-            help=f"Total de {total_pages} página(s)"
-        )
-    
-    # Calcular índices
-    start_idx = (page - 1) * rows_per_page
-    end_idx = min(start_idx + rows_per_page, len(df_filtered))
-    
-    # Exibir página atual
-    st.caption(f"Exibindo registros {start_idx + 1} a {end_idx} de {len(df_filtered)}")
-    
-    st.dataframe(
-        df_filtered.iloc[start_idx:end_idx],
-        use_container_width=True,
-        hide_index=True,
-        height=600
-    )
-    
-elif view_option == "Completa":
-    st.caption(f"⚠️ Exibindo todos os {len(df_filtered)} resultados")
-    st.dataframe(
-        df_filtered,
-        use_container_width=True,
-        hide_index=True,
-        height=600
-    )
-    
-else:  # Resumo Estatístico
-    st.write("### 📊 Informações da Base de Dados")
-        
-    col1, col2 = st.columns(2)
-        
+        Para solicitar custeio, confira o perfil ou vínculo elegível do autor, autoria correspondente,
+        ORCID vinculado ao Meus Dados CAPES, licença CC BY, instituição e periódico no acordo.
+        Docentes ativos, pós-doutorandos, mestrandos/doutorandos e egressos de mestrado/doutorado
+        há até cinco anos têm condições previstas na norma. Há previsão também para agentes públicos
+        e empregados com vínculo formal elegível, observados os demais requisitos.
+
+        A aprovação é da CAPES. Taxas adicionais podem existir e não há reembolso de APC paga diretamente.
+        [Orientação oficial da CAPES](https://www.gov.br/capes/pt-br/acesso-a-informacao/acoes-e-programas/carta-de-servicos-ao-usuario/obter-acesso-ao-portal-de-periodicos-da-capes).
+        """)
+
+    # Estatísticas
+    st.markdown("---")
+    st.markdown("### 📊 Resultados da Busca")
+
+    col1, col2, col3 = st.columns(3)
     with col1:
-        st.write("**Estrutura dos Dados:**")
-        st.write(f"- Total de registros: {len(df_filtered):,}")
-        st.write(f"- Total de colunas: {len(df_filtered.columns)}")
-        st.write(f"- Tipos de dados:")
-        for dtype in df_filtered.dtypes.unique():
-            count = (df_filtered.dtypes == dtype).sum()
-            st.write(f"  - {dtype}: {count} coluna(s)")
-        
+        st.metric("Total de Periódicos", f"{len(df_filtered):,}")
     with col2:
-        st.write("**Colunas Disponíveis:**")
-        for i, col in enumerate(df_filtered.columns, 1):
-            st.write(f"{i}. {col}")
+        if selected_publisher != "Todas":
+            st.metric("Editora", selected_publisher)
+        else:
+            st.metric("Grupos / portfólios", f"{df_filtered['Editora'].nunique()}")
+    with col3:
+        if search_term:
+            st.metric("Busca Ativa", "✓")
+        else:
+            st.metric("Exibindo", "Todos")
+
+    if (df_filtered['Editora'] == 'Wiley Gold').any():
+        st.warning("Wiley Gold não é cobertura integral pelo acordo CAPES. O desconto registrado na base anterior precisa ser confirmado nas condições atuais da editora.")
+    if (df_filtered['Editora'] == 'Nature Portfolio').any():
+        st.info("Nature Portfolio: 41 títulos da lista oficial, com lista institucional própria. Confira a coluna de data e os requisitos CAPES.")
+
+    # Exibir resultados
+    if len(df_filtered) == 0:
+        st.warning("🔍 Nenhum resultado encontrado. Tente outros termos de busca ou selecione outra editora.")
+    elif view_option == "Paginada (Recomendado)":
+        # Cálculo de paginação
+        total_pages = -(-len(df_filtered) // rows_per_page)  # ceiling division
     
-# ==================== INFORMAÇÕES ADICIONAIS ====================
-st.markdown("---")
-
-st.markdown("### 📚 Informações Complementares")
-
-# Exibir ÍNDICE
-if publisher_data.get('INDICE') is not None:
-    with st.expander("📊 Resumo Geral - Índice de Periódicos", expanded=False):
-        st.markdown("### Visão Geral dos Acordos CAPES")
-        st.dataframe(
-            publisher_data['INDICE'],
-            use_container_width=True,
-            hide_index=True
-        )
-        st.caption("💡 Este é um resumo consolidado de todos os acordos transformativos CAPES")
-        st.caption("ℹ️ OA = OPEN ACCESS")
+        # Controle de página (agora ACIMA dos resultados)
+        col1, col2, col3 = st.columns([1, 2, 1])
     
-# Exibir REQUISITOS
-if publisher_data.get('REQUISITOS') is not None:
-    with st.expander("✅ Requisitos para Publicação Gratuita", expanded=False):
-        st.markdown("### O que você precisa para publicar gratuitamente")
-        st.dataframe(
-            publisher_data['REQUISITOS'],
-            use_container_width=True,
-            hide_index=True
-        )
-        st.caption("⚠️ Verifique estes requisitos antes de submeter seu artigo")
-
-# NOVO: Exibir AVISOS
-if publisher_data.get('AVISOS') is not None:
-    with st.expander("⚠️ AVISOS IMPORTANTES - Leia antes de submeter!", expanded=False):
-        st.markdown("### Avisos e Observações sobre os Acordos")
-        st.dataframe(
-            publisher_data['AVISOS'],
-            use_container_width=True,
-            hide_index=True
-        )
-        st.caption("⚠️ Atenção especial para Elsevier e Wiley Gold!")
-
-# FAQ
-st.markdown("---")
+        with col2:
+            filter_signature = (selected_publisher, search_term, rows_per_page)
+            if st.session_state.get('journal_filter_signature') != filter_signature:
+                st.session_state['journal_filter_signature'] = filter_signature
+                st.session_state['results_page'] = 1
+            if st.session_state.get('results_page', 1) > total_pages:
+                st.session_state['results_page'] = 1
+            page = st.number_input(
+                "Página",
+                min_value=1,
+                max_value=max(1, total_pages),
+                value=1,
+                step=1,
+                key="results_page",
+                help=f"Total de {total_pages} página(s)"
+            )
     
-with st.expander("❓ Perguntas Frequentes - Como publicar gratuitamente"):
+        # Calcular índices
+        start_idx = (page - 1) * rows_per_page
+        end_idx = min(start_idx + rows_per_page, len(df_filtered))
+    
+        # Exibir página atual
+        st.caption(f"Exibindo registros {start_idx + 1} a {end_idx} de {len(df_filtered)}")
+    
+        st.dataframe(
+            df_filtered.iloc[start_idx:end_idx],
+            use_container_width=True,
+            hide_index=True,
+            height=600
+        )
+    
+    elif view_option == "Completa":
+        st.caption(f"⚠️ Exibindo todos os {len(df_filtered)} resultados")
+        st.dataframe(
+            df_filtered,
+            use_container_width=True,
+            hide_index=True,
+            height=600
+        )
+    
+    else:  # Resumo Estatístico
+        st.write("### Periódicos por grupo / portfólio")
+        summary = df_filtered.groupby('Editora').size().rename('Periódicos').reset_index()
+        st.dataframe(summary, hide_index=True, use_container_width=True)
+    
+
+with tab_institution:
+    with st.expander("📋 Clique aqui para buscar sua instituição", expanded=True):
+        # Carregar dados
+        df_inst = load_institutions_data()
+    
+        if df_inst is not None:
+            # Detectar nomes de colunas
+            colunas = df_inst.columns.tolist()
+        
+            # Verificar se tem as colunas necessárias
+            col_editora = None
+            col_nome = None
+            col_sigla = None
+            col_busca = None
+        
+            # Mapear colunas possíveis
+            for col in colunas:
+                col_lower = col.lower()
+                if 'editora' in col_lower or 'publisher' in col_lower:
+                    col_editora = col
+                elif 'nome' in col_lower and 'instituição' in col_lower:
+                    col_nome = col
+                elif 'sigla' in col_lower or 'acronym' in col_lower:
+                    col_sigla = col
+                elif 'busca' in col_lower or 'normalized' in col_lower:
+                    col_busca = col
+        
+            if not col_editora or not col_nome:
+                st.error("❌ Estrutura da planilha não reconhecida. Verifique as colunas.")
+                st.write("**Colunas encontradas:**", colunas)
+            else:
+                # Campo de busca - combinar com sidebar
+                st.markdown("### 🔍 Buscar minha instituição:")
+            
+                col1, col2 = st.columns([3, 1])
+            
+                with col1:
+                    instituicao_busca = st.text_input(
+                        "Digite o nome da sua instituição ou sigla:",
+                        placeholder="Ex: UFU, Universidade Federal de Uberlândia, Federal Uberlândia...",
+                        key="busca_instituicao",
+                        help="Busque pelo nome completo, sigla ou parte do nome - funciona sem acentos."
+                    )
+            
+                with col2:
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    if st.button("🔍 Buscar", type="primary", use_container_width=True):
+                        pass  # Trigger de atualização
+            
+                # Filtro de editoras
+                st.markdown("### 📚 Filtrar por editoras:")
+            
+                st.markdown("""
+                <div class="info-box">
+                    <strong>💡 Por que filtrar por editoras?</strong><br>
+                    Cada editora tem acordos diferentes com instituições específicas. Filtre pelas editoras 
+                    onde você pretende publicar para ver se sua instituição está elegível especificamente nelas.
+                </div>
+                """, unsafe_allow_html=True)
+            
+                editoras_disponiveis = sorted(df_inst[col_editora].unique())
+            
+                # Checkboxes
+                cols = st.columns(4)
+                editoras_selecionadas = []
+            
+                for i, editora in enumerate(editoras_disponiveis):
+                    with cols[i % 4]:
+                        checked = st.checkbox(
+                            editora,
+                            value=True,  # Todas marcadas por padrão
+                            key=f"check_inst_ed_{i}"
+                        )
+                        if checked:
+                            editoras_selecionadas.append(editora)
+            
+                # Realizar busca
+                if not editoras_selecionadas:
+                    st.warning("⚠️ Selecione pelo menos uma editora")
+                else:
+                    # Usar campo local apenas
+                    busca_ativa = instituicao_busca
+                
+                    # Filtrar resultados
+                    if busca_ativa:
+                        termo_norm = normalizar_busca(busca_ativa)
+                    
+                        # Buscar em todas as colunas relevantes
+                        mask = pd.Series([False] * len(df_inst))
+                    
+                        if col_busca:
+                            mask = mask | df_inst[col_busca].astype(str).str.contains(termo_norm, case=False, na=False, regex=False)
+                        if col_sigla:
+                            mask = mask | df_inst[col_sigla].astype(str).str.upper().str.contains(termo_norm, na=False, regex=False)
+                        mask = mask | df_inst[col_nome].astype(str).str.upper().str.contains(termo_norm, na=False, regex=False)
+                    
+                        resultados = df_inst[mask & df_inst[col_editora].isin(editoras_selecionadas)]
+                    else:
+                        resultados = df_inst[df_inst[col_editora].isin(editoras_selecionadas)]
+                
+                    # Mostrar resultados
+                    if busca_ativa:
+                        st.markdown("---")
+                
+                    if len(resultados) > 0:
+                        editoras_encontradas = sorted(resultados[col_editora].unique())
+                    
+                        if busca_ativa:
+                            st.success(f"**Encontramos instituições correspondentes à busca em {len(editoras_encontradas)} acordo(s). Confira os nomes abaixo.**")
+                        
+                            st.markdown("""
+                            <div class="info-box">
+                                <strong>🎉 Ótima notícia!</strong> Sua instituição está nos acordos. Agora:<br>
+                                1. ✅ Anote em quais editoras você pode publicar (veja abaixo)<br>
+                                2. 📚 Role a página para baixo até "Lista de Periódicos Elegíveis"<br>
+                                3. 🔍 Busque o periódico específico onde quer publicar<br>
+                                4. ✅ Se o periódico estiver em uma editora onde sua instituição é elegível → <strong>Confira a cobertura, a vigência e os requisitos do autor.</strong>
+                            </div>
+                            """, unsafe_allow_html=True)
+                        
+                            # Cards de resumo
+                            cols_resumo = st.columns(min(len(editoras_encontradas), 4))
+                            for i, ed in enumerate(editoras_encontradas):
+                                with cols_resumo[i % 4]:
+                                    st.metric(
+                                        label=ed,
+                                        value="Na lista",
+                                        delta="✓"
+                                    )
+                        
+                            st.markdown("---")
+                    
+                        # Detalhes por editora
+                        for editora in editoras_encontradas:
+                            df_editora = resultados[resultados[col_editora] == editora]
+                        
+                            expandido = (len(editoras_encontradas) <= 2 and busca_ativa != "")
+                        
+                            with st.expander(
+                                f"**{editora}** ({len(df_editora)} instituições)",
+                                expanded=expandido
+                            ):
+                                # Link oficial
+                                if editora in URLS_INSTITUICOES:
+                                    st.markdown(f"🔗 [Consultar lista oficial da {editora}]({URLS_INSTITUICOES[editora]})")
+                            
+                                # Preparar display
+                                cols_display = []
+                                if col_sigla:
+                                    cols_display.append(col_sigla)
+                                cols_display.append(col_nome)
+                            
+                                df_display = df_editora[cols_display].copy()
+                                df_display = df_display.sort_values(col_nome)
+                                df_display = df_display.reset_index(drop=True)
+                            
+                                st.dataframe(
+                                    df_display,
+                                    use_container_width=True,
+                                    hide_index=True,
+                                    height=min(400, len(df_display) * 35 + 38)
+                                )
+                            
+                                st.caption(f"📊 {len(df_editora)} instituições encontradas")
+                    else:
+                        if busca_ativa:
+                            st.warning("🔍 Nenhuma instituição encontrada com os critérios selecionados")
+                            st.markdown("""
+                            <div class="warning-box">
+                                <strong>💡 Não encontrou sua instituição? Tente:</strong><br>
+                                • <strong>Buscar pela sigla</strong> (ex: "UFU" em vez de nome completo)<br>
+                                • <strong>Buscar por parte do nome</strong> (ex: "Federal Uberlândia" em vez de nome completo)<br>
+                                • <strong>Verificar se digitou corretamente</strong> (a busca funciona sem acentos)<br>
+                                • <strong>Verificar todas as editoras</strong> (marque todas os checkboxes)<br>
+                                • <strong>Consultar as listas oficiais</strong> das editoras (links acima)<br><br>
+                                <strong>⚠️ Sua instituição pode não estar nos acordos.</strong> Neste caso, você precisará 
+                                pagar APCs ou buscar periódicos com outros modelos de acesso aberto.
+                            </div>
+                            """, unsafe_allow_html=True)
+        else:
+            st.error("❌ Não foi possível carregar os dados de instituições. Tente novamente mais tarde.")
+
+
+with tab_about:
+    # ==================== INFORMAÇÕES ADICIONAIS ====================
+    st.markdown("---")
+
+    st.markdown("### 📚 Informações Complementares")
+
+    # Exibir ÍNDICE
+    if publisher_data.get('INDICE') is not None:
+        with st.expander("📊 Resumo Geral - Índice de Periódicos", expanded=False):
+            st.markdown("### Visão Geral dos Acordos CAPES")
+            st.dataframe(
+                publisher_data['INDICE'],
+                use_container_width=True,
+                hide_index=True
+            )
+            st.caption("💡 Este é um resumo consolidado de todos os acordos transformativos CAPES")
+            st.caption("ℹ️ OA = OPEN ACCESS")
+    
+    # Exibir REQUISITOS
+    if publisher_data.get('REQUISITOS') is not None:
+        with st.expander("✅ Requisitos para Publicação Gratuita", expanded=False):
+            st.markdown("### O que você precisa para publicar gratuitamente")
+            st.dataframe(
+                publisher_data['REQUISITOS'],
+                use_container_width=True,
+                hide_index=True
+            )
+            st.caption("⚠️ Verifique estes requisitos antes de submeter seu artigo")
+
+    # NOVO: Exibir AVISOS
+    if publisher_data.get('AVISOS') is not None:
+        with st.expander("⚠️ AVISOS IMPORTANTES - Leia antes de submeter!", expanded=False):
+            st.markdown("### Avisos e Observações sobre os Acordos")
+            st.dataframe(
+                publisher_data['AVISOS'],
+                use_container_width=True,
+                hide_index=True
+            )
+            st.caption("⚠️ Atenção especial para Elsevier e Wiley Gold!")
+
+    # FAQ
+    st.markdown("---")
+    
+    with st.expander("❓ Perguntas Frequentes - Como publicar gratuitamente"):
+        st.markdown("""
+        ### 1. O que são Acordos Transformativos?
+        
+        São contratos entre a CAPES e grandes editoras científicas que permitem:
+        - **Acesso aberto (Open Access)** às publicações
+        - **Sem custos de APC** para autores brasileiros elegíveis
+        - Publicações imediatamente disponíveis para todo o mundo
+        
+        ### 2. Como sei se posso publicar gratuitamente?
+        
+        **Condições preliminares para solicitar custeio:**
+        - ✅ O periódico está listado neste sistema
+        - ✅ Você é afiliado a uma instituição brasileira elegível
+        - ✅ Sua instituição está nos acordos da editora específica
+        - ✅ Você é o autor correspondente (corresponding author)
+        
+        **A busca não confirma o perfil do autor, a cobertura por título ou a autorização da CAPES.**
+        
+        ### 3. Por que preciso verificar minha instituição?
+        
+        Nem todas as instituições brasileiras estão em todos os acordos. Cada editora tem 
+        sua própria lista de instituições elegíveis. Sua instituição pode estar em algumas 
+        editoras, mas não em outras. Por isso é essencial verificar ANTES de escolher o periódico.
+        
+        ### 4. Como usar este sistema?
+        
+        **Passo a passo:**
+        1. Use a seção "PASSO 1" para verificar se sua instituição é elegível
+        2. Anote em quais editoras sua instituição está
+        3. Use a seção "PASSO 2" para buscar periódicos nessas editoras
+        4. Se encontrar o periódico em uma editora onde sua instituição é elegível → Confira a cobertura e os requisitos antes de submeter.
+        
+        ### 5. Quanto eu economizo?
+        
+        APCs típicos variam de:
+        - **US$ 1.500 a US$ 3.000** em periódicos convencionais
+        - **US$ 3.000 a US$ 11.000** em periódicos de alto impacto
+        
+        O custeio de APC depende do acordo e da validação. Serviços editoriais adicionais podem gerar cobrança.
+        
+        ### 6. Onde encontro mais informações?
+        
+        - **Portal CAPES:** https://www.periodicos.capes.gov.br
+        - **Biblioteca da sua instituição:** Entre em contato para suporte
+        - **Listas oficiais:** Use os links nas seções de cada editora
+        """)
+    
+    with st.expander("ℹ️ Sobre este Sistema"):
+        st.markdown(f"""
+        ### Objetivo
+        
+        Facilitar a busca de periódicos e verificação de instituições elegíveis nos acordos CAPES.
+        
+        ### Como funciona:
+        
+        **PASSO 1:** Verifica se sua instituição está nos acordos  
+        **PASSO 2:** Busca periódicos nas editoras onde você é elegível  
+        
+        ### Desenvolvido por:
+        
+        **Grupo GOBIOTA** - Genômica, Bioinformática e Tecnologias Aplicadas  
+        PPGCVET/FMVZ/UFU
+        
+        ---
+        *Revisão das bases: 19/10/2026. Outras listas editoriais permanecem em revisão.*
+        """)
+    
+    # ==================== AGÊNCIAS DE FOMENTO ====================
+    
     st.markdown("""
-    ### 1. O que são Acordos Transformativos?
-        
-    São contratos entre a CAPES e grandes editoras científicas que permitem:
-    - **Acesso aberto (Open Access)** às publicações
-    - **Sem custos de APC** para autores brasileiros elegíveis
-    - Publicações imediatamente disponíveis para todo o mundo
-        
-    ### 2. Como sei se posso publicar gratuitamente?
-        
-    **Condições preliminares para solicitar custeio:**
-    - ✅ O periódico está listado neste sistema
-    - ✅ Você é afiliado a uma instituição brasileira elegível
-    - ✅ Sua instituição está nos acordos da editora específica
-    - ✅ Você é o autor correspondente (corresponding author)
-        
-    **A busca não confirma o perfil do autor, a cobertura por título ou a autorização da CAPES.**
-        
-    ### 3. Por que preciso verificar minha instituição?
-        
-    Nem todas as instituições brasileiras estão em todos os acordos. Cada editora tem 
-    sua própria lista de instituições elegíveis. Sua instituição pode estar em algumas 
-    editoras, mas não em outras. Por isso é essencial verificar ANTES de escolher o periódico.
-        
-    ### 4. Como usar este sistema?
-        
-    **Passo a passo:**
-    1. Use a seção "PASSO 1" para verificar se sua instituição é elegível
-    2. Anote em quais editoras sua instituição está
-    3. Use a seção "PASSO 2" para buscar periódicos nessas editoras
-    4. Se encontrar o periódico em uma editora onde sua instituição é elegível → Confira a cobertura e os requisitos antes de submeter.
-        
-    ### 5. Quanto eu economizo?
-        
-    APCs típicos variam de:
-    - **US$ 1.500 a US$ 3.000** em periódicos convencionais
-    - **US$ 3.000 a US$ 11.000** em periódicos de alto impacto
-        
-    O custeio de APC depende do acordo e da validação. Serviços editoriais adicionais podem gerar cobrança.
-        
-    ### 6. Onde encontro mais informações?
-        
-    - **Portal CAPES:** https://www.periodicos.capes.gov.br
-    - **Biblioteca da sua instituição:** Entre em contato para suporte
-    - **Listas oficiais:** Use os links nas seções de cada editora
+    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); 
+                padding: 1.5rem; 
+                border-radius: 10px; 
+                border-left: 4px solid #0284c7;
+                margin: 2rem 0;">
+        <p style="text-align: center; margin: 0; color: #0c4a6e; font-size: 0.95rem; line-height: 1.6;">
+            <strong>🔬 Apoio à Pesquisa</strong><br><br>
+            Esta iniciativa é fortalecida pelo apoio de agências de fomento à pesquisa no Brasil, 
+            em especial <strong>CNPq</strong>, <strong>CAPES</strong> e <strong>FAPEMIG</strong>, 
+            por meio de diferentes projetos e bolsas associados ao <strong>Grupo GOBIOTA – PPGCVET/FMVZ/UFU</strong>.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="background-color: #fef3c7; 
+                padding: 1rem; 
+                border-radius: 8px; 
+                border-left: 4px solid #f59e0b;
+                margin-bottom: 2rem;">
+        <p style="margin: 0; color: #92400e; font-size: 0.85rem; text-align: center;">
+            ⚠️ <strong>Disclaimer:</strong> As opiniões, hipóteses e conclusões ou recomendações 
+            expressas neste site são de responsabilidade dos autores e não necessariamente 
+            refletem a visão das agências de fomento.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ==================== RODAPÉ LEGAL ====================
+    
+    st.markdown("---")
+    
+    # Proteção de Dados
+    st.warning("""
+    **⚠️ Proteção de Dados**
+
+    **📊 Os dados desta plataforma são protegidos por direitos autorais.**
+
+    **🚫 Proibido:**
+    - Download em massa dos dados
+    - Extração automatizada (web scraping)
+    - Reprodução não autorizada da base de dados
+    - Criação de cópias ou sistemas derivados
+
+    **✅ Permitido:**
+    - Consulta individual para fins de pesquisa acadêmica
+    - Busca de periódicos e instituições específicas
+    - Uso pessoal e não comercial
+
+    **⚖️ Importante:** Este sistema é apenas para consulta. A violação destes termos pode resultar em ações legais.
+    """)
+
+    # Aviso Legal e Direitos (usando st.info - componente nativo)
+    st.info("""
+    **⚖️ Aviso Legal e Direitos**
+
+    **© Direitos Autorais**  
+    © 2026 Richard Costa Polveiro - Grupo GOBIOTA  
+    Todos os direitos sobre o código e interface são reservados.  
+    Licenciado sob [Licença MIT](https://github.com/ricmedveterinario/periodicos-capes-gratuito/blob/main/LICENSE).
+
+    **📊 Fonte dos Dados**  
+    Informações baseadas em documentos oficiais do [Portal CAPES](https://www.periodicos.capes.gov.br) e das editoras participantes.
+
+    **⚠️ Disclaimer**  
+    **Ferramenta independente sem vínculo oficial com CAPES ou editoras.**  
+    Desenvolvida para fins informativos e acadêmicos. Verifique sempre documentos oficiais antes de decisões.  
+    Direitos sobre dados e marcas pertencem aos respectivos titulares.
+
+    **🔒 Privacidade**  
+    Esta aplicação **não requer login**.  
+    O que você digita é usado apenas durante o uso e não é armazenado pelo aplicativo.  
+    A hospedagem pode registrar logs técnicos para segurança e diagnóstico.  
+    Usamos Google Analytics. 
     """)
     
-with st.expander("ℹ️ Sobre este Sistema"):
-    st.markdown(f"""
-    ### Objetivo
-        
-    Facilitar a busca de periódicos e verificação de instituições elegíveis nos acordos CAPES.
-        
-    ### Como funciona:
-        
-    **PASSO 1:** Verifica se sua instituição está nos acordos  
-    **PASSO 2:** Busca periódicos nas editoras onde você é elegível  
-        
-    ### Desenvolvido por:
-        
-    **Grupo GOBIOTA** - Genômica, Bioinformática e Tecnologias Aplicadas  
-    PPGCVET/FMVZ/UFU
-        
-    ---
-    *Revisão das bases: 19/10/2026. Outras listas editoriais permanecem em revisão.*
-    """)
-    
-# ==================== AGÊNCIAS DE FOMENTO ====================
-    
-st.markdown("""
-<div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); 
-            padding: 1.5rem; 
-            border-radius: 10px; 
-            border-left: 4px solid #0284c7;
-            margin: 2rem 0;">
-    <p style="text-align: center; margin: 0; color: #0c4a6e; font-size: 0.95rem; line-height: 1.6;">
-        <strong>🔬 Apoio à Pesquisa</strong><br><br>
-        Esta iniciativa é fortalecida pelo apoio de agências de fomento à pesquisa no Brasil, 
-        em especial <strong>CNPq</strong>, <strong>CAPES</strong> e <strong>FAPEMIG</strong>, 
-        por meio de diferentes projetos e bolsas associados ao <strong>Grupo GOBIOTA – PPGCVET/FMVZ/UFU</strong>.
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<div style="background-color: #fef3c7; 
-            padding: 1rem; 
-            border-radius: 8px; 
-            border-left: 4px solid #f59e0b;
-            margin-bottom: 2rem;">
-    <p style="margin: 0; color: #92400e; font-size: 0.85rem; text-align: center;">
-        ⚠️ <strong>Disclaimer:</strong> As opiniões, hipóteses e conclusões ou recomendações 
-        expressas neste site são de responsabilidade dos autores e não necessariamente 
-        refletem a visão das agências de fomento.
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-# ==================== RODAPÉ LEGAL ====================
-    
-st.markdown("---")
-    
-# Proteção de Dados
-st.warning("""
-**⚠️ Proteção de Dados**
-
-**📊 Os dados desta plataforma são protegidos por direitos autorais.**
-
-**🚫 Proibido:**
-- Download em massa dos dados
-- Extração automatizada (web scraping)
-- Reprodução não autorizada da base de dados
-- Criação de cópias ou sistemas derivados
-
-**✅ Permitido:**
-- Consulta individual para fins de pesquisa acadêmica
-- Busca de periódicos e instituições específicas
-- Uso pessoal e não comercial
-
-**⚖️ Importante:** Este sistema é apenas para consulta. A violação destes termos pode resultar em ações legais.
-""")
-
-# Aviso Legal e Direitos (usando st.info - componente nativo)
-st.info("""
-**⚖️ Aviso Legal e Direitos**
-
-**© Direitos Autorais**  
-© 2026 Richard Costa Polveiro - Grupo GOBIOTA  
-Todos os direitos sobre o código e interface são reservados.  
-Licenciado sob [Licença MIT](https://github.com/ricmedveterinario/periodicos-capes-gratuito/blob/main/LICENSE).
-
-**📊 Fonte dos Dados**  
-Informações baseadas em documentos oficiais do [Portal CAPES](https://www.periodicos.capes.gov.br) e das editoras participantes.
-
-**⚠️ Disclaimer**  
-**Ferramenta independente sem vínculo oficial com CAPES ou editoras.**  
-Desenvolvida para fins informativos e acadêmicos. Verifique sempre documentos oficiais antes de decisões.  
-Direitos sobre dados e marcas pertencem aos respectivos titulares.
-
-**🔒 Privacidade**  
-Esta aplicação **não requer login**.  
-O que você digita é usado apenas durante o uso e não é armazenado pelo aplicativo.  
-A hospedagem pode registrar logs técnicos para segurança e diagnóstico.  
-Usamos Google Analytics. 
-""")
-    
-# Rodapé com créditos
-st.markdown("""
-<div style="text-align: center; padding: 1.5rem; background-color: #f9fafb; border-radius: 10px; margin-top: 2rem;">
-    <h4 style="margin: 0 0 0.5rem 0; color: #1e40af;">Grupo GOBIOTA</h4>
-    <p style="margin: 0.25rem 0; font-size: 0.9rem; color: #4b5563;">
-        Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica
-    </p>
-    <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #6b7280;">
-        Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
-        Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
-        Universidade Federal de Uberlândia (UFU)
-    </p>
-    <hr style="margin: 1rem auto; width: 50%; border: none; border-top: 1px solid #e5e7eb;">
-    <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: #9ca3af;">
-        💰 Ajudando pesquisadores brasileiros a publicarem em acesso aberto
-    </p>
-    <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #9ca3af;">
-        Licenciado sob MIT License | Versão 0.9 | Revisão de 19/10/2026
-    </p>
-</div>
-""", unsafe_allow_html=True)
+    # Rodapé com créditos
+    st.markdown("""
+    <div style="text-align: center; padding: 1.5rem; background-color: #f9fafb; border-radius: 10px; margin-top: 2rem;">
+        <h4 style="margin: 0 0 0.5rem 0; color: #1e40af;">Grupo GOBIOTA</h4>
+        <p style="margin: 0.25rem 0; font-size: 0.9rem; color: #4b5563;">
+            Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica
+        </p>
+        <p style="margin: 0.25rem 0; font-size: 0.85rem; color: #6b7280;">
+            Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
+            Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
+            Universidade Federal de Uberlândia (UFU)
+        </p>
+        <hr style="margin: 1rem auto; width: 50%; border: none; border-top: 1px solid #e5e7eb;">
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: #9ca3af;">
+            💰 Ajudando pesquisadores brasileiros a publicarem em acesso aberto
+        </p>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.75rem; color: #9ca3af;">
+            Licenciado sob MIT License | Versão 0.9 | Revisão de 19/10/2026
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
