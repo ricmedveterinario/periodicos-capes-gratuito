@@ -1,0 +1,70 @@
+{
+  "edition": 2025,
+  "period": "2020–2024",
+  "captured_at": "2026-06-30",
+  "checked_at": "2026-10-23",
+  "provenance": "Transcrição de captura pública preservada por ASSERT-KTH/open-h5; conferência dos valores na captura HTML. Não é consulta ao vivo.",
+  "snapshot_url": "https://github.com/ASSERT-KTH/open-h5/blob/main/Software%20Systems%20-%20Google%20Scholar%20Metrics%20-%2020260630.html",
+  "records": [
+    {
+      "title": "IEEE Transactions on Software Engineering",
+      "h5_index": 77,
+      "h5_median": 104,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=ne7Vj8c_KBUJ.2025"
+    },
+    {
+      "title": "Journal of Systems and Software",
+      "h5_index": 72,
+      "h5_median": 112,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=6_nht98CSK8J.2025"
+    },
+    {
+      "title": "Information and Software Technology",
+      "h5_index": 69,
+      "h5_median": 104,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=pElyisFMojYJ.2025"
+    },
+    {
+      "title": "ACM Transactions on Software Engineering and Methodology",
+      "h5_index": 62,
+      "h5_median": 100,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=J8XuN4dfD5QJ.2025"
+    },
+    {
+      "title": "Empirical Software Engineering",
+      "h5_index": 62,
+      "h5_median": 100,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=w7tXCm-brrIJ.2025"
+    },
+    {
+      "title": "Proceedings of the ACM on Programming Languages",
+      "h5_index": 51,
+      "h5_median": 79,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=aabcDmqMOP8J.2025"
+    },
+    {
+      "title": "Software: Practice and Experience",
+      "h5_index": 51,
+      "h5_median": 77,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=loZltQTD4pMJ.2025"
+    },
+    {
+      "title": "IEEE Software",
+      "h5_index": 44,
+      "h5_median": 75,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=1ycgy6sCSKAJ.2025"
+    },
+    {
+      "title": "Software and Systems Modeling",
+      "h5_index": 40,
+      "h5_median": 58,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=Oh3kCuQwOQYJ.2025"
+    },
+    {
+      "title": "Journal of Software: Evolution and Process",
+      "h5_index": 38,
+      "h5_median": 48,
+      "source_url": "https://scholar.google.com/citations?hl=en&vq=eng_softwaresystems&view_op=list_hcore&venue=PVkhrzL83u0J.2025"
+    }
+  ]
+}
