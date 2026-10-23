@@ -14,6 +14,7 @@ METRIC = 'Média de citações em 2 anos (OpenAlex)'
 H_INDEX = 'Índice h (OpenAlex)'
 AREA = 'Área (OpenAlex)'
 NO_AREA = 'Sem área identificada'
+SNAPSHOT_PATH = Path(__file__).parent / 'data' / 'openalex_metrics.json.gz.b64'
 FIELD_NAMES = {
     'Medicine': 'Medicina', 'Nursing': 'Enfermagem', 'Veterinary': 'Medicina veterinária',
     'Agricultural and Biological Sciences': 'Ciências agrárias e biológicas',
@@ -59,7 +60,7 @@ def nonnegative(value):
 
 
 def read_snapshot(path=None):
-    path = Path(path) if path else Path(__file__).parent / 'data' / 'openalex_metrics.json.gz.b64'
+    path = Path(path) if path else SNAPSHOT_PATH
     if not path.exists():
         return {'records': [], 'retrieved_at': '', 'license': 'CC0'}
     if path.suffix == '.b64':
@@ -102,6 +103,7 @@ def enrich_catalog(catalog, snapshot):
             'Fonte OpenAlex': safe_url(record.get('id')),
             'Consulta OpenAlex': snapshot.get('retrieved_at', '')[:10],
             'Correspondência': 'ISSN ambíguo; sem métrica' if key in ambiguous else ('ISSN exato' if record else 'Sem correspondência'),
+            '_citation_history': record.get('history') or [],
         })
     frame = pd.concat([frame, pd.DataFrame(metadata)], axis=1)
     for metric in (METRIC, H_INDEX):
