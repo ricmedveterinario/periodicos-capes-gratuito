@@ -249,9 +249,10 @@ st.markdown("""
 # Cabeçalho
 st.markdown("""
 <div class="main-header">
-    <h1>📊 Publique Gratuitamente - Acordos CAPES</h1>
+    <div class="pa-eyebrow">PUBLICAÇÃO CIENTÍFICA · ACORDOS CAPES</div>
+    <h1>Publica Aberto</h1>
     <p style="font-size: 1.1rem; margin-bottom: 0;">
-        Descubra se você pode publicar sem custos através dos acordos transformativos
+        Encontre revistas para sua pesquisa e confira as condições de publicação sem APC.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -338,13 +339,12 @@ except Exception:
 # Sidebar - Logo e informações GOBIOTA
 try:
     logo_data = base64.b64encode((Path(__file__).resolve().parent / "logo.png").read_bytes()).decode('ascii')
-    st.sidebar.markdown('<div style="text-align:center"><img src="data:image/png;base64,' + logo_data + '" alt="Logotipo GOBIOTA — Universidade Federal de Uberlândia" style="width:15rem;max-width:100%;height:auto"></div>', unsafe_allow_html=True)
+    st.sidebar.markdown('<div class="pa-brand"><img src="data:image/png;base64,' + logo_data + '" alt="Logotipo GOBIOTA — Universidade Federal de Uberlândia"></div>', unsafe_allow_html=True)
 except:
     pass
 
 st.sidebar.markdown("""
 <div style="text-align: center; margin-top: -10px; margin-bottom: 20px;">
-    <h3 style="margin: 5px 0; color: #1e40af; font-size: 1.1rem;">GOBIOTA</h3>
     <p style="margin: 0; font-size: 0.875rem; color: #475569; line-height: 1.3;">
         <strong>G</strong>rupo de Pesquisa e Inovação em<br>
         <strong>O</strong>rganismos, <strong>Bio</strong>informática e<br>

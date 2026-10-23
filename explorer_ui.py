@@ -6,6 +6,7 @@ from open_metrics import (METRIC, H_INDEX, AREA, enrich_catalog, read_snapshot,
 from capes_catalog import acceptance_status
 from recommender_ui import render_recommender
 from metric_visuals import metric_panel, journal_chips
+from discovery_links import OPENALEX_ABOUT, scholar_journal_url, scholar_topic_url, summary_cards
 
 
 @st.cache_data(show_spinner=False, max_entries=2)
@@ -14,7 +15,7 @@ def prepare_explorer(catalog, snapshot_version=0):
     return enrich_catalog(catalog, snapshot), snapshot.get('retrieved_at', '')[:10]
 
 
-def render_chart(frame, chart_metric):
+def render_chart(frame, chart_metric, key='simple'):
     import altair as alt
     records = chart_records(frame, chart_metric)
     if not records:
@@ -42,7 +43,9 @@ def render_chart(frame, chart_metric):
         labelFont='Arial', labelFontSize=14, titleFont='Arial', titleFontSize=16,
         labelColor='#475569', titleColor='#1f2937',
     )
-    st.altair_chart(chart, width="stretch")
+    with st.container(key='pa_plot_' + key):
+        st.altair_chart(chart, width="stretch")
+    st.markdown('<span class="pa-mobile-hint">Deslize dentro do gráfico para explorar. Os botões das revistas abaixo também abrem os links.</span>', unsafe_allow_html=True)
     st.caption(f'{len(records):,} revistas com valor disponível. Passe o mouse para ver detalhes; clique no ponto para abrir a revista quando houver link. Losangos mostram a mediana dos resultados de cada área. Áreas representam o campo do tópico predominante no OpenAlex. Eixo em escala simétrica logarítmica.')
 
 
@@ -68,7 +71,8 @@ def render_cards(frame, key, accepted=None):
                 st.caption('Métricas não disponíveis nesta consulta.')
             url = safe_url(row['Página da revista'])
             if url:
-                st.link_button('Abrir revista ↗', url)
+                st.link_button('Abrir revista ↗', url, width='stretch')
+            st.link_button('Pesquisar artigos no Google Acadêmico ↗', scholar_journal_url(row['Título da Revista']), width='stretch')
             with st.expander('Cobertura, fonte e vigência'):
                 st.write('**ISSN:** ' + str(row['ISSN']))
                 for column in ('Modelo', 'Cobertura APC'):
@@ -89,13 +93,10 @@ def render_explorer(catalog, institutions):
     version = SNAPSHOT_PATH.stat().st_mtime_ns if SNAPSHOT_PATH.exists() else 0
     frame, retrieved = prepare_explorer(catalog, version)
     st.markdown('<div id="explorar-revistas"></div>', unsafe_allow_html=True)
-    summary = st.columns(4)
-    summary[0].metric('Registros no catálogo', f'{len(frame):,}'.replace(',', '.'))
-    summary[1].metric('Com métrica OpenAlex', f'{int(frame[METRIC].notna().sum()):,}'.replace(',', '.'))
-    summary[2].metric('Títulos Nature', int((frame['Editora'] == 'Nature Portfolio').sum()))
-    summary[3].metric('Modos de busca', 2)
+    st.markdown(summary_cards(len(frame), int(frame[METRIC].notna().sum()), int((frame['Editora'] == 'Nature Portfolio').sum())), unsafe_allow_html=True)
     st.caption('Oportunidades pelo tema do manuscrito, com conferência institucional, cobertura e fontes. A presença no catálogo não autoriza custeio por si só.')
     st.caption('¹ Métricas abertas OpenAlex, consultadas em ' + (retrieved or 'data não disponível') + '. Não são JIF/JCR, CiteScore ou quartil. Não determinam elegibilidade CAPES ou qualidade individual do artigo.')
+    st.markdown('[O que é o OpenAlex?](' + OPENALEX_ABOUT + ') · [Como pesquisar no Google Acadêmico](https://scholar.google.com/intl/pt-BR/scholar/help.html)')
     simple, advanced = st.tabs(['🔎 Busca simples', '🎯 Busca avançada'])
     publishers = sorted(frame['Editora'].unique())
     areas = sorted(frame[AREA].unique())
@@ -107,6 +108,8 @@ def render_explorer(catalog, institutions):
         order = right.selectbox('Ordenar por', ['Título', 'Citações em 2 anos', 'Índice h'], key='simple_order')
         filtered = filter_catalog(frame, query, [publisher] if publisher != 'Todas' else None,
                                   area if area != 'Todas' else None, order=order)
+        if query.strip():
+            st.link_button('Pesquisar este tema no Google Acadêmico ↗', scholar_topic_url(query), width='stretch')
         with st.expander('Panorama visual por área', expanded=True):
             render_chart(filtered, METRIC if order != 'Índice h' else H_INDEX)
         render_cards(filtered, 'simple')
@@ -133,9 +136,10 @@ def render_explorer(catalog, institutions):
                                       full, metric_only, minimum, order)
             st.caption('O filtro institucional confere somente a presença no acordo. A autorização de custeio exige os demais requisitos CAPES.')
             with st.expander('Panorama visual dos resultados', expanded=False):
-                render_chart(filtered, H_INDEX if order == 'Índice h' else METRIC)
+                render_chart(filtered, H_INDEX if order == 'Índice h' else METRIC, key='advanced')
             render_cards(filtered, 'advanced', accepted)
     with st.expander('Sobre as métricas e a classificação por área'):
+        st.markdown('O [OpenAlex](' + OPENALEX_ABOUT + ') é um catálogo aberto da produção científica. Usamos seus registros para apresentar métricas e temas com fonte identificada. Os botões do Google Acadêmico abrem uma consulta externa; não importamos suas citações nem enviamos seu resumo automaticamente.')
         st.write('A média de citações em dois anos e o índice h são fornecidos pelo OpenAlex. A correspondência usa ISSN exato; casos ambíguos e métricas ausentes não recebem valores estimados. A data de consulta é uma fotografia da base, não um ano JCR.')
         st.write('A área vem do campo do tópico mais frequente associado à revista no OpenAlex, traduzido quando disponível. Revistas multidisciplinares podem aparecer sob uma área predominante; não é uma classificação oficial de escopo editorial.')
         st.write('As pequenas linhas mostram citações por ano no OpenAlex de 2021 a 2025, em escala própria para cada revista. Não são histórico de fator de impacto JCR. Anos sem registro ficam com lacunas; não são preenchidos com zero.')
