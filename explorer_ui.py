@@ -138,10 +138,12 @@ def render_explorer(catalog, institutions):
             with st.expander('Panorama visual dos resultados', expanded=False):
                 render_chart(filtered, H_INDEX if order == 'Índice h' else METRIC, key='advanced')
             render_cards(filtered, 'advanced', accepted)
+    with st.expander('Teste: indicadores do Google Scholar'):
+        st.write('Amostra da edição 2025 (artigos de 2020–2024), transcrita de captura preservada por ASSERT-KTH e conferida em 23/10/2026. Oito títulos correspondem exatamente ao catálogo. Os indicadores aparecem nos cartões dessas revistas, separados do OpenAlex; ausência na amostra não significa ausência no Google Scholar.')
+        st.write('Para testar, pesquise Journal of Systems and Software, Empirical Software Engineering ou Information and Software Technology. A data da captura não altera a edição da métrica. Não são fator de impacto JCR nem critérios de elegibilidade CAPES.')
     with st.expander('Sobre as métricas e a classificação por área'):
         st.markdown('O [OpenAlex](' + OPENALEX_ABOUT + ') é um catálogo aberto da produção científica. Usamos seus registros para apresentar métricas e temas com fonte identificada. Os botões do Google Acadêmico abrem uma consulta externa; não importamos suas citações nem enviamos seu resumo automaticamente.')
         st.write('A média de citações em dois anos e o índice h são fornecidos pelo OpenAlex. A correspondência usa ISSN exato; casos ambíguos e métricas ausentes não recebem valores estimados. A data de consulta é uma fotografia da base, não um ano JCR.')
         st.write('A área vem do campo do tópico mais frequente associado à revista no OpenAlex, traduzido quando disponível. Revistas multidisciplinares podem aparecer sob uma área predominante; não é uma classificação oficial de escopo editorial.')
         st.write('As pequenas linhas mostram citações por ano no OpenAlex de 2021 a 2025, em escala própria para cada revista. Não são histórico de fator de impacto JCR. Anos sem registro ficam com lacunas; não são preenchidos com zero.')
         st.markdown('[Fonte e definições OpenAlex](https://help.openalex.org/data/sources/attributes/) · Dados CC0. Quartis JCR não são calculados a partir dessas métricas.')
-
