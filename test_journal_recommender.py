@@ -53,6 +53,15 @@ class RecommenderTests(unittest.TestCase):
         pd.testing.assert_frame_equal(first, second)
         pd.testing.assert_frame_equal(before, self.catalog['Springer Nature'])
 
+    def test_openalex_topics_find_relevant_journal_with_generic_name(self):
+        catalog = {'Springer Nature': pd.DataFrame([
+            {'Título da Revista': 'Research Letters', 'ISSN': '1111-1111', 'Cobertura APC': '100%', 'Temas OpenAlex': 'Antimicrobial Resistance and Bacterial Infections'},
+            {'Título da Revista': 'Other Letters', 'ISSN': '2222-2222', 'Cobertura APC': '100%', 'Temas OpenAlex': 'Stellar and Planetary Physics'},
+        ])}
+        results = JournalRecommender(catalog).recommend(abstract='Resistência antimicrobiana em infecções bacterianas')
+        self.assertEqual(results.iloc[0]['ISSN'], '1111-1111')
+        self.assertNotIn('2222-2222', set(results['ISSN']))
+
 
 if __name__ == '__main__':
     unittest.main()
