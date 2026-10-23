@@ -82,7 +82,7 @@ class OpenMetricTests(unittest.TestCase):
         self.assertEqual(issn_key('1234567X'), '1234567X')
 
     def test_compressed_public_snapshot_roundtrip(self):
-        with tempfile.TemporaryDirectory() as directory:
+        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parent) as directory:
             path = Path(directory) / 'snapshot.json.gz.b64'
             path.write_bytes(base64.b64encode(gzip.compress(json.dumps(self.snapshot).encode())))
             self.assertEqual(read_snapshot(path), self.snapshot)
