@@ -73,7 +73,7 @@ class JournalRecommender:
             frames.append(current)
         self.frame = pd.concat(frames, ignore_index=True).fillna('')
         fields = [c for c in self.frame if c == 'Título da Revista' or
-                  clean(c) in {'area', 'area de conhecimento', 'subject area', 'subject', 'subjects', 'keywords', 'palavras-chave'}]
+                  clean(c) in {'area', 'area de conhecimento', 'subject area', 'subject', 'subjects', 'keywords', 'palavras-chave', 'area (openalex)', 'temas openalex'}]
         self.documents = [Counter(tokens(' '.join(str(row[c]) for c in fields)))
                           for _, row in self.frame.iterrows()]
         self.frequency = Counter(term for doc in self.documents for term in doc)
