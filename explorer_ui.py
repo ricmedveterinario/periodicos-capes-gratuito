@@ -39,14 +39,14 @@ def render_chart(frame, chart_metric, key='simple'):
         y=alt.Y('Área:N'),
         tooltip=[alt.Tooltip('Área:N'), alt.Tooltip('Mediana:Q', format='.2f')],
     )
-    chart = (chart + median).properties(height=max(260, areas * 35)).configure_view(stroke=None).configure_axis(
+    chart = (chart + median).properties(height=max(260, areas * 35), usermeta={"embedOptions": {"loader": {"target": "_blank"}}}).configure_view(stroke=None).configure_axis(
         labelFont='Arial', labelFontSize=14, titleFont='Arial', titleFontSize=16,
         labelColor='#475569', titleColor='#1f2937',
     )
     with st.container(key='pa_plot_' + key):
         st.altair_chart(chart, width="stretch")
     st.markdown('<span class="pa-mobile-hint">Deslize dentro do gráfico para explorar. Os botões das revistas abaixo também abrem os links.</span>', unsafe_allow_html=True)
-    st.caption(f'{len(records):,} revistas com valor disponível. Passe o mouse para ver detalhes; clique no ponto para abrir a revista quando houver link. Losangos mostram a mediana dos resultados de cada área. Áreas representam o campo do tópico predominante no OpenAlex. Eixo em escala simétrica logarítmica.')
+    st.caption(f'{len(records):,} revistas com valor disponível. Passe o mouse para ver detalhes; clique no ponto para abrir a revista em nova aba quando houver link. Losangos mostram a mediana dos resultados de cada área. Áreas representam o campo do tópico predominante no OpenAlex. Eixo em escala simétrica logarítmica.')
 
 
 def render_cards(frame, key, accepted=None):
@@ -144,3 +144,4 @@ def render_explorer(catalog, institutions):
         st.write('A área vem do campo do tópico mais frequente associado à revista no OpenAlex, traduzido quando disponível. Revistas multidisciplinares podem aparecer sob uma área predominante; não é uma classificação oficial de escopo editorial.')
         st.write('As pequenas linhas mostram citações por ano no OpenAlex de 2021 a 2025, em escala própria para cada revista. Não são histórico de fator de impacto JCR. Anos sem registro ficam com lacunas; não são preenchidos com zero.')
         st.markdown('[Fonte e definições OpenAlex](https://help.openalex.org/data/sources/attributes/) · Dados CC0. Quartis JCR não são calculados a partir dessas métricas.')
+
