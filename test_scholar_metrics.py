@@ -2,6 +2,12 @@ import unittest
 from scholar_metrics import lookup, scholar_panel, snapshot
 
 class ScholarTests(unittest.TestCase):
+    def test_direct_google_value_has_own_provenance(self):
+        self.assertEqual(lookup('3 Biotech')['h5_index'],53)
+        self.assertEqual(lookup('3 Biotech')['h5_median'],92)
+        html=scholar_panel('3 Biotech')
+        self.assertIn('2026-10-24',html)
+        self.assertNotIn('ASSERT-KTH',html)
     def test_exact_identity_and_no_estimation(self):
         self.assertEqual(lookup('IEEE Transactions on Software Engineering')['h5_index'],77)
         self.assertIsNone(lookup('Transactions on Software Engineering'))
