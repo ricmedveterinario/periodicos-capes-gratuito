@@ -89,7 +89,8 @@ def load_catalog(data_dir=None, service_account_info=None):
         raise ValueError("A lista Nature não corresponde aos 41 títulos conferidos")
     result["Nature Portfolio"] = prepare_search(nature)
     index = result['INDICE']
-    nature_index = dict(zip(index.columns, ['Nature', 'Nature Portfolio', 'HÍBRIDOS', 'Conforme requisitos', 41,
+    index = index.loc[index['Editora'].astype(str).str.strip() != 'Nature Portfolio']
+    nature_index = dict(zip(index.columns, ['📚', 'Nature Portfolio', 'HÍBRIDOS', 'Conforme requisitos', 41,
                                            'Set/2026 - Dez/2028', 'Lista oficial Nature de 01/09/2026; instituições próprias']))
     result['INDICE'] = pd.concat([index, pd.DataFrame([nature_index])], ignore_index=True)
     result['REQUISITOS'] = result['REQUISITOS'].apply(lambda column: column.map(
@@ -106,6 +107,6 @@ def load_catalog(data_dir=None, service_account_info=None):
             acronym = acronyms.get(normalize(name), "")
             institution_rows.append({"Editora": publisher, "Sigla": acronym, "Nome da Instituição": name,
                                      "Busca (normalizado)": normalize(name + " " + acronym)})
-    institutions = institutions.loc[institutions["Editora"] != "Springer Nature"]
+    institutions = institutions.loc[~institutions["Editora"].isin(["Springer Nature", "Nature Portfolio"])]
     institutions = pd.concat([institutions, pd.DataFrame(institution_rows)], ignore_index=True)
     return result, institutions
