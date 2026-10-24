@@ -22,13 +22,6 @@ st.markdown('<style>' + (Path(__file__).parent / 'typography.css').read_text(enc
 # CSS customizado
 st.markdown("""
 <style>
-    .main-header {
-        background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
-        padding: 2rem;
-        border-radius: 10px;
-        margin-bottom: 2rem;
-        color: white;
-    }
     .credits {
         background-color: #f3f4f6;
         padding: 1rem;
