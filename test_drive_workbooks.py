@@ -3,13 +3,28 @@ from types import ModuleType
 import unittest
 from unittest.mock import MagicMock, patch
 
-from drive_workbooks import read_private_workbooks, PrivateDriveConfigurationError
+from drive_workbooks import read_private_workbooks, read_private_json, PrivateDriveConfigurationError
 
 
 class PrivateDriveTests(unittest.TestCase):
     def test_missing_credentials_fail_closed(self):
         with self.assertRaises(PrivateDriveConfigurationError):
             read_private_workbooks(None, {'periodicos':'file-one'})
+        with self.assertRaises(PrivateDriveConfigurationError):
+            read_private_json(None,'metrics')
+
+    def test_private_json_reader_is_restricted_and_validates_shape(self):
+        modules={name:ModuleType(name) for name in ['google','google.oauth2','google.oauth2.service_account','google.auth','google.auth.transport','google.auth.transport.requests']}
+        cred=MagicMock();modules['google.oauth2.service_account'].Credentials=cred
+        auth=MagicMock();modules['google.auth.transport.requests'].AuthorizedSession=auth
+        response=auth.return_value.__enter__.return_value.get.return_value
+        response.status_code=200;response.json.return_value={'records':[]}
+        with patch.dict(sys.modules,modules):
+            self.assertEqual(read_private_json({'type':'service_account'},'metrics'),{'records':[]})
+            response.json.return_value=[]
+            with self.assertRaises(PrivateDriveConfigurationError):
+                read_private_json({'type':'service_account'},'metrics')
+        self.assertEqual(cred.from_service_account_info.call_args.kwargs['scopes'],['https://www.googleapis.com/auth/drive.readonly'])
 
     def test_downloads_only_configured_files_with_readonly_scope(self):
         credentials=MagicMock()

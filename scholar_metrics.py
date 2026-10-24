@@ -5,20 +5,34 @@ from html import escape
 import json
 import unicodedata
 
+_private_snapshot = None
+
+def configure_snapshot(data):
+    global _private_snapshot
+    if not isinstance(data,dict) or not isinstance(data.get('records'),list):
+        raise ValueError('Invalid scholar snapshot')
+    _private_snapshot=data
+    snapshot.cache_clear()
+
 def title_key(value):
     return ' '.join(unicodedata.normalize('NFKC', str(value)).casefold().split())
 
 @lru_cache(maxsize=1)
 def snapshot():
+    if _private_snapshot is not None:
+        return _private_snapshot
     return json.loads((Path(__file__).parent/'data'/'scholar_metrics_pilot.json').read_text(encoding='utf-8'))
 
-def lookup(title, data=None):
+def lookup(title, data=None, issn=None):
     data = snapshot() if data is None else data
     matches=[r for r in data['records'] if title_key(r['title'])==title_key(title)]
+    if issn is not None:
+        key=''.join(c for c in str(issn).upper() if c.isdigit() or c=='X')
+        matches=[r for r in matches if ''.join(c for c in str(r.get('issn','')).upper() if c.isdigit() or c=='X')==key]
     return matches[0] if len(matches)==1 else None
 
-def scholar_panel(title):
-    data=snapshot(); record=lookup(title,data)
+def scholar_panel(title, issn=None):
+    data=snapshot(); record=lookup(title,data,issn)
     if record is None:
         return ('<div style="border:1px solid #c7d2fe;border-left:4px solid #6366f1;background:#f8faff;border-radius:12px;padding:12px 16px;margin:14px 0">'
                 '<strong style="color:#3730a3">Google Scholar · h5-index</strong>'
@@ -28,11 +42,14 @@ def scholar_panel(title):
     if not all(type(v) is int and v>0 for v in (h5,median)) or median<h5:
         return ''
     direct = record.get('verification') == 'direct'
+    supplied = record.get('verification') == 'provided_collection'
     provenance = ('Fonte: Google Scholar Metrics, conferido diretamente em ' + record.get('checked_at','') + '. Valores da edição indicada; não é atualização automática.'
                   if direct else 'Fonte: captura de 30/06/2026 preservada por ASSERT-KTH; conferida em 23/10/2026. Não é consulta ao vivo.')
-    archive = ('' if direct else ' · <a target="_blank" rel="noopener noreferrer" href="'+escape(data['snapshot_url'],quote=True)+'">Ver captura de origem ↗</a>')
+    if supplied:
+        provenance='Fonte: coleta Google Scholar de '+record.get('checked_at','')+', importada e validada com os lotes fornecidos. Não é consulta ao vivo.'
+    archive = ('' if direct or supplied else ' · <a target="_blank" rel="noopener noreferrer" href="'+escape(record.get('snapshot_url') or data['snapshot_url'],quote=True)+'">Ver captura de origem ↗</a>')
     return ('<div style="border:1px solid #c7d2fe;background:#eef2ff;border-radius:12px;padding:12px 16px;margin:10px 0">'
-        '<strong style="color:#3730a3">Google Scholar Metrics · amostra de teste</strong>'
+        '<strong style="color:#3730a3">Google Scholar Metrics</strong>'
         f'<div style="display:flex;gap:24px;flex-wrap:wrap"><div>h5-index<br><strong style="font-size:1.875rem;color:#3730a3">{h5}</strong></div>'
         f'<div>h5-mediana<br><strong style="font-size:1.875rem;color:#3730a3">{median}</strong></div></div>'
         f'<div>Edição {data["edition"]} · artigos de {escape(data["period"])}</div>'

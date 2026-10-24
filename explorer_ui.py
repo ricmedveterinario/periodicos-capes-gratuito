@@ -7,6 +7,7 @@ from capes_catalog import acceptance_status
 from recommender_ui import render_recommender
 from metric_visuals import metric_panel, journal_chips
 from discovery_links import OPENALEX_ABOUT, scholar_journal_url, scholar_topic_url, summary_cards
+from scholar_metrics import lookup as scholar_lookup, snapshot as scholar_snapshot
 
 
 @st.cache_data(show_spinner=False, max_entries=2)
@@ -108,6 +109,11 @@ def render_explorer(catalog, institutions):
         order = right.selectbox('Ordenar por', ['Título', 'Citações em 2 anos', 'Índice h'], key='simple_order')
         filtered = filter_catalog(frame, query, [publisher] if publisher != 'Todas' else None,
                                   area if area != 'Todas' else None, order=order)
+        google_only = st.checkbox('Somente revistas com h5 Google disponível', key='simple_google_only')
+        if google_only:
+            mask = filtered.apply(lambda row: scholar_lookup(row['Título da Revista'], issn=row['ISSN']) is not None, axis=1)
+            filtered = filtered.loc[mask]
+            st.caption('O gráfico continua mostrando a métrica OpenAlex identificada no eixo. O h5 Google aparece em painel separado nos cartões.')
         if query.strip():
             st.link_button('Pesquisar este tema no Google Acadêmico ↗', scholar_topic_url(query), width='stretch')
         with st.expander('Panorama visual por área', expanded=True):
@@ -138,9 +144,9 @@ def render_explorer(catalog, institutions):
             with st.expander('Panorama visual dos resultados', expanded=False):
                 render_chart(filtered, H_INDEX if order == 'Índice h' else METRIC, key='advanced')
             render_cards(filtered, 'advanced', accepted)
-    with st.expander('Teste: indicadores do Google Scholar'):
-        st.write('Amostra da edição 2025 (artigos de 2020–2024), transcrita de captura preservada por ASSERT-KTH e conferida em 23/10/2026. Oito títulos correspondem exatamente ao catálogo. Os indicadores aparecem nos cartões dessas revistas, separados do OpenAlex; ausência na amostra não significa ausência no Google Scholar.')
-        st.write('Para testar, pesquise Journal of Systems and Software, Empirical Software Engineering ou Information and Software Technology. A data da captura não altera a edição da métrica. Não são fator de impacto JCR nem critérios de elegibilidade CAPES.')
+    with st.expander('Cobertura dos indicadores Google Scholar'):
+        st.write(f"{len(scholar_snapshot()['records'])} revistas com h5-index e h5-mediana na edição 2025 (artigos de 2020–2024). Os valores foram importados da coleta fornecida e validados contra seus lotes ou os registros anteriores. Isso não equivale a uma nova conferência online de todas as revistas.")
+        st.write('A procedência é exibida em cada cartão: coleta fornecida, consulta direta anterior ou captura secundária ASSERT-KTH. A cobertura é parcial; ausência na base não significa ausência de indicador no Google. Nenhum dado é coletado durante a visita ao site.')
     with st.expander('Sobre as métricas e a classificação por área'):
         st.markdown('O [OpenAlex](' + OPENALEX_ABOUT + ') é um catálogo aberto da produção científica. Usamos seus registros para apresentar métricas e temas com fonte identificada. Os botões do Google Acadêmico abrem uma consulta externa; não importamos suas citações nem enviamos seu resumo automaticamente.')
         st.write('A média de citações em dois anos e o índice h são fornecidos pelo OpenAlex. A correspondência usa ISSN exato; casos ambíguos e métricas ausentes não recebem valores estimados. A data de consulta é uma fotografia da base, não um ano JCR.')
