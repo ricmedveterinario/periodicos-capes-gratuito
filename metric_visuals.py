@@ -53,7 +53,7 @@ def metric_panel(row):
                       '<div style="font-size:.875rem;font-weight:650;color:#0f766e">Citações por ano · OpenAlex</div>'
                       + sparkline_svg(history) + '</div>')
     heading = '<div style="font-weight:700;color:#0f766e;margin-top:14px">Métricas OpenAlex</div>' if blocks else ''
-    return heading + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">' + ''.join(blocks) + '</div>' + scholar_panel(row.get('Título da Revista', ''))
+    return heading + '<div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0">' + ''.join(blocks) + '</div>' + scholar_panel(row.get('Título da Revista', ''), row.get('ISSN'))
 
 
 def journal_chips(area, publisher, full):
