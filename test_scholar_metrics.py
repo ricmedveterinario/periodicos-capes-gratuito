@@ -6,7 +6,9 @@ class ScholarTests(unittest.TestCase):
         self.assertEqual(lookup('IEEE Transactions on Software Engineering')['h5_index'],77)
         self.assertIsNone(lookup('Transactions on Software Engineering'))
         self.assertIsNone(lookup('Nature'))
-        self.assertEqual(scholar_panel('missing'),'')
+        missing=scholar_panel('missing')
+        self.assertIn('Não disponível na nossa amostra',missing)
+        self.assertNotIn('font-size:1.875rem',missing)
     def test_duplicate_identity_is_rejected(self):
         record=snapshot()['records'][0]
         self.assertIsNone(lookup(record['title'],{'records':[record,record]}))
