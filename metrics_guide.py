@@ -13,10 +13,12 @@ def render_metrics_guide():
         st.subheader('OpenAlex: um mapa da pesquisa')
         st.write('É um catálogo aberto que conecta trabalhos científicos, autores, instituições e revistas. Aqui, usamos o ISSN para associar uma revista ao seu registro e apresentar temas e indicadores de citação.')
         st.write('Ajuda a conhecer a área de uma revista, encontrar oportunidades e contextualizar a circulação de seus artigos. A associação é complementar: uma revista sem correspondência continua no nosso catálogo CAPES.')
+        st.caption('Consulta: [Site oficial do OpenAlex](https://openalex.org/)')
     with right:
         st.subheader('Google Scholar: literatura e visibilidade')
         st.write('O Google Acadêmico permite buscar literatura científica. O Google Scholar Metrics é a parte que apresenta h5-index e h5-mediana de publicações, organizados por edição.')
         st.write('Ajuda a observar a presença recente de uma revista na literatura citada pelo Google. Nosso site mostra apenas valores coletados e identificados, com período e procedência no cartão.')
+        st.caption('Consulta: [Guia oficial do Google Scholar Metrics](https://scholar.google.com/intl/en/scholar/metrics.html#overview)')
     st.subheader('O que significa cada número?')
     st.markdown('''
 | Indicador | Como ler | Atenção |
