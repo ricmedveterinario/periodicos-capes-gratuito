@@ -519,10 +519,17 @@ if active_section == 'Entenda os índices':
         if publisher_data.get('INDICE') is not None:
             with st.expander("📊 Resumo Geral - Índice de Periódicos", expanded=False):
                 st.markdown("### Visão Geral dos Acordos CAPES")
+                overview = publisher_data['INDICE'].copy()
+                overview['Editora'] = overview['Editora'].astype(str).str.strip()
+                overview['Ícone'] = '📚'
                 st.dataframe(
-                    publisher_data['INDICE'],
+                    overview,
                     width="stretch",
-                    hide_index=True
+                    hide_index=True,
+                    column_config={
+                        'Ícone': st.column_config.TextColumn('Ícone', width='small'),
+                        'Editora': st.column_config.TextColumn('Editora', width='medium'),
+                    },
                 )
                 st.caption("💡 Este é um resumo consolidado de todos os acordos transformativos CAPES")
                 st.caption("ℹ️ OA = OPEN ACCESS")
@@ -720,4 +727,3 @@ if active_section == 'Entenda os índices':
             </p>
         </div>
         """, unsafe_allow_html=True)
-        
