@@ -15,9 +15,9 @@ def scholar_topic_url(topic):
     return 'https://scholar.google.com/scholar?' + urlencode({'hl': 'pt-BR', 'q': str(topic).strip()[:500]})
 
 
-def summary_cards(total, with_metric, nature):
-    values = [(total, 'Registros no catálogo'), (with_metric, 'Com métrica OpenAlex'),
-              (nature, 'Títulos Nature'), (2, 'Modos de busca')]
+def summary_cards(counts):
+    values = [(counts['total'], 'Registros no catálogo CAPES'), (counts['full'], 'Com APC integral indicada na base'),
+              (counts['openalex'], 'Relacionados ao OpenAlex'), (counts['google'], 'Com h5 Google disponível')]
     return '<div class="pa-summary">' + ''.join(
         '<div class="pa-summary-item"><strong>' + f'{int(value):,}'.replace(',', '.') +
         '</strong><span>' + escape(label) + '</span></div>' for value, label in values) + '</div>'

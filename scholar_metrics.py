@@ -11,8 +11,10 @@ def configure_snapshot(data):
     global _private_snapshot
     if not isinstance(data,dict) or not isinstance(data.get('records'),list):
         raise ValueError('Invalid scholar snapshot')
-    _private_snapshot=data
-    snapshot.cache_clear()
+    if _private_snapshot != data:
+        _private_snapshot=data
+        snapshot.cache_clear()
+        _title_index.cache_clear()
 
 def title_key(value):
     return ' '.join(unicodedata.normalize('NFKC', str(value)).casefold().split())
@@ -23,9 +25,16 @@ def snapshot():
         return _private_snapshot
     return json.loads((Path(__file__).parent/'data'/'scholar_metrics_pilot.json').read_text(encoding='utf-8'))
 
+@lru_cache(maxsize=1)
+def _title_index():
+    result={}
+    for record in snapshot()['records']:
+        result.setdefault(title_key(record['title']),[]).append(record)
+    return result
+
 def lookup(title, data=None, issn=None):
-    data = snapshot() if data is None else data
-    matches=[r for r in data['records'] if title_key(r['title'])==title_key(title)]
+    matches=(_title_index().get(title_key(title),[]) if data is None else
+             [r for r in data['records'] if title_key(r['title'])==title_key(title)])
     if issn is not None:
         key=''.join(c for c in str(issn).upper() if c.isdigit() or c=='X')
         matches=[r for r in matches if ''.join(c for c in str(r.get('issn','')).upper() if c.isdigit() or c=='X')==key]
