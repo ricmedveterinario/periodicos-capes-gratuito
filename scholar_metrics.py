@@ -5,11 +5,22 @@ from html import escape
 import json
 import unicodedata
 
+_private_snapshot = None
+
+def configure_snapshot(data):
+    global _private_snapshot
+    if not isinstance(data,dict) or not isinstance(data.get('records'),list):
+        raise ValueError('Invalid scholar snapshot')
+    _private_snapshot=data
+    snapshot.cache_clear()
+
 def title_key(value):
     return ' '.join(unicodedata.normalize('NFKC', str(value)).casefold().split())
 
 @lru_cache(maxsize=1)
 def snapshot():
+    if _private_snapshot is not None:
+        return _private_snapshot
     return json.loads((Path(__file__).parent/'data'/'scholar_metrics_pilot.json').read_text(encoding='utf-8'))
 
 def lookup(title, data=None, issn=None):
