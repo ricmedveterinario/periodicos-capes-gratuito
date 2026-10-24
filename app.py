@@ -272,7 +272,7 @@ def load_sources():
     except (KeyError, FileNotFoundError):
         from drive_workbooks import PrivateDriveConfigurationError
         raise PrivateDriveConfigurationError('O acesso privado às bases precisa ser configurado no servidor.') from None
-    return load_catalog(service_account_info=account)
+    return load_catalog(service_account_info=account, drive_files=dict(st.secrets.get('private_workbooks', {})) or None)
 
 def load_data():
     return load_sources()[0]
