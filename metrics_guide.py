@@ -9,12 +9,12 @@ def render_metrics_guide():
     st.write('Escolher onde publicar envolve três perguntas: a revista combina com seu trabalho, a publicação pode ser custeada e como seus artigos circulam na comunidade? Cada informação responde a uma parte dessa decisão.')
     st.info('CAPES informa condições de custeio. OpenAlex e Google Scholar ajudam a explorar a literatura e suas citações. Ter uma métrica não torna uma revista elegível ao acordo CAPES.')
     left,right=st.columns(2)
-    with left:
+    with left, st.container(border=True):
         st.subheader('OpenAlex: um mapa da pesquisa')
         st.write('É um catálogo aberto que conecta trabalhos científicos, autores, instituições e revistas. Aqui, usamos o ISSN para associar uma revista ao seu registro e apresentar temas e indicadores de citação.')
         st.write('Ajuda a conhecer a área de uma revista, encontrar oportunidades e contextualizar a circulação de seus artigos. A associação é complementar: uma revista sem correspondência continua no nosso catálogo CAPES.')
         st.caption('Consulta: [Site oficial do OpenAlex](https://openalex.org/)')
-    with right:
+    with right, st.container(border=True):
         st.subheader('Google Scholar: literatura e visibilidade')
         st.write('O Google Acadêmico permite buscar literatura científica. O Google Scholar Metrics é a parte que apresenta h5-index e h5-mediana de publicações, organizados por edição.')
         st.write('Ajuda a observar a presença recente de uma revista na literatura citada pelo Google. Nosso site mostra apenas valores coletados e identificados, com período e procedência no cartão.')
