@@ -90,3 +90,34 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   [class*="st-key-pa_plot_"] [data-testid="stVegaLiteChart"] { min-width: 40rem; }
   .pa-mobile-hint { display: block; font-size: .875rem; line-height: 1.5; color: #475569; margin-top: .5rem; }
 }
+
+/* Keep the four navigation choices in a balanced two-by-two mobile grid. */
+@media (max-width: 42rem) {
+  [class*="st-key-main_section"] [role="radiogroup"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem;
+    align-items: stretch;
+    width: 100%;
+  }
+  [class*="st-key-main_section"] [role="radiogroup"] > * {
+    min-width: 0;
+    width: 100%;
+    margin: 0 !important;
+  }
+  [class*="st-key-main_section"] [data-testid="stRadio"] label {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 3.5rem;
+    margin: 0 !important;
+    padding: .6rem .5rem;
+    align-items: center;
+  }
+  [class*="st-key-main_section"] label p {
+    font-size: .9375rem;
+    line-height: 1.3;
+    white-space: normal;
+  }
+}
