@@ -8,6 +8,7 @@ import base64
 from pathlib import Path
 from capes_catalog import load_catalog, search_catalog, acceptance_status, REVISION
 from explorer_ui import render_explorer
+from scholar_metrics import configure_snapshot
 
 # Configuração da página
 st.set_page_config(
@@ -279,6 +280,16 @@ def load_data():
 def load_institutions_data():
     return load_sources()[1]
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def load_scholar_data():
+    local_dir = os.environ.get('PUBLICA_ABERTO_LOCAL_DATA_DIR')
+    if local_dir:
+        import json
+        return json.loads((Path(local_dir)/'scholar_metrics_pilot.json').read_text(encoding='utf-8'))
+    from drive_workbooks import read_private_json
+    return read_private_json(dict(st.secrets['gcp_service_account']),
+                             '1WIcG_a4Iabh9wWzqBujHaex359mjyNlv')
+
 # URLs oficiais das editoras
 URLS_INSTITUICOES = {
     'Elsevier': 'https://view.highspot.com/viewer/c53fae46a21769209f110f21afcc6504#1',
@@ -441,6 +452,11 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 # Descoberta de revistas com dois níveis de complexidade.
+try:
+    configure_snapshot(load_scholar_data())
+except Exception:
+    configure_snapshot({'records':[], 'edition':2025, 'period':'2020–2024'})
+    st.warning('Os indicadores Google Scholar estão temporariamente indisponíveis. As demais consultas continuam disponíveis.')
 render_explorer(publisher_data, load_institutions_data())
 
 with st.expander("Como usar o Publica Aberto e equipe GOBIOTA", expanded=False):
