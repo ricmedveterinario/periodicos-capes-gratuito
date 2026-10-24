@@ -91,21 +91,30 @@ def render_cards(frame, key, accepted=None):
 
 
 def render_explorer(catalog, institutions):
+    from metrics_guide import render_metrics_guide
+    from catalog_summary import catalog_counts
     version = SNAPSHOT_PATH.stat().st_mtime_ns if SNAPSHOT_PATH.exists() else 0
     frame, retrieved = prepare_explorer(catalog, version)
-    st.markdown('<div id="explorar-revistas"></div>', unsafe_allow_html=True)
-    st.markdown(summary_cards(len(frame), int(frame[METRIC].notna().sum()), int((frame['Editora'] == 'Nature Portfolio').sum())), unsafe_allow_html=True)
-    st.caption('Oportunidades pelo tema do manuscrito, com conferência institucional, cobertura e fontes. A presença no catálogo não autoriza custeio por si só.')
-    st.caption('¹ Métricas abertas OpenAlex, consultadas em ' + (retrieved or 'data não disponível') + '. Não são JIF/JCR, CiteScore ou quartil. Não determinam elegibilidade CAPES ou qualidade individual do artigo.')
-    st.markdown('[O que é o OpenAlex?](' + OPENALEX_ABOUT + ') · [Como pesquisar no Google Acadêmico](https://scholar.google.com/intl/pt-BR/scholar/help.html)')
-    simple, advanced = st.tabs(['🔎 Busca simples', '🎯 Busca avançada'])
+    counts = catalog_counts(frame, scholar_lookup)
+    st.markdown(summary_cards(counts), unsafe_allow_html=True)
+    st.caption(f"Segundo nossa base: {format(counts['full'], ',').replace(',', '.')} registros com cobertura integral indicada; {counts['partial']:,} com desconto parcial; {counts['other']:,} com outras condições ou confirmação pendente. A autorização depende dos requisitos do acordo. OpenAlex e Google não definem essa cobertura.")
+    section = st.radio('Navegação', ['Encontrar revistas', 'Busca direta', 'Análise avançada', 'Entenda os índices'], horizontal=True, label_visibility='collapsed', key='main_section')
+    if section == 'Entenda os índices':
+        render_metrics_guide()
+        return section
+    if section == 'Encontrar revistas':
+        st.subheader('Seu próximo artigo começa com uma boa escolha')
+        st.write('Informe o título, o resumo ou palavras-chave. Explore sugestões e confira o escopo de cada revista.')
+        render_recommender(catalog, institutions)
+        return section
     publishers = sorted(frame['Editora'].unique())
     areas = sorted(frame[AREA].unique())
-    with simple:
-        query = st.text_input('Buscar revista', placeholder='Nome, ISSN ou tema — ex.: microbiologia', key='simple_query')
+    if section == 'Busca direta':
+        st.subheader('Encontre uma revista no catálogo')
+        query = st.text_input('Buscar revista', placeholder='Nome, ISSN ou tema', key='simple_query')
         left, middle, right = st.columns(3)
         publisher = left.selectbox('Editora / acordo', ['Todas'] + publishers, key='simple_publisher')
-        area = middle.selectbox('Área', ['Todas'] + areas, key='simple_area')
+        area = middle.selectbox('Área OpenAlex', ['Todas'] + areas, key='simple_area')
         order = right.selectbox('Ordenar por', ['Título', 'Citações em 2 anos', 'Índice h'], key='simple_order')
         filtered = filter_catalog(frame, query, [publisher] if publisher != 'Todas' else None,
                                   area if area != 'Todas' else None, order=order)
@@ -113,43 +122,29 @@ def render_explorer(catalog, institutions):
         if google_only:
             mask = filtered.apply(lambda row: scholar_lookup(row['Título da Revista'], issn=row['ISSN']) is not None, axis=1)
             filtered = filtered.loc[mask]
-            st.caption('O gráfico continua mostrando a métrica OpenAlex identificada no eixo. O h5 Google aparece em painel separado nos cartões.')
-        if query.strip():
-            st.link_button('Pesquisar este tema no Google Acadêmico ↗', scholar_topic_url(query), width='stretch')
-        with st.expander('Panorama visual por área', expanded=True):
-            render_chart(filtered, METRIC if order != 'Índice h' else H_INDEX)
         render_cards(filtered, 'simple')
-    with advanced:
-        mode = st.radio('Como deseja buscar?', ['Recomendar pelo manuscrito', 'Combinar filtros'], horizontal=True)
-        if mode == 'Recomendar pelo manuscrito':
-            render_recommender(catalog, institutions)
-        else:
-            query = st.text_input('Nome, ISSN ou tema', key='advanced_query')
-            left, right = st.columns(2)
-            selected = left.multiselect('Editoras / acordos', publishers)
-            area = right.selectbox('Área', ['Todas'] + areas, key='advanced_area')
-            names = sorted(institutions['Nome da Instituição'].dropna().unique())
-            institution = st.selectbox('Instituição do autor correspondente', ['Sem filtro institucional'] + names, key='advanced_institution')
-            left, right = st.columns(2)
-            full = left.checkbox('Somente cobertura integral indicada na base', value=True, key='advanced_full')
-            metric_only = right.checkbox('Somente revistas com métrica OpenAlex', value=False)
-            left, middle, right = st.columns(3)
-            minimum = left.number_input('Média de citações mínima', min_value=0.0, value=0.0, step=0.5)
-            accepted = middle.date_input('Data de aceite (opcional)', value=None, key='advanced_date')
-            order = right.selectbox('Ordenar por', ['Citações em 2 anos', 'Índice h', 'Título'], key='advanced_order')
-            filtered = filter_catalog(frame, query, selected, area if area != 'Todas' else None,
-                                      institutions, institution if institution != 'Sem filtro institucional' else None,
-                                      full, metric_only, minimum, order)
-            st.caption('O filtro institucional confere somente a presença no acordo. A autorização de custeio exige os demais requisitos CAPES.')
-            with st.expander('Panorama visual dos resultados', expanded=False):
-                render_chart(filtered, H_INDEX if order == 'Índice h' else METRIC, key='advanced')
-            render_cards(filtered, 'advanced', accepted)
-    with st.expander('Cobertura dos indicadores Google Scholar'):
-        st.write(f"{len(scholar_snapshot()['records'])} revistas com h5-index e h5-mediana na edição 2025 (artigos de 2020–2024). Os valores foram importados da coleta fornecida e validados contra seus lotes ou os registros anteriores. Isso não equivale a uma nova conferência online de todas as revistas.")
-        st.write('A procedência é exibida em cada cartão: coleta fornecida, consulta direta anterior ou captura secundária ASSERT-KTH. A cobertura é parcial; ausência na base não significa ausência de indicador no Google. Nenhum dado é coletado durante a visita ao site.')
-    with st.expander('Sobre as métricas e a classificação por área'):
-        st.markdown('O [OpenAlex](' + OPENALEX_ABOUT + ') é um catálogo aberto da produção científica. Usamos seus registros para apresentar métricas e temas com fonte identificada. Os botões do Google Acadêmico abrem uma consulta externa; não importamos suas citações nem enviamos seu resumo automaticamente.')
-        st.write('A média de citações em dois anos e o índice h são fornecidos pelo OpenAlex. A correspondência usa ISSN exato; casos ambíguos e métricas ausentes não recebem valores estimados. A data de consulta é uma fotografia da base, não um ano JCR.')
-        st.write('A área vem do campo do tópico mais frequente associado à revista no OpenAlex, traduzido quando disponível. Revistas multidisciplinares podem aparecer sob uma área predominante; não é uma classificação oficial de escopo editorial.')
-        st.write('As pequenas linhas mostram citações por ano no OpenAlex de 2021 a 2025, em escala própria para cada revista. Não são histórico de fator de impacto JCR. Anos sem registro ficam com lacunas; não são preenchidos com zero.')
-        st.markdown('[Fonte e definições OpenAlex](https://help.openalex.org/data/sources/attributes/) · Dados CC0. Quartis JCR não são calculados a partir dessas métricas.')
+        return section
+    st.subheader('Cruze filtros e explore o panorama')
+    query = st.text_input('Nome, ISSN ou tema', key='advanced_query')
+    left, right = st.columns(2)
+    selected = left.multiselect('Editoras / acordos', publishers)
+    area = right.selectbox('Área OpenAlex', ['Todas'] + areas, key='advanced_area')
+    names = sorted(institutions['Nome da Instituição'].dropna().unique())
+    institution = st.selectbox('Instituição do autor correspondente', ['Sem filtro institucional'] + names, key='advanced_institution')
+    left, right = st.columns(2)
+    full = left.checkbox('Somente cobertura integral indicada na base', value=True, key='advanced_full')
+    metric_only = right.checkbox('Somente revistas com métrica OpenAlex', value=False)
+    left, middle, right = st.columns(3)
+    minimum = left.number_input('Média de citações mínima', min_value=0.0, value=0.0, step=0.5)
+    accepted = middle.date_input('Data de aceite (opcional)', value=None, key='advanced_date')
+    order = right.selectbox('Ordenar por', ['Citações em 2 anos', 'Índice h', 'Título'], key='advanced_order')
+    filtered = filter_catalog(frame, query, selected, area if area != 'Todas' else None,
+                              institutions, institution if institution != 'Sem filtro institucional' else None,
+                              full, metric_only, minimum, order)
+    show_chart = st.checkbox('Carregar gráfico interativo', value=False, key='load_chart')
+    if show_chart:
+        render_chart(filtered, H_INDEX if order == 'Índice h' else METRIC, key='advanced')
+    else:
+        st.caption('O gráfico só é carregado quando solicitado, para manter a navegação mais leve.')
+    render_cards(filtered, 'advanced', accepted)
+    return section

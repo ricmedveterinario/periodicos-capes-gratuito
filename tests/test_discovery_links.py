@@ -15,7 +15,7 @@ class DiscoveryLinkTests(unittest.TestCase):
         self.assertEqual(set(query), {'q', 'hl'})
 
     def test_summary_has_distinct_responsive_tiles(self):
-        html = summary_cards(5936, 5918, 41)
+        html = summary_cards({'total':5936,'full':5277,'openalex':5918,'google':226})
         self.assertEqual(html.count('class="pa-summary-item"'), 4)
         self.assertIn('5.936', html)
 

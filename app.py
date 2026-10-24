@@ -15,7 +15,7 @@ st.set_page_config(
     page_title="Publique Gratuitamente - Acordos CAPES",
     page_icon="💰",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="auto"
 )
 
 st.markdown('<style>' + (Path(__file__).parent / 'typography.css').read_text(encoding='utf-8') + '</style>', unsafe_allow_html=True)
@@ -243,10 +243,10 @@ st.markdown("""
 # Cabeçalho
 st.markdown("""
 <div class="main-header">
-    <div class="pa-eyebrow">PUBLICAÇÃO CIENTÍFICA · ACORDOS CAPES</div>
+    <div class="pa-eyebrow">GOBIOTA / UFU</div>
     <h1>Publica Aberto</h1>
     <p style="font-size: 1.1rem; margin-bottom: 0;">
-        Encontre revistas para sua pesquisa e confira as condições de publicação sem APC.
+        Sua pesquisa, a revista certa. Descubra oportunidades nos acordos CAPES.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -372,7 +372,7 @@ st.sidebar.caption("Atualizar Dados consulta novamente a base de periódicos e i
 
 st.sidebar.markdown("---")
 
-st.sidebar.caption("Escolha Busca simples ou Busca avançada no centro da página.")
+st.sidebar.caption("Encontre sugestões pelo manuscrito ou consulte uma revista na navegação principal.")
 
 # Espaço para futuros links do GOBIOTA
 st.sidebar.header("🔗 Links GOBIOTA")
@@ -457,264 +457,267 @@ try:
 except Exception:
     configure_snapshot({'records':[], 'edition':2025, 'period':'2020–2024'})
     st.warning('Os indicadores Google Scholar estão temporariamente indisponíveis. As demais consultas continuam disponíveis.')
-render_explorer(publisher_data, load_institutions_data())
+active_section = render_explorer(publisher_data, load_institutions_data())
 
-with st.expander("Como usar o Publica Aberto e equipe GOBIOTA", expanded=False):
-    # Alerta informativo
-    st.info("""
-    🎯 **Como funciona:** Consulte os acordos e escolha o nível de busca:
-    1. **🏛️ Verificar se SUA INSTITUIÇÃO é elegível** (primeiro passo - faça isso abaixo!)
-    2. **📚 Buscar o PERIÓDICO** onde você quer publicar (segundo passo)
-
-    Se ambos estiverem listados, confira também o modelo do periódico, a data de aceite e os requisitos do autor. O custeio depende de validação pela CAPES.
-    """)
-
-
-    # Créditos
-    st.markdown("""
-    <div class="credits">
-        <h3 style="margin-top: 0; color: #1e40af;">💰 O que são Acordos Transformativos?</h3>
-        <p style="margin-bottom: 1rem;">
-            São acordos entre a CAPES e grandes editoras científicas que permitem a <strong>pesquisadores brasileiros 
-            publicarem gratuitamente em acesso aberto</strong>, sem pagar APCs (Article Processing Charges - taxas de 
-            processamento de artigos que podem custar milhares de dólares).
-        </p>
-        <p style="margin-bottom: 1rem;">
-            <strong>Verificação preliminar:</strong><br>
-            • É afiliado a uma instituição brasileira elegível nos acordos<br>
-            • Sua instituição tem acesso ao Portal de Periódicos CAPES<br>
-            • O periódico está listado nos acordos da editora<br>
-            • Você é o autor correspondente (corresponding author)
-        </p>
-        <hr style="margin: 1rem 0;">
-        <h3 style="margin-top: 1rem; color: #1e40af;">📚 Desenvolvido por:</h3>
-        <p style="margin-bottom: 0.5rem;">
-            <strong>Grupo GOBIOTA</strong><br>
-            <em>Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica</em>
-        </p>
-        <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">
-            <strong>Instituição:</strong> Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
-            <strong>Programa de Pós-graduação:</strong> Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
-            <strong>Universidade:</strong> Universidade Federal de Uberlândia (UFU)
-        </p>
-        <p style="margin-bottom: 0.5rem; font-size: 0.875rem; color: #4b5563;">
-            <strong>Coordenação:</strong> Prof. Dr. Richard Costa Polveiro
-        </p>
-        <p style="margin-bottom: 0; font-size: 0.9rem; color: #475569;">
-            ℹ️ Dados extraídos dos acordos transformativos CAPES vigentes • Atualizado periodicamente<br>
-            💡 Acesse a barra lateral para links de contato e recursos do GOBIOTA
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# ==================== INFORMAÇÕES ADICIONAIS ====================
-st.markdown("---")
-
-st.markdown("### 📚 Informações Complementares")
-
-# Exibir ÍNDICE
-if publisher_data.get('INDICE') is not None:
-    with st.expander("📊 Resumo Geral - Índice de Periódicos", expanded=False):
-        st.markdown("### Visão Geral dos Acordos CAPES")
-        st.dataframe(
-            publisher_data['INDICE'],
-            width="stretch",
-            hide_index=True
-        )
-        st.caption("💡 Este é um resumo consolidado de todos os acordos transformativos CAPES")
-        st.caption("ℹ️ OA = OPEN ACCESS")
-    
-# Exibir REQUISITOS
-if publisher_data.get('REQUISITOS') is not None:
-    with st.expander("✅ Requisitos para Publicação Gratuita", expanded=False):
-        st.markdown("### O que você precisa para publicar gratuitamente")
-        st.dataframe(
-            publisher_data['REQUISITOS'],
-            width="stretch",
-            hide_index=True
-        )
-        st.caption("⚠️ Verifique estes requisitos antes de submeter seu artigo")
-
-# NOVO: Exibir AVISOS
-if publisher_data.get('AVISOS') is not None:
-    with st.expander("⚠️ AVISOS IMPORTANTES - Leia antes de submeter!", expanded=False):
-        st.markdown("### Avisos e Observações sobre os Acordos")
-        st.dataframe(
-            publisher_data['AVISOS'],
-            width="stretch",
-            hide_index=True
-        )
-        st.caption("⚠️ Atenção especial para Elsevier e Wiley Gold!")
-
-# FAQ
-st.markdown("---")
-    
-with st.expander("❓ Perguntas Frequentes - Como publicar gratuitamente"):
-    st.markdown("""
-    ### 1. O que são Acordos Transformativos?
+if active_section == 'Entenda os índices':
+    with st.expander('Sobre o projeto, acordos e condições de uso'):
+        with st.expander("Como usar o Publica Aberto e equipe GOBIOTA", expanded=False):
+            # Alerta informativo
+            st.info("""
+            🎯 **Como funciona:** Consulte os acordos e escolha o nível de busca:
+            1. **🏛️ Verificar se SUA INSTITUIÇÃO é elegível** (primeiro passo - faça isso abaixo!)
+            2. **📚 Buscar o PERIÓDICO** onde você quer publicar (segundo passo)
         
-    São contratos entre a CAPES e grandes editoras científicas que permitem:
-    - **Acesso aberto (Open Access)** às publicações
-    - **Sem custos de APC** para autores brasileiros elegíveis
-    - Publicações imediatamente disponíveis para todo o mundo
+            Se ambos estiverem listados, confira também o modelo do periódico, a data de aceite e os requisitos do autor. O custeio depende de validação pela CAPES.
+            """)
         
-    ### 2. Como sei se posso publicar gratuitamente?
         
-    **Condições preliminares para solicitar custeio:**
-    - ✅ O periódico está listado neste sistema
-    - ✅ Você é afiliado a uma instituição brasileira elegível
-    - ✅ Sua instituição está nos acordos da editora específica
-    - ✅ Você é o autor correspondente (corresponding author)
+            # Créditos
+            st.markdown("""
+            <div class="credits">
+                <h3 style="margin-top: 0; color: #1e40af;">💰 O que são Acordos Transformativos?</h3>
+                <p style="margin-bottom: 1rem;">
+                    São acordos entre a CAPES e grandes editoras científicas que permitem a <strong>pesquisadores brasileiros 
+                    publicarem gratuitamente em acesso aberto</strong>, sem pagar APCs (Article Processing Charges - taxas de 
+                    processamento de artigos que podem custar milhares de dólares).
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>Verificação preliminar:</strong><br>
+                    • É afiliado a uma instituição brasileira elegível nos acordos<br>
+                    • Sua instituição tem acesso ao Portal de Periódicos CAPES<br>
+                    • O periódico está listado nos acordos da editora<br>
+                    • Você é o autor correspondente (corresponding author)
+                </p>
+                <hr style="margin: 1rem 0;">
+                <h3 style="margin-top: 1rem; color: #1e40af;">📚 Desenvolvido por:</h3>
+                <p style="margin-bottom: 0.5rem;">
+                    <strong>Grupo GOBIOTA</strong><br>
+                    <em>Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica</em>
+                </p>
+                <p style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+                    <strong>Instituição:</strong> Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
+                    <strong>Programa de Pós-graduação:</strong> Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
+                    <strong>Universidade:</strong> Universidade Federal de Uberlândia (UFU)
+                </p>
+                <p style="margin-bottom: 0.5rem; font-size: 0.875rem; color: #4b5563;">
+                    <strong>Coordenação:</strong> Prof. Dr. Richard Costa Polveiro
+                </p>
+                <p style="margin-bottom: 0; font-size: 0.9rem; color: #475569;">
+                    ℹ️ Dados extraídos dos acordos transformativos CAPES vigentes • Atualizado periodicamente<br>
+                    💡 Acesse a barra lateral para links de contato e recursos do GOBIOTA
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
         
-    **A busca não confirma o perfil do autor, a cobertura por título ou a autorização da CAPES.**
         
-    ### 3. Por que preciso verificar minha instituição?
+        # ==================== INFORMAÇÕES ADICIONAIS ====================
+        st.markdown("---")
         
-    Nem todas as instituições brasileiras estão em todos os acordos. Cada editora tem 
-    sua própria lista de instituições elegíveis. Sua instituição pode estar em algumas 
-    editoras, mas não em outras. Por isso é essencial verificar ANTES de escolher o periódico.
+        st.markdown("### 📚 Informações Complementares")
         
-    ### 4. Como usar este sistema?
+        # Exibir ÍNDICE
+        if publisher_data.get('INDICE') is not None:
+            with st.expander("📊 Resumo Geral - Índice de Periódicos", expanded=False):
+                st.markdown("### Visão Geral dos Acordos CAPES")
+                st.dataframe(
+                    publisher_data['INDICE'],
+                    width="stretch",
+                    hide_index=True
+                )
+                st.caption("💡 Este é um resumo consolidado de todos os acordos transformativos CAPES")
+                st.caption("ℹ️ OA = OPEN ACCESS")
+            
+        # Exibir REQUISITOS
+        if publisher_data.get('REQUISITOS') is not None:
+            with st.expander("✅ Requisitos para Publicação Gratuita", expanded=False):
+                st.markdown("### O que você precisa para publicar gratuitamente")
+                st.dataframe(
+                    publisher_data['REQUISITOS'],
+                    width="stretch",
+                    hide_index=True
+                )
+                st.caption("⚠️ Verifique estes requisitos antes de submeter seu artigo")
         
-    **Passo a passo:**
-    1. Use a seção "Busca avançada" para verificar se sua instituição é elegível
-    2. Anote em quais editoras sua instituição está
-    3. Use a seção "Busca simples" para buscar periódicos nessas editoras
-    4. Se encontrar o periódico em uma editora onde sua instituição é elegível → Confira a cobertura e os requisitos antes de submeter.
+        # NOVO: Exibir AVISOS
+        if publisher_data.get('AVISOS') is not None:
+            with st.expander("⚠️ AVISOS IMPORTANTES - Leia antes de submeter!", expanded=False):
+                st.markdown("### Avisos e Observações sobre os Acordos")
+                st.dataframe(
+                    publisher_data['AVISOS'],
+                    width="stretch",
+                    hide_index=True
+                )
+                st.caption("⚠️ Atenção especial para Elsevier e Wiley Gold!")
         
-    ### 5. Quanto eu economizo?
+        # FAQ
+        st.markdown("---")
+            
+        with st.expander("❓ Perguntas Frequentes - Como publicar gratuitamente"):
+            st.markdown("""
+            ### 1. O que são Acordos Transformativos?
+                
+            São contratos entre a CAPES e grandes editoras científicas que permitem:
+            - **Acesso aberto (Open Access)** às publicações
+            - **Sem custos de APC** para autores brasileiros elegíveis
+            - Publicações imediatamente disponíveis para todo o mundo
+                
+            ### 2. Como sei se posso publicar gratuitamente?
+                
+            **Condições preliminares para solicitar custeio:**
+            - ✅ O periódico está listado neste sistema
+            - ✅ Você é afiliado a uma instituição brasileira elegível
+            - ✅ Sua instituição está nos acordos da editora específica
+            - ✅ Você é o autor correspondente (corresponding author)
+                
+            **A busca não confirma o perfil do autor, a cobertura por título ou a autorização da CAPES.**
+                
+            ### 3. Por que preciso verificar minha instituição?
+                
+            Nem todas as instituições brasileiras estão em todos os acordos. Cada editora tem 
+            sua própria lista de instituições elegíveis. Sua instituição pode estar em algumas 
+            editoras, mas não em outras. Por isso é essencial verificar ANTES de escolher o periódico.
+                
+            ### 4. Como usar este sistema?
+                
+            **Passo a passo:**
+            1. Use a seção "Busca avançada" para verificar se sua instituição é elegível
+            2. Anote em quais editoras sua instituição está
+            3. Use a seção "Busca simples" para buscar periódicos nessas editoras
+            4. Se encontrar o periódico em uma editora onde sua instituição é elegível → Confira a cobertura e os requisitos antes de submeter.
+                
+            ### 5. Quanto eu economizo?
+                
+            APCs típicos variam de:
+            - **US$ 1.500 a US$ 3.000** em periódicos convencionais
+            - **US$ 3.000 a US$ 11.000** em periódicos de alto impacto
+                
+            O custeio de APC depende do acordo e da validação. Serviços editoriais adicionais podem gerar cobrança.
+                
+            ### 6. Onde encontro mais informações?
+                
+            - **Portal CAPES:** https://www.periodicos.capes.gov.br
+            - **Biblioteca da sua instituição:** Entre em contato para suporte
+            - **Listas oficiais:** Use os links nas seções de cada editora
+            """)
+            
+        with st.expander("ℹ️ Sobre este Sistema"):
+            st.markdown(f"""
+            ### Objetivo
+                
+            Facilitar a busca de periódicos e verificação de instituições elegíveis nos acordos CAPES.
+                
+            ### Como funciona:
+                
+            **PASSO 1:** Verifica se sua instituição está nos acordos  
+            **PASSO 2:** Busca periódicos nas editoras onde você é elegível  
+                
+            ### Desenvolvido por:
+                
+            **Grupo GOBIOTA** - Genômica, Bioinformática e Tecnologias Aplicadas  
+            PPGCVET/FMVZ/UFU
+                
+            ---
+            *Revisão das bases: 19/10/2026. Outras listas editoriais permanecem em revisão.*
+            """)
+            
+        # ==================== AGÊNCIAS DE FOMENTO ====================
+            
+        st.markdown("""
+        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); 
+                    padding: 1.5rem; 
+                    border-radius: 10px; 
+                    border-left: 4px solid #0284c7;
+                    margin: 2rem 0;">
+            <p style="text-align: center; margin: 0; color: #0c4a6e; font-size: 0.95rem; line-height: 1.6;">
+                <strong>🔬 Apoio à Pesquisa</strong><br><br>
+                Esta iniciativa é fortalecida pelo apoio de agências de fomento à pesquisa no Brasil, 
+                em especial <strong>CNPq</strong>, <strong>CAPES</strong> e <strong>FAPEMIG</strong>, 
+                por meio de diferentes projetos e bolsas associados ao <strong>Grupo GOBIOTA – PPGCVET/FMVZ/UFU</strong>.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         
-    APCs típicos variam de:
-    - **US$ 1.500 a US$ 3.000** em periódicos convencionais
-    - **US$ 3.000 a US$ 11.000** em periódicos de alto impacto
+        st.markdown("""
+        <div style="background-color: #fef3c7; 
+                    padding: 1rem; 
+                    border-radius: 8px; 
+                    border-left: 4px solid #f59e0b;
+                    margin-bottom: 2rem;">
+            <p style="margin: 0; color: #92400e; font-size: 0.875rem; text-align: center;">
+                ⚠️ <strong>Disclaimer:</strong> As opiniões, hipóteses e conclusões ou recomendações 
+                expressas neste site são de responsabilidade dos autores e não necessariamente 
+                refletem a visão das agências de fomento.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         
-    O custeio de APC depende do acordo e da validação. Serviços editoriais adicionais podem gerar cobrança.
+        # ==================== RODAPÉ LEGAL ====================
+            
+        st.markdown("---")
+            
+        # Proteção de Dados
+        st.warning("""
+        **⚠️ Proteção de Dados**
         
-    ### 6. Onde encontro mais informações?
+        **📊 Os dados desta plataforma são protegidos por direitos autorais.**
         
-    - **Portal CAPES:** https://www.periodicos.capes.gov.br
-    - **Biblioteca da sua instituição:** Entre em contato para suporte
-    - **Listas oficiais:** Use os links nas seções de cada editora
-    """)
-    
-with st.expander("ℹ️ Sobre este Sistema"):
-    st.markdown(f"""
-    ### Objetivo
+        **🚫 Proibido:**
+        - Download em massa dos dados
+        - Extração automatizada (web scraping)
+        - Reprodução não autorizada da base de dados
+        - Criação de cópias ou sistemas derivados
         
-    Facilitar a busca de periódicos e verificação de instituições elegíveis nos acordos CAPES.
+        **✅ Permitido:**
+        - Consulta individual para fins de pesquisa acadêmica
+        - Busca de periódicos e instituições específicas
+        - Uso pessoal e não comercial
         
-    ### Como funciona:
+        **⚖️ Importante:** Este sistema é apenas para consulta. A violação destes termos pode resultar em ações legais.
+        """)
         
-    **PASSO 1:** Verifica se sua instituição está nos acordos  
-    **PASSO 2:** Busca periódicos nas editoras onde você é elegível  
+        # Aviso Legal e Direitos (usando st.info - componente nativo)
+        st.info("""
+        **⚖️ Aviso Legal e Direitos**
         
-    ### Desenvolvido por:
+        **© Direitos Autorais**  
+        © 2026 Richard Costa Polveiro - Grupo GOBIOTA  
+        Todos os direitos sobre o código e interface são reservados.  
+        Licenciado sob [Licença MIT](https://github.com/ricmedveterinario/periodicos-capes-gratuito/blob/main/LICENSE).
         
-    **Grupo GOBIOTA** - Genômica, Bioinformática e Tecnologias Aplicadas  
-    PPGCVET/FMVZ/UFU
+        **📊 Fonte dos Dados**  
+        Informações baseadas em documentos oficiais do [Portal CAPES](https://www.periodicos.capes.gov.br) e das editoras participantes.
         
-    ---
-    *Revisão das bases: 19/10/2026. Outras listas editoriais permanecem em revisão.*
-    """)
-    
-# ==================== AGÊNCIAS DE FOMENTO ====================
-    
-st.markdown("""
-<div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); 
-            padding: 1.5rem; 
-            border-radius: 10px; 
-            border-left: 4px solid #0284c7;
-            margin: 2rem 0;">
-    <p style="text-align: center; margin: 0; color: #0c4a6e; font-size: 0.95rem; line-height: 1.6;">
-        <strong>🔬 Apoio à Pesquisa</strong><br><br>
-        Esta iniciativa é fortalecida pelo apoio de agências de fomento à pesquisa no Brasil, 
-        em especial <strong>CNPq</strong>, <strong>CAPES</strong> e <strong>FAPEMIG</strong>, 
-        por meio de diferentes projetos e bolsas associados ao <strong>Grupo GOBIOTA – PPGCVET/FMVZ/UFU</strong>.
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<div style="background-color: #fef3c7; 
-            padding: 1rem; 
-            border-radius: 8px; 
-            border-left: 4px solid #f59e0b;
-            margin-bottom: 2rem;">
-    <p style="margin: 0; color: #92400e; font-size: 0.875rem; text-align: center;">
-        ⚠️ <strong>Disclaimer:</strong> As opiniões, hipóteses e conclusões ou recomendações 
-        expressas neste site são de responsabilidade dos autores e não necessariamente 
-        refletem a visão das agências de fomento.
-    </p>
-</div>
-""", unsafe_allow_html=True)
-
-# ==================== RODAPÉ LEGAL ====================
-    
-st.markdown("---")
-    
-# Proteção de Dados
-st.warning("""
-**⚠️ Proteção de Dados**
-
-**📊 Os dados desta plataforma são protegidos por direitos autorais.**
-
-**🚫 Proibido:**
-- Download em massa dos dados
-- Extração automatizada (web scraping)
-- Reprodução não autorizada da base de dados
-- Criação de cópias ou sistemas derivados
-
-**✅ Permitido:**
-- Consulta individual para fins de pesquisa acadêmica
-- Busca de periódicos e instituições específicas
-- Uso pessoal e não comercial
-
-**⚖️ Importante:** Este sistema é apenas para consulta. A violação destes termos pode resultar em ações legais.
-""")
-
-# Aviso Legal e Direitos (usando st.info - componente nativo)
-st.info("""
-**⚖️ Aviso Legal e Direitos**
-
-**© Direitos Autorais**  
-© 2026 Richard Costa Polveiro - Grupo GOBIOTA  
-Todos os direitos sobre o código e interface são reservados.  
-Licenciado sob [Licença MIT](https://github.com/ricmedveterinario/periodicos-capes-gratuito/blob/main/LICENSE).
-
-**📊 Fonte dos Dados**  
-Informações baseadas em documentos oficiais do [Portal CAPES](https://www.periodicos.capes.gov.br) e das editoras participantes.
-
-**⚠️ Disclaimer**  
-**Ferramenta independente sem vínculo oficial com CAPES ou editoras.**  
-Desenvolvida para fins informativos e acadêmicos. Verifique sempre documentos oficiais antes de decisões.  
-Direitos sobre dados e marcas pertencem aos respectivos titulares.
-
-**🔒 Privacidade**  
-Esta aplicação **não requer login**.  
-O que você digita é usado apenas durante o uso e não é armazenado pelo aplicativo.  
-A hospedagem pode registrar logs técnicos para segurança e diagnóstico.  
-Usamos Google Analytics. 
-""")
-    
-# Rodapé com créditos
-st.markdown("""
-<div style="text-align: center; padding: 1.5rem; background-color: #f9fafb; border-radius: 10px; margin-top: 2rem;">
-    <h4 style="margin: 0 0 0.5rem 0; color: #1e40af;">Grupo GOBIOTA</h4>
-    <p style="margin: 0.25rem 0; font-size: 0.9rem; color: #4b5563;">
-        Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica
-    </p>
-    <p style="margin: 0.25rem 0; font-size: 0.875rem; color: #475569;">
-        Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
-        Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
-        Universidade Federal de Uberlândia (UFU)
-    </p>
-    <hr style="margin: 1rem auto; width: 50%; border: none; border-top: 1px solid #e5e7eb;">
-    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #475569;">
-        💰 Ajudando pesquisadores brasileiros a publicarem em acesso aberto
-    </p>
-    <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #475569;">
-        Licenciado sob MIT License | Versão 1.0 | Interface de 23/10/2026
-    </p>
-</div>
-""", unsafe_allow_html=True)
+        **⚠️ Disclaimer**  
+        **Ferramenta independente sem vínculo oficial com CAPES ou editoras.**  
+        Desenvolvida para fins informativos e acadêmicos. Verifique sempre documentos oficiais antes de decisões.  
+        Direitos sobre dados e marcas pertencem aos respectivos titulares.
+        
+        **🔒 Privacidade**  
+        Esta aplicação **não requer login**.  
+        O que você digita é usado apenas durante o uso e não é armazenado pelo aplicativo.  
+        A hospedagem pode registrar logs técnicos para segurança e diagnóstico.  
+        Usamos Google Analytics. 
+        """)
+            
+        # Rodapé com créditos
+        st.markdown("""
+        <div style="text-align: center; padding: 1.5rem; background-color: #f9fafb; border-radius: 10px; margin-top: 2rem;">
+            <h4 style="margin: 0 0 0.5rem 0; color: #1e40af;">Grupo GOBIOTA</h4>
+            <p style="margin: 0.25rem 0; font-size: 0.9rem; color: #4b5563;">
+                Grupo de Pesquisa e Inovação em Microbiologia e Inteligência Biotecnológica
+            </p>
+            <p style="margin: 0.25rem 0; font-size: 0.875rem; color: #475569;">
+                Programa de Pós-graduação em Ciências Veterinárias (PPGCVET)<br>
+                Faculdade de Medicina Veterinária e Zootecnia (FMVZ)<br>
+                Universidade Federal de Uberlândia (UFU)
+            </p>
+            <hr style="margin: 1rem auto; width: 50%; border: none; border-top: 1px solid #e5e7eb;">
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #475569;">
+                💰 Ajudando pesquisadores brasileiros a publicarem em acesso aberto
+            </p>
+            <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: #475569;">
+                Licenciado sob MIT License | Versão 1.0 | Interface de 23/10/2026
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
