@@ -13,7 +13,7 @@ DRIVE_FILES = {
     "periodicos": "1PysXi6_kp7TL4fXmw8jlZe5aFjRrWsSo",
     "instituicoes": "1zgE4_LshjeP75SqGzckP9bV36p_M_SS_",
 }
-REVISION = "2026-10-19"
+REVISION = "2026-10-24"
 PUBLISHERS = {
     "🟡 Elsevier": "Elsevier",
     "🟢 Springer Nature": "Springer Nature",
@@ -55,14 +55,14 @@ def acceptance_status(publisher, accepted):
             if start <= accepted <= date(2028, 12, 31) else "Fora da vigência do acordo")
 
 
-def load_catalog(data_dir=None, service_account_info=None):
+def load_catalog(data_dir=None, service_account_info=None, drive_files=None):
     """Read private Drive v2 files, or explicitly provided local files in tests."""
     if data_dir is not None:
         root = Path(data_dir)
         journals_source, institutions_source = root / JOURNALS_FILE, root / INSTITUTIONS_FILE
     else:
         from drive_workbooks import read_private_workbooks
-        files = read_private_workbooks(service_account_info, DRIVE_FILES)
+        files = read_private_workbooks(service_account_info, drive_files or DRIVE_FILES)
         journals_source, institutions_source = files['periodicos'], files['instituicoes']
     result = {}
     with pd.ExcelFile(journals_source, engine="openpyxl") as workbook:
