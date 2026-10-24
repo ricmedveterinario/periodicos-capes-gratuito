@@ -272,7 +272,7 @@ def load_sources():
     except (KeyError, FileNotFoundError):
         from drive_workbooks import PrivateDriveConfigurationError
         raise PrivateDriveConfigurationError('O acesso privado às bases precisa ser configurado no servidor.') from None
-    return load_catalog(service_account_info=account)
+    return load_catalog(service_account_info=account, drive_files=dict(st.secrets.get('private_workbooks', {})) or None)
 
 def load_data():
     return load_sources()[0]
@@ -367,7 +367,7 @@ if st.sidebar.button("🔄 Atualizar Dados", help="Recarrega a versão de dados 
     st.cache_data.clear()
     st.rerun()
 
-st.sidebar.caption("Bases v2 • Revisão de 19/10/2026 • Nature: lista de setembro/2026")
+st.sidebar.caption('Bases v2.1 • Revisão de 24/10/2026 • Nature: 41 títulos incluídos' if st.secrets.get('private_workbooks') else 'Bases v2 • Revisão de 19/10/2026 • Nature: lista de setembro/2026')
 st.sidebar.caption("Atualizar Dados consulta novamente a base de periódicos e instituições.")
 
 st.sidebar.markdown("---")
