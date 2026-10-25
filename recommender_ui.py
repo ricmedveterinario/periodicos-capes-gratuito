@@ -34,7 +34,7 @@ def render_recommender(catalog, institutions):
         submitted = st.form_submit_button('Encontrar revistas', type='primary', width="stretch")
     st.caption('Seu texto é processado no servidor do Publica Aberto, sem envio a serviços externos e sem gravação pelo recomendador. Permanece na sessão enquanto ela estiver aberta.')
     with st.expander('Como interpretar as sugestões'):
-        st.write('Comparamos título, resumo e palavras-chave com nomes de revistas, áreas e temas associados às publicações no OpenAlex. Um vocabulário português–inglês ajuda a reconhecer temas. Título e palavras-chave têm maior peso. A pontuação ordena a relação temática; não é porcentagem de compatibilidade ou chance de aceite.')
+        st.write('O motor local identifica assunto, população e métodos do manuscrito, compara nomes de revistas, áreas e temas e reordena os candidatos pelo contexto. Um vocabulário português–inglês reconhece termos e expressões. Aderência e evidência são sinais heurísticos, não validação editorial nem chance de aceite.')
         st.write('Esta primeira versão não analisa artigos publicados nem o escopo completo de cada revista. Periódicos multidisciplinares podem não aparecer. Confira o escopo e as instruções aos autores antes de escolher.')
     if not submitted:
         return
@@ -49,8 +49,10 @@ def render_recommender(catalog, institutions):
         st.info('Não encontramos correspondências com esses critérios. Tente palavras-chave mais específicas, também em inglês, ou revise os filtros. Isso não significa que não existam revistas adequadas.')
         return
     st.success(f'{len(results)} sugestões para conferir')
+    if not results['Aderência'].isin(['Forte', 'Boa']).any():
+        st.info('As correspondências encontradas são exploratórias ou fracas. Confira o escopo e experimente termos mais específicos; esta lista não confirma adequação editorial.')
     st.caption('A presença da instituição no acordo é preliminar. A cobertura depende também do título, modelo, vigência e requisitos do autor; a aprovação do custeio é da CAPES.')
-    display_columns = ['Título da Revista', 'Editora', 'Pontuação temática', 'Termos relacionados', 'ISSN', 'Modelo', 'Cobertura APC']
+    display_columns = ['Título da Revista', 'Editora', 'Aderência', 'Cobertura temática', 'Evidência', 'Termos do seu texto', 'ISSN', 'Modelo', 'Cobertura APC']
     display = results[[column for column in display_columns if column in results]].copy()
     if accepted is not None:
         display['Conferência da data'] = results['Editora'].map(lambda publisher: acceptance_status(publisher, accepted))
@@ -60,7 +62,8 @@ def render_recommender(catalog, institutions):
         with st.container(border=True):
             st.markdown(f"**{position}. {row['Título da Revista']}**")
             st.markdown(journal_chips(row.get(AREA, ''), row['Editora'], row.get('_full_coverage', False)), unsafe_allow_html=True)
-            st.write('**Por que apareceu:** termos relacionados ao manuscrito: ' + row['Termos relacionados'])
+            st.caption('Aderência temática: ' + str(row['Aderência']))
+            st.write('**Por que apareceu:** ' + (row['Termos do seu texto'] or row['Termos relacionados'] or 'associação exploratória com o tema informado'))
             topics = str(row.get('Temas OpenAlex', '')).strip()
             if topics:
                 st.caption('Temas da revista no OpenAlex: ' + topics)
@@ -70,6 +73,8 @@ def render_recommender(catalog, institutions):
                 st.link_button('Abrir revista e conferir escopo ↗', url, width='stretch')
             st.link_button('Pesquisar artigos no Google Acadêmico ↗', scholar_journal_url(row['Título da Revista']), width='stretch')
         with st.expander('Ver condições: ' + str(row['Título da Revista'])):
+            st.write('**Perfil identificado:** ' + str(row.get('Perfil detectado', '')))
+            st.caption(f"Cobertura textual ponderada: {row['Cobertura temática']:.0f}%. Evidência heurística: {row['Evidência']:.0f}/100. Não são probabilidades e não devem ser comparadas entre manuscritos como uma escala validada.")
             st.write('**Termos relacionados:** ' + row['Termos relacionados'])
             st.write('**Cobertura registrada:** ' + str(row.get('Cobertura APC', 'Conferir')))
             st.write('**Instituição:** ' + ('não informada; confira a lista do acordo' if allowed is None else 'consta na lista deste grupo; demais requisitos pendentes'))

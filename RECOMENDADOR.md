@@ -1,34 +1,31 @@
-# Recomendador temático de revistas
+# Recomendação temática local
 
-O formulário aceita título, resumo e palavras-chave e ordena revistas do catálogo
-Publica Aberto por correspondência temática. O índice usa títulos e campos de área
-disponíveis, expansão por vocabulário português–inglês e BM25 (k1=1.5, b=0.75).
-Cada termo pesa 3 no título, 4 nas palavras-chave e 1 no resumo. Repetição no
-manuscrito não aumenta esses pesos. A lista mostra os termos que contribuíram.
+O motor modular combina normalização português–inglês, análise por regras do
+manuscrito, recuperação textual e reordenação contextual. Não é um modelo de
+linguagem treinado, não prevê aceite e não envia o texto a serviços externos.
 
-O índice inclui também os cinco temas predominantes por revista fornecidos pelo
-OpenAlex e o campo de área, associados por ISSN exato. Isso permite encontrar
-revistas de nome genérico cujo perfil temático corresponde ao manuscrito. Não há
-envio do texto à API: os temas públicos ficam no índice local. Os cartões mostram
-os termos que motivaram a sugestão, temas da fonte, métricas e link da revista.
+O índice considera nomes, áreas, temas, palavras-chave e escopo quando disponível.
+Campos da editora e do OpenAlex são combinados sem duplicar valores idênticos.
+As frequências dos campos são ponderadas antes da saturação BM25; esta é uma
+aproximação de BM25F, sem normalização independente por campo.
 
-A interface separa Busca simples e Busca avançada. Na busca avançada o formulário
-de manuscrito permite título ou resumo, e os filtros combinados permitem conferir
-a instituição. Detalhes e materiais de apoio ficam recolhidos.
+Expressões como deep learning recebem tratamento contextual. Doença e população
+ajudam a distinguir o problema estudado de métodos auxiliares. Especialismos
+explícitos incompatíveis são tratados por regras de domínio, sem lista de títulos
+preferidos. Essas regras continuam sujeitas a falhas e não substituem a leitura
+do escopo. Revistas multidisciplinares e temas raros podem ter metadados escassos.
 
-A seleção exata da instituição limita os grupos aos presentes em sua lista.
-Springer e Nature são separados. O rótulo institucional Wiley inclui seus dois
-grupos; o filtro padrão de cobertura integral exclui Wiley Gold, descontos,
-cobertura pendente e títulos de assinatura sem publicação indicada.
-Esses filtros são preliminares: não autorizam custeio e não substituem CAPES.
+Filtros CAPES são aplicados separadamente. Métricas de citação não aumentam a
+pontuação. Evidência é uma heurística; cobertura temática é a fração ponderada
+dos termos de consulta representados, incluindo expansões. Nenhuma é probabilidade.
 
-A pontuação não é porcentagem, probabilidade de aceite, prestígio ou qualidade.
-Não há fator de impacto estimado. A falta de escopos completos e de artigos no
-índice limita a recomendação, especialmente em títulos multidisciplinares e nos
-grupos sem áreas estruturadas. Não encontrar uma revista não indica inelegibilidade.
+O módulo semântico de coocorrências permanece desligado por padrão. Não há nova
+dependência de produção. Índice reutilizado em cache; entradas limitadas a 500
+caracteres de título, 1.000 de palavras-chave e 12.000 de resumo, até 30 resultados.
 
-O texto é processado no próprio servidor, sem chamada de API externa nem gravação
-pelo recomendador. O formulário conserva valores na sessão Streamlit. O cache de
-recursos contém apenas o índice do catálogo; consultas e manuscritos não são
-armazenados no cache compartilhado. Nenhuma credencial ou planilha privada é
-incluída nesta alteração, e não há novas dependências de produção.
+Validação local inclui testes de regressão, comparações com o catálogo real e
+execução do formulário Streamlit. Comparações de títulos sugeridos não constituem
+avaliação editorial independente nem comprovam superioridade universal.
+
+Para retorno ao motor anterior, importe `LegacyJournalRecommender` de
+`journal_recommender` no lugar de `JournalRecommender` e limpe o cache do aplicativo.
