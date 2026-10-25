@@ -3,6 +3,12 @@ import pandas as pd
 from journal_recommender import JournalRecommender, integral_candidate
 
 class ContextTests(unittest.TestCase):
+    def test_partial_subject_matches_fill_requested_page(self):
+        engine=self.engine([{'Título da Revista':f'Animal Nutrition {i}', 'Temas OpenAlex':'Animal nutrition; probiotics; veterinary medicine'} for i in range(12)])
+        result=engine.recommend(title='Probióticos em leitões', keywords='probiotics; swine', limit=10)
+        self.assertEqual(len(result),10)
+        self.assertIn('Outras revistas para explorar',result['Grupo de sugestões'].tolist())
+
     def engine(self, rows):
         return JournalRecommender(pd.DataFrame([dict({'Editora':'Example','ISSN':str(i),'Modelo':'Hybrid','Cobertura APC':'100%'},**row) for i,row in enumerate(rows)]))
 
