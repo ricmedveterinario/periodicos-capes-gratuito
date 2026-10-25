@@ -1,13 +1,31 @@
 import unittest
 import pandas as pd
+from types import SimpleNamespace
 from journal_recommender import JournalRecommender, integral_candidate
+from manuscript_analysis import analyze_manuscript
+from reranking import _role_weights
 
 class ContextTests(unittest.TestCase):
+    def test_labels_do_not_override_contextual_rank(self):
+        engine=self.engine([{'Título da Revista':'Example journal'}])
+        ranked=[SimpleNamespace(label=label, matched_focus=('parasite',), method_only_match=False, domain_match=True) for label in ['Exploratória','Boa']]
+        self.assertEqual(engine._select(ranked,2),ranked)
+
+    def test_primary_subject_has_more_weight_than_abstract_only_words(self):
+        profile=analyze_manuscript(title='Veterinary parasitology',abstract='Microbiology and nutrition')
+        weights=_role_weights(profile)
+        self.assertGreater(weights['parasitology'],weights['microbiology'])
+
+    def test_swine_query_excludes_explicit_aquatic_specialism(self):
+        engine=self.engine([{'Título da Revista':'Aquaculture International', 'Temas OpenAlex':'Animal nutrition; probiotics; swine health'}, {'Título da Revista':'Animal Nutrition','Temas OpenAlex':'Swine nutrition; probiotics'}])
+        result=engine.recommend(title='Probiotics for swine nutrition',limit=10)
+        self.assertNotIn('Aquaculture International',result['Título da Revista'].tolist())
+
     def test_partial_subject_matches_fill_requested_page(self):
         engine=self.engine([{'Título da Revista':f'Animal Nutrition {i}', 'Temas OpenAlex':'Animal nutrition; probiotics; veterinary medicine'} for i in range(12)])
         result=engine.recommend(title='Probióticos em leitões', keywords='probiotics; swine', limit=10)
         self.assertEqual(len(result),10)
-        self.assertIn('Outras revistas para explorar',result['Grupo de sugestões'].tolist())
+        self.assertIn('Correspondências com o manuscrito',result['Grupo de sugestões'].tolist())
 
     def engine(self, rows):
         return JournalRecommender(pd.DataFrame([dict({'Editora':'Example','ISSN':str(i),'Modelo':'Hybrid','Cobertura APC':'100%'},**row) for i,row in enumerate(rows)]))

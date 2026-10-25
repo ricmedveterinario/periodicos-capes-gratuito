@@ -14,7 +14,7 @@ def build_recommender(catalog, snapshot_version=0):
     from modular_recommender import ModularJournalRecommender
     frame = enrich_catalog(catalog, read_snapshot())
     enriched = {name: group.copy() for name, group in frame.groupby('Editora', sort=False)}
-    return ModularJournalRecommender(enriched, use_semantic=False)
+    return ModularJournalRecommender(enriched, use_semantic=False, use_rerank=True)
 
 
 def render_recommender(catalog, institutions):

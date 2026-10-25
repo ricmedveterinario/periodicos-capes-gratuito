@@ -86,6 +86,10 @@ def _role_weights(profile):
         weights[term] = max(weights.get(term, 0.0), 1.6)
     for term in profile.focus_terms:
         weights.setdefault(term, 0.6)
+    # A long abstract must not dilute the explicit subject in title/keywords.
+    primary = set(profile.title_terms) | set(profile.keyword_terms)
+    for term in weights:
+        weights[term] *= 1.6 if term in primary else 0.6
     return weights
 
 
@@ -201,7 +205,7 @@ def rerank(profile, hits, semantic_weights=None, top_k=100):
         if requested_hosts == {'swine'} and 'ruminant' in title_specialism:
             continue
         if population_terms & {'poultry', 'chicken', 'cattle', 'swine', 'goat', 'sheep'}:
-            incompatible = title_specialism & {'primatology', 'primate', 'marine', 'laboratory', 'lab'}
+            incompatible = title_specialism & {'primatology', 'primate', 'marine', 'laboratory', 'lab', 'aquaculture', 'fisheries'}
             if incompatible and not (title_specialism & (population_terms - {'animal'})):
                 continue
         computational_focus = set(profile.terms) & {'cybersecurity', 'intrusion', 'security'}
@@ -259,6 +263,14 @@ def rerank(profile, hits, semantic_weights=None, top_k=100):
                 score += 0.05
             elif profile.disease_terms or profile.population_terms:
                 score *= 0.70
+            # Reinforce the intended audience when it is explicit in the
+            # journal title, without using publisher, prestige or journal IDs.
+            animal_query = population_terms & ANIMAL_POPULATIONS
+            if animal_query and 'veterinary' in title_terms:
+                score += 0.08
+            nutrition_query = set(profile.terms) & {'nutrition', 'probiotic', 'feed', 'diet'}
+            if animal_query and nutrition_query and 'animal' in title_terms and 'nutrition' in title_terms:
+                score += 0.08
             ethics_only = (
                 bool(set(profile.population_terms) & PRODUCTION_ANIMALS)
                 and bool(context_terms & ETHICS_HINTS)

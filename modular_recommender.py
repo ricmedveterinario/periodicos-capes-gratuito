@@ -252,9 +252,9 @@ class ModularJournalRecommender:
                     or (profile is not None and not profile.population_terms
                         and len(matched) >= 2))
         usable = [candidate for candidate in candidates if pertinent(candidate)]
-        strong = [c for c in usable if c.label in {'Forte', 'Boa'}]
-        exploratory = [c for c in usable if c.label not in {'Forte', 'Boa'}]
-        return (strong + exploratory)[:limit]
+        # Labels communicate uncertainty; promoting every "Boa" before every
+        # "Exploratória" silently replaced the contextual ranking.
+        return usable[:limit]
 
     def _diversify(self, candidates, limit):
         selected = []
@@ -362,7 +362,7 @@ class ModularJournalRecommender:
         result = self.frame.iloc[indices].copy()
         result['Pontuação temática'] = [round(candidate.score, 2) for candidate in selected]
         result['Aderência'] = [candidate.label for candidate in selected]
-        result['Grupo de sugestões'] = ['Mais relacionadas' if candidate.label in {'Forte', 'Boa'} else 'Outras revistas para explorar' for candidate in selected]
+        result['Grupo de sugestões'] = 'Correspondências com o manuscrito'
         # Textual coverage is the weighted fraction of query terms found in the
         # journal record. Evidence is the reranker's heuristic, which also
         # includes role, field and domain signals. They are deliberately not
