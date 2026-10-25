@@ -60,11 +60,20 @@ def render_recommender(catalog, institutions):
         display['Conferência da data'] = results['Editora'].map(lambda publisher: acceptance_status(publisher, accepted))
     with st.expander('Comparar sugestões em tabela'):
         st.dataframe(display, hide_index=True, width="stretch")
+    current_group = None
     for position, (_, row) in enumerate(results.iterrows(), 1):
+        group = row.get('Grupo de sugestões', 'Mais relacionadas')
+        if group != current_group:
+            st.subheader(group)
+            if group == 'Outras revistas para explorar':
+                st.caption('Correspondências parciais: podem compartilhar o problema ou a área sem cobrir todo o manuscrito. Confira o escopo antes de escolher.')
+            current_group = group
         with st.container(border=True):
             st.markdown(f"**{position}. {row['Título da Revista']}**")
             st.markdown(journal_chips(row.get(AREA, ''), row['Editora'], row.get('_full_coverage', False)), unsafe_allow_html=True)
             st.caption('Aderência temática: ' + str(row['Aderência']))
+            if str(row.get('Origem da sugestão', '')).startswith('Busca ampliada'):
+                st.caption(row['Origem da sugestão'])
             st.write('**Por que apareceu:** ' + (row['Termos do seu texto'] or row['Termos relacionados'] or 'associação exploratória com o tema informado'))
             topics = str(row.get('Temas OpenAlex', '')).strip()
             if topics:
@@ -76,7 +85,10 @@ def render_recommender(catalog, institutions):
             st.link_button('Pesquisar artigos no Google Acadêmico ↗', scholar_journal_url(row['Título da Revista']), width='stretch')
         with st.expander('Ver condições: ' + str(row['Título da Revista'])):
             st.write('**Perfil identificado:** ' + str(row.get('Perfil detectado', '')))
-            st.caption(f"Cobertura textual ponderada: {row['Cobertura temática']:.0f}%. Evidência heurística: {row['Evidência']:.0f}/100. Não são probabilidades e não devem ser comparadas entre manuscritos como uma escala validada.")
+            if str(row.get('Origem da sugestão', '')).startswith('Busca ampliada'):
+                st.caption('Resultado exploratório de uma busca ampliada. Não atribuímos percentual de correspondência ao manuscrito original.')
+            else:
+                st.caption(f"Cobertura textual ponderada: {row['Cobertura temática']:.0f}%. Evidência heurística: {row['Evidência']:.0f}/100. Não são probabilidades e não devem ser comparadas entre manuscritos como uma escala validada.")
             st.write('**Termos relacionados:** ' + row['Termos relacionados'])
             st.write('**Cobertura registrada:** ' + str(row.get('Cobertura APC', 'Conferir')))
             st.write('**Instituição:** ' + ('não informada; confira a lista do acordo' if allowed is None else 'consta na lista deste grupo; demais requisitos pendentes'))
