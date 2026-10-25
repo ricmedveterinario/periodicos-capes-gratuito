@@ -10,9 +10,11 @@ from discovery_links import scholar_journal_url
 
 @st.cache_resource(show_spinner=False, max_entries=2)
 def build_recommender(catalog, snapshot_version=0):
+    # Resolve the release explicitly and invalidate the old cached engine.
+    from modular_recommender import ModularJournalRecommender
     frame = enrich_catalog(catalog, read_snapshot())
     enriched = {name: group.copy() for name, group in frame.groupby('Editora', sort=False)}
-    return JournalRecommender(enriched)
+    return ModularJournalRecommender(enriched)
 
 
 def render_recommender(catalog, institutions):
