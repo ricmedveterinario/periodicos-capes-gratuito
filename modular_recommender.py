@@ -231,50 +231,30 @@ class ModularJournalRecommender:
             ))
         return results
 
-    def _selection_cap(self, candidates, limit):
-        """Cap the page without treating the label as a hard filter.
-
-        A candidate labelled Fraca can still have more lexical/core evidence
-        than an Exploratória candidate. Filtering it out before selection was
-        the reason relevant AMR/security journals disappeared. Labels describe
-        evidence; they do not replace score order.
-        """
-        limit = max(1, int(limit))
-        if any(candidate.label in {'Forte', 'Boa'} for candidate in candidates):
-            return limit
-        if any(candidate.label == 'Exploratória' for candidate in candidates):
-            return min(5, limit)
-        return min(3, limit)
-
     def _select(self, candidates, limit, profile=None):
-        if not candidates:
-            return []
+        """Return the requested page, retaining meaningful partial matches.
+
+        Evidence labels describe uncertainty; they do not impose a 1/3/5-item
+        limit. Method-only hits and candidates with no subject evidence stay out.
+        """
+        limit = max(1, min(int(limit), 30))
         core = set()
         if profile is not None:
-            core = (set(profile.disease_terms)
-                    | set(profile.intervention_terms)
+            core = (set(profile.disease_terms) | set(profile.intervention_terms)
                     | set(profile.outcome_terms))
-
-        def keep_weak(candidate):
-            # A Fraca label is not a hard exclusion when the candidate still
-            # matches at least two central problem concepts. This is the case
-            # for an antimicrobial-resistance journal that does not mention the
-            # cattle host. Unrelated weak lexical coincidences remain excluded.
+        def pertinent(candidate):
+            if candidate.method_only_match or not candidate.matched_focus:
+                return False
+            matched = set(candidate.matched_focus)
             return (candidate.label != 'Fraca'
-                    or len(core & set(candidate.matched_focus)) >= 2)
-
-        usable = [candidate for candidate in candidates if keep_weak(candidate)]
-        if usable:
-            return usable[:self._selection_cap(usable, limit)]
-        # Only weak evidence: return a short, explicitly weak list instead of
-        # filling the requested ten slots. If the manuscript has a disease or
-        # population, a weak candidate must at least share that core role.
-        weak = candidates
-        if profile is not None and (profile.disease_terms or profile.population_terms):
-            role_core = set(profile.disease_terms) | set(profile.population_terms)
-            weak = [candidate for candidate in candidates
-                    if role_core & set(candidate.matched_focus)]
-        return weak[:min(3, limit)]
+                    or candidate.domain_match
+                    or len(core & matched) >= 2
+                    or (profile is not None and not profile.population_terms
+                        and len(matched) >= 2))
+        usable = [candidate for candidate in candidates if pertinent(candidate)]
+        strong = [c for c in usable if c.label in {'Forte', 'Boa'}]
+        exploratory = [c for c in usable if c.label not in {'Forte', 'Boa'}]
+        return (strong + exploratory)[:limit]
 
     def _diversify(self, candidates, limit):
         selected = []
@@ -321,7 +301,7 @@ class ModularJournalRecommender:
         return result
 
     def recommend(self, title='', abstract='', keywords='', publishers=None, integral_only=True,
-                  limit=10, areas=None, diversify=False):
+                  limit=10, areas=None, diversify=False, *, _broadening=False):
         # Bound work for callers outside the Streamlit form too.
         title, abstract, keywords = str(title or '')[:500], str(abstract or '')[:12000], str(keywords or '')[:1000]
         limit = max(1, min(int(limit), 30))
@@ -382,6 +362,7 @@ class ModularJournalRecommender:
         result = self.frame.iloc[indices].copy()
         result['Pontuação temática'] = [round(candidate.score, 2) for candidate in selected]
         result['Aderência'] = [candidate.label for candidate in selected]
+        result['Grupo de sugestões'] = ['Mais relacionadas' if candidate.label in {'Forte', 'Boa'} else 'Outras revistas para explorar' for candidate in selected]
         # Textual coverage is the weighted fraction of query terms found in the
         # journal record. Evidence is the reranker's heuristic, which also
         # includes role, field and domain signals. They are deliberately not
@@ -407,6 +388,31 @@ class ModularJournalRecommender:
             for candidate in selected
         ]
         result['Perfil detectado'] = profile.summary
+        result['Origem da sugestão'] = 'Correspondência com o manuscrito'
+        # A second, bounded retrieval widens the subject rather than filling
+        # slots with weak accidental matches. Preserve every eligibility filter.
+        if not _broadening and len(result) < limit:
+            bridges = {
+                'probiotic': ('gut', 'microbiome', 'nutrition', 'veterinary'),
+                'swine': ('veterinary', 'livestock', 'nutrition'),
+                'chicken': ('poultry', 'animal', 'nutrition', 'veterinary'),
+                'leishmaniasis': ('parasite', 'parasitology', 'veterinary'),
+                'cybersecurity': ('network', 'security', 'computer'),
+            }
+            related = list(dict.fromkeys(t for term in profile.terms for t in bridges.get(term, ())))
+            if related:
+                broader = self.recommend(
+                    title=title, abstract=abstract, keywords=keywords + '; ' + '; '.join(related),
+                    publishers=publishers, integral_only=integral_only, limit=limit,
+                    areas=areas, diversify=diversify, _broadening=True)
+                broader = broader.loc[~broader.index.isin(result.index)].copy()
+                if not broader.empty:
+                    broader['Aderência'] = 'Exploratória — busca ampliada'
+                    broader['Grupo de sugestões'] = 'Outras revistas para explorar'
+                    broader['Origem da sugestão'] = 'Busca ampliada por temas relacionados: ' + ', '.join(related)
+                    broader['Cobertura temática'] = float('nan')
+                    broader['Evidência'] = float('nan')
+                    result = pd.concat([result, broader]).iloc[:limit].copy()
         return result
 
     def query_terms(self, title='', abstract='', keywords=''):
