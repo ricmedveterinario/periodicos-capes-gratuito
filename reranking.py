@@ -191,6 +191,15 @@ def rerank(profile, hits, semantic_weights=None, top_k=100):
         # Explicit journal specialisms outweigh generic animal-welfare topics.
         # This is a domain rule, not a list of journal names.
         title_specialism = set(hit.title_terms)
+        explicit_hosts = {'dog', 'cat', 'cattle', 'swine', 'horse', 'goat', 'sheep', 'poultry', 'chicken', 'fish'}
+        requested_hosts = population_terms & explicit_hosts
+        journal_hosts = title_specialism & explicit_hosts
+        if requested_hosts and journal_hosts and not (requested_hosts & journal_hosts):
+            # Poultry/chicken name the same host class at different granularity.
+            if not (requested_hosts & {'poultry', 'chicken'} and journal_hosts & {'poultry', 'chicken'}):
+                continue
+        if requested_hosts == {'swine'} and 'ruminant' in title_specialism:
+            continue
         if population_terms & {'poultry', 'chicken', 'cattle', 'swine', 'goat', 'sheep'}:
             incompatible = title_specialism & {'primatology', 'primate', 'marine', 'laboratory', 'lab'}
             if incompatible and not (title_specialism & (population_terms - {'animal'})):
