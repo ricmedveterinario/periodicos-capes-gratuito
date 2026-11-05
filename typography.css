@@ -1,3 +1,33 @@
+/* Keep the four navigation choices in a balanced two-by-two mobile grid. */
+@media (max-width: 42rem) {
+  [class*="st-key-main_section"] [role="radiogroup"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .5rem;
+    align-items: stretch;
+    width: 100%;
+  }
+  [class*="st-key-main_section"] [role="radiogroup"] > * {
+    min-width: 0;
+    width: 100%;
+    margin: 0 !important;
+  }
+  [class*="st-key-main_section"] [data-testid="stRadio"] label {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 3.5rem;
+    margin: 0 !important;
+    padding: .6rem .5rem;
+    align-items: center;
+  }
+  [class*="st-key-main_section"] label p {
+    font-size: .9375rem;
+    line-height: 1.3;
+    white-space: normal;
+  }
+}
 /* Reading scale informed by USWDS and WCAG text-resizing/spacing guidance. */
 :root {
   --pa-font: Arial, Helvetica, sans-serif;
@@ -91,33 +121,76 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .pa-mobile-hint { display: block; font-size: .875rem; line-height: 1.5; color: #475569; margin-top: .5rem; }
 }
 
-/* Keep the four navigation choices in a balanced two-by-two mobile grid. */
+/* Scientific identity: static vectors, official marks and restrained colour. */
+.main-header {
+  position: relative; isolation: isolate; overflow: hidden;
+  background: linear-gradient(110deg, #eef8f4 0%, #f6faf9 55%, #edf6fa 100%);
+  border: 1px solid #d9ebe4; border-left: .3rem solid #157668;
+  padding-block: 1.75rem; box-shadow: 0 .35rem 1.5rem #173b3805;
+}
+.main-header::after {
+  content: ''; position: absolute; z-index: -1; inset: 0; opacity: .25;
+  background-image: radial-gradient(#68a294 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(90deg, #000, transparent 32%, transparent 75%, #000);
+}
+.pa-research-network {
+  position: absolute; right: -1.5rem; top: 0; width: 17.5rem;
+  height: 100%; color: #157668; opacity: .12; z-index: -1;
+  pointer-events: none;
+}
+.main-header .pa-eyebrow { color: #12695f; }
+.pa-affiliations {
+  display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+  margin: .25rem 0 1.25rem; padding: .7rem 1rem;
+}
+[data-testid="stMarkdownContainer"] .pa-affiliations a {
+  display: flex; align-items: center; gap: .8rem; color: #475569;
+  text-decoration: none; font-size: .8125rem; line-height: 1.4;
+  border-radius: .4rem;
+}
+[data-testid="stMarkdownContainer"] .pa-affiliations a:hover { color: #12695f; text-decoration: underline; }
+.pa-affiliations a + a { border-left: 1px solid #dce6e3; padding-left: 1.5rem; }
+.pa-ufu-logo { width: 5.5rem; height: 2.25rem; object-fit: contain; }
+.pa-program-logo { width: 2.75rem; height: 3.5rem; object-fit: contain; }
+.pa-support {
+  margin-top: 2.25rem; padding: 1.75rem; border: 1px solid #dce9e4;
+  border-radius: 1rem; background: linear-gradient(135deg, #f4faf7, #f8fbfd);
+}
+.pa-section-label { font-size: .75rem; letter-spacing: .09em; font-weight: 700; color: #12695f; }
+[data-testid="stMarkdownContainer"] .pa-support h2 {
+  font-size: 1.5rem; color: #173b38; margin: .5rem 0 .65rem; padding: 0;
+}
+[data-testid="stMarkdownContainer"] .pa-support-intro {
+  max-width: 85ch; color: #475569; font-size: .9375rem; margin: 0 0 1.25rem;
+}
+.pa-support-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .9rem; }
+.pa-support-card {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  text-align: center; background: #fff; border: 1px solid #e0e8e6;
+  padding: 1.4rem 1rem; border-radius: .8rem; color: #475569;
+  text-decoration: none; min-width: 0;
+}
+.pa-support-card:hover { border-color: #79aa9b; box-shadow: 0 .25rem .75rem #173b3808; }
+[data-testid="stMarkdownContainer"] .pa-support-card { text-decoration: none; color: #475569; }
+[data-testid="stMarkdownContainer"] .pa-support-card:hover span { color: #12695f; text-decoration: underline; }
+.pa-support-logo { display: flex; height: 5rem; align-items: center; justify-content: center; width: 100%; }
+.pa-support-logo img { max-width: 100%; width: 10.5rem; max-height: 5rem; object-fit: contain; }
+.pa-support-card span { font-size: .8125rem; line-height: 1.5; max-width: 30ch; }
+.pa-support-fapemig img { width: 6.5rem; }
+[data-testid="stMarkdownContainer"] .pa-support-note { font-size: .8125rem; color: #52625d; margin: 1rem 0 0; }
 @media (max-width: 42rem) {
-  [class*="st-key-main_section"] [role="radiogroup"] {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .5rem;
-    align-items: stretch;
-    width: 100%;
-  }
-  [class*="st-key-main_section"] [role="radiogroup"] > * {
-    min-width: 0;
-    width: 100%;
-    margin: 0 !important;
-  }
-  [class*="st-key-main_section"] [data-testid="stRadio"] label {
-    box-sizing: border-box;
-    min-width: 0;
-    width: 100%;
-    height: 100%;
-    min-height: 3.5rem;
-    margin: 0 !important;
-    padding: .6rem .5rem;
-    align-items: center;
-  }
-  [class*="st-key-main_section"] label p {
-    font-size: .9375rem;
-    line-height: 1.3;
-    white-space: normal;
-  }
+  .main-header { padding: 1.5rem 1rem; }
+  .pa-research-network { width: 10rem; right: -3rem; opacity: .09; }
+  .pa-affiliations { gap: .75rem; padding: .5rem 0; margin-bottom: 1rem; }
+  .pa-affiliations a { flex: 1 1 0; flex-direction: column; text-align: center; gap: .5rem; font-size: .75rem; }
+  .pa-affiliations a + a { padding-left: .75rem; }
+  .pa-ufu-logo { height: 3rem; }
+  .pa-program-logo { height: 3rem; }
+  .pa-support { padding: 1.25rem; margin-top: 1.5rem; }
+  .pa-support-grid { grid-template-columns: 1fr; gap: .75rem; }
+  .pa-support-card { flex-direction: row; text-align: left; gap: 1rem; padding: 1rem; }
+  .pa-support-logo { flex: 0 0 6.5rem; width: 6.5rem; height: 4rem; }
+  .pa-support-logo img { width: 100%; max-height: 4rem; }
+  .pa-support-fapemig img { width: 5rem; }
 }
