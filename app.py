@@ -1,4 +1,3 @@
-# Contextual recommender release 2026-10-24.
 import streamlit as st
 import pandas as pd
 from datetime import datetime
@@ -10,11 +9,12 @@ from pathlib import Path
 from capes_catalog import load_catalog, search_catalog, acceptance_status, REVISION
 from explorer_ui import render_explorer
 from scholar_metrics import configure_snapshot
+from institutional_ui import affiliation_html, support_html
 
 # Configuração da página
 st.set_page_config(
-    page_title="Publique Gratuitamente - Acordos CAPES",
-    page_icon="💰",
+    page_title="Publica Aberto | GOBIOTA · UFU",
+    page_icon="🔬",
     layout="wide",
     initial_sidebar_state="auto"
 )
@@ -244,13 +244,15 @@ st.markdown("""
 # Cabeçalho
 st.markdown("""
 <div class="main-header">
-    <div class="pa-eyebrow">GOBIOTA / UFU</div>
+    <svg class="pa-research-network" viewBox="0 0 280 180" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 116 75 82 130 106 185 49 248 72M75 82 99 24 185 49 213 141 130 106 67 154 18 116M130 106 99 24M185 49 248 72 213 141"/><circle cx="130" cy="106" r="32"/></g><g fill="currentColor"><circle cx="18" cy="116" r="4"/><circle cx="75" cy="82" r="6"/><circle cx="99" cy="24" r="4"/><circle cx="130" cy="106" r="7"/><circle cx="185" cy="49" r="6"/><circle cx="248" cy="72" r="4"/><circle cx="213" cy="141" r="5"/><circle cx="67" cy="154" r="4"/></g></svg>
+    <div class="pa-eyebrow">CIÊNCIA ABERTA · GOBIOTA / UFU</div>
     <h1>Publica Aberto</h1>
     <p style="font-size: 1.1rem; margin-bottom: 0;">
         Sua pesquisa, a revista certa. Descubra oportunidades nos acordos CAPES.
     </p>
 </div>
 """, unsafe_allow_html=True)
+st.markdown(affiliation_html(), unsafe_allow_html=True)
 
 # ==================== FUNÇÕES AUXILIARES ====================
 
@@ -459,6 +461,7 @@ except Exception:
     configure_snapshot({'records':[], 'edition':2025, 'period':'2020–2024'})
     st.warning('Os indicadores Google Scholar estão temporariamente indisponíveis. As demais consultas continuam disponíveis.')
 active_section = render_explorer(publisher_data, load_institutions_data())
+st.markdown(support_html(), unsafe_allow_html=True)
 
 if active_section == 'Entenda os índices':
     with st.expander('Sobre o projeto, acordos e condições de uso'):
@@ -628,23 +631,6 @@ if active_section == 'Entenda os índices':
             *Revisão das bases: 19/10/2026. Outras listas editoriais permanecem em revisão.*
             """)
             
-        # ==================== AGÊNCIAS DE FOMENTO ====================
-            
-        st.markdown("""
-        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); 
-                    padding: 1.5rem; 
-                    border-radius: 10px; 
-                    border-left: 4px solid #0284c7;
-                    margin: 2rem 0;">
-            <p style="text-align: center; margin: 0; color: #0c4a6e; font-size: 0.95rem; line-height: 1.6;">
-                <strong>🔬 Apoio à Pesquisa</strong><br><br>
-                Esta iniciativa é fortalecida pelo apoio de agências de fomento à pesquisa no Brasil, 
-                em especial <strong>CNPq</strong>, <strong>CAPES</strong> e <strong>FAPEMIG</strong>, 
-                por meio de diferentes projetos e bolsas associados ao <strong>Grupo GOBIOTA – PPGCVET/FMVZ/UFU</strong>.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        
         st.markdown("""
         <div style="background-color: #fef3c7; 
                     padding: 1rem; 
@@ -728,3 +714,4 @@ if active_section == 'Entenda os índices':
             </p>
         </div>
         """, unsafe_allow_html=True)
+        
